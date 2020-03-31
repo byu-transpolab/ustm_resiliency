@@ -1,0 +1,11 @@
+Base/Output/*
+*.properties
+*.DBK
+*.log
+*.PRN
+*.BAK
+*.[0-9][0-9][0-9]
+TPPL.PRJ
+TPPL.VAR
+*{$$0}.s
+*.DS_Store
