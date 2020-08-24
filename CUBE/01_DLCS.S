@@ -1,18 +1,18 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Calculate Destination Choice Logsum'
-FILEO PRINTO[3] = "C:\projects\ustm_resiliency\Base\Output\01_HBW_ZONAL_TRIPS.CSV"
-FILEO PRINTO[2] = "C:\projects\ustm_resiliency\Base\Output\01_DEST_CHOICE_DEBUG.TXT"
-FILEO PRINTO[1] = "C:\projects\ustm_resiliency\Base\Output\01_DEST_CHOICE.RPT"
-FILEO RECO[1] = "C:\projects\ustm_resiliency\Base\Output\01_DCLS_ROWSUM.DBF",
+FILEO PRINTO[3] = "{SCENARIO_DIR}\01_HBW_ZONAL_TRIPS.CSV"
+FILEO PRINTO[2] = "{SCENARIO_DIR}\01_DEST_CHOICE_DEBUG.TXT"
+FILEO PRINTO[1] = "{SCENARIO_DIR}\01_DEST_CHOICE.RPT"
+FILEO RECO[1] = "{SCENARIO_DIR}\01_DCLS_ROWSUM.DBF",
   FIELDS = A, SeU, LnS
-FILEO MATO[1] = "C:\projects\ustm_resiliency\Base\Output\01_DEST_HBW.MAT",
+FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_HBW.MAT",
   MO = 200, 112, DEC = 8, NAME = HBW, SizeTerm
 FILEI LOOKUPI[1] = "{SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF"
 FILEI ZDATI[2] = "{SCENARIO_DIR}\Output\se_classified_2012A.dbf"
 FILEI ZDATI[1] = "{SCENARIO_DIR}\Output\HH_PROD.DBF"
 FILEI MATI[2] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\Output\MC_LOGSUM.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\01_MC_LOGSUM.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.

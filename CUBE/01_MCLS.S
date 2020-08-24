@@ -1,13 +1,13 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Calulate Mode Choice Logsum'
-FILEO MATO[3] = "{SCENARIO_DIR}\Output\MC_PROBABILITY.MAT",
+FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_PROBABILITY.MAT",
   MO=31-33,DEC=10,NAME=auto_prob,nonmot_prob,transit_prob
-FILEO MATO[2] = "{SCENARIO_DIR}\Output\MC_UTILITY.MAT",
+FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_UTILITY.MAT",
   MO=11-13,DEC=12,NAME=auto_util,nonmot_util,transit_util
-FILEO MATO[1] = "{SCENARIO_DIR}\Output\MC_LOGSUM.MAT",
+FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_LOGSUM.MAT",
   MO = 41 ,DEC=1, NAME=logsum 
-FILEI MATI[1] = "{SCENARIO_DIR}\Output\PROCESSED_SKIM.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
 FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
 FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
 FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
