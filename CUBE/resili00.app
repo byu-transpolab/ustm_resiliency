@@ -7,7 +7,7 @@ resiliency
 00
 
 
-Mon Aug 24 12:37:51 2020
+Mon Aug 24 13:14:13 2020
 
 
 C:\projects\ustm_resiliency\CUBE\resili00.app
@@ -6996,7 +6996,7 @@ HH Productions
 0
 0
 *
-{SCENARIO_DIR}\Output\HH_PROD.DBF
+{SCENARIO_DIR}\HH_PROD.DBF
 0
 ZON
 ZDATI1
@@ -7014,7 +7014,7 @@ SE Data 2012
 0
 0
 *
-{SCENARIO_DIR}\Output\se_classified_2012A.dbf
+{SCENARIO_DIR}\se_classified_2012A.dbf
 0
 ZON
 ZDATI2
