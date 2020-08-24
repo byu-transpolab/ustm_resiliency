@@ -1,0 +1,35 @@
+DESTINTION CHOICE TRACE @PURP@
+
+
+ Destination Choice Model Trace 
+
+Selected Interchange for Tracing:       1- 159
+
+ PURPOSE -                   @PURP@  
+ Size Term is computed on the Destination 
+ SizeTerm = household coefficient                             0 *      29.00
+ SizeTerm = Other + Office Emp coefficient                    0 *    3976.00    550.00     32.00
+ SizeTerm = Office Emp coefficient                         0.46 *     481.00
+ SizeTerm = Other Emp coefficient                          1.68 *    3976.00    481.00    550.00     32.00
+ SizeTerm = Retail Emp coefficient                         0.61 *     550.00     32.00
+ Capped distance (this is a value)                22.00
+ Logsum coefficient                                        0.50 *       0.20
+ distance coefficient                                      0.04 *      11.24
+ distance square coeffficient                             -0.00 *     126.34
+ distance cube coefficient                                 0.00 *    1420.03
+ distance log coefficient                                     0 *       2.42
+ Intrazonal constant                                      -0.07 *          0
+ distance calibration constant (0-1 Mile)                     0
+ distance calibration constant (1-2 Mile)                     0
+ distance calibration constant (2-3 Mile)                     0
+ distance calibration constant (3-4 Mile)                     0
+ distance calibration constant (4-5 Mile)                     0
+ distance calibration constant (5-6 Mile)                     0
+ distance calibration constant (6-7 Mile)                     0
+ Applied  calibration constant                             8.43
+ Size Term                                              4576.31
+ Ln(Size Term)                                             8.43
+ Computed Utility                                          8.43
+ Total Productions in Origin                             898.22
+ Trip Attractions                                         26.55
+ Intrazonal Sum                665.91
