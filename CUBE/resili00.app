@@ -7,10 +7,10 @@ resiliency
 00
 
 
-Mon Aug 24 13:14:13 2020
+Tue Aug 25 17:37:57 2020
 
 
-C:\projects\ustm_resiliency\CUBE\resili00.app
+D:\projects\ustm_resiliency\CUBE\resili00.app
 VOYAGER
 
 
@@ -32,8 +32,8 @@ Whole Network
 999999
 688
 -314
-885
--378
+919
+-385
 0
 0
 0
@@ -43,15 +43,15 @@ Script File
 0
 0
 S
-C:\projects\ustm_resiliency\CUBE\01_HIGHWAY.S
+D:\projects\ustm_resiliency\CUBE\01_HIGHWAY.S
 1
 HWY
 ISCR1 
 999999
-389
--286
-677
--343
+352
+-281
+676
+-344
 -1
 -1
 0
@@ -426,10 +426,10 @@ NET
 HWY
 NETI  
 999999
-389
--347
-677
--404
+352
+-349
+676
+-412
 -1
 -1
 0
@@ -1414,10 +1414,10 @@ MAT
 HWY
 MATO1 
 999999
-901
--316
-1184
--373
+937
+-315
+1255
+-378
 0
 #OUTFIL2
 Matrix File 2
@@ -2843,8 +2843,8 @@ Process Skims
 999999
 1600
 -314
-1777
--378
+1809
+-385
 0
 0
 0
@@ -2854,15 +2854,15 @@ Script File
 0
 0
 S
-C:\projects\ustm_resiliency\CUBE\01_PROCESSING.S
+D:\projects\ustm_resiliency\CUBE\01_PROCESSING.S
 1
 MAT
 ISCR1 
 999999
-1301
--286
-1589
--343
+1264
+-281
+1588
+-344
 -1
 -1
 0
@@ -2877,10 +2877,10 @@ MAT
 MAT
 MATI1 
 999999
-1301
--347
-1589
--404
+1264
+-349
+1588
+-412
 0
 1
 0
@@ -3991,10 +3991,10 @@ MAT
 MAT
 MATO1 
 999999
-1793
--316
-2076
--373
+1827
+-315
+2145
+-378
 0
 #OUTFIL2
 Matrix File 2
@@ -4716,8 +4716,8 @@ Calulate Mode Choice Logsum
 999999
 2444
 -314
-2621
--378
+2653
+-385
 0
 0
 0
@@ -4727,15 +4727,15 @@ Script File
 0
 0
 S
-C:\projects\ustm_resiliency\CUBE\01_MCLS.S
+D:\projects\ustm_resiliency\CUBE\01_MCLS.S
 1
 MAT
 ISCR1 
 999999
-2145
--196
-2433
--253
+2108
+-179
+2432
+-242
 -1
 -1
 0
@@ -4750,10 +4750,10 @@ MAT
 MAT
 MATI1 
 999999
-2145
--257
-2433
--314
+2108
+-247
+2432
+-310
 1
 1
 0
@@ -4768,10 +4768,10 @@ MAT
 MAT
 MATI2 
 999999
-2145
--318
-2433
--375
+2108
+-315
+2432
+-378
 -1
 -1
 0
@@ -5488,10 +5488,10 @@ MC Coefficients
 LOK
 LOOKUPI1
 999999
-2145
--379
-2433
--436
+2108
+-383
+2432
+-446
 -1
 -1
 0
@@ -5506,10 +5506,10 @@ MC Constants
 LOK
 LOOKUPI2
 999999
-2145
--440
-2433
--497
+2108
+-451
+2432
+-514
 -1
 -1
 0
@@ -5864,10 +5864,10 @@ MAT
 MAT
 MATO1 
 999999
-2637
--256
-2920
--313
+2671
+-247
+2989
+-310
 0
 #OUTFIL2
 Matrix File 2
@@ -5880,10 +5880,10 @@ MAT
 MAT
 MATO2 
 999999
-2637
--317
-2920
--374
+2671
+-315
+2989
+-378
 0
 #OUTFIL3
 Matrix File 3
@@ -5896,10 +5896,10 @@ MAT
 MAT
 MATO3 
 999999
-2637
--378
-2920
--435
+2671
+-383
+2989
+-446
 0
 #OUTFIL4
 Matrix File 4
@@ -6589,8 +6589,8 @@ Calculate Destination Choice Logsum
 999999
 3357
 -314
-3534
--378
+3566
+-385
 0
 0
 0
@@ -6600,15 +6600,15 @@ Script File
 0
 0
 S
-C:\projects\ustm_resiliency\CUBE\01_DLCS.S
+D:\projects\ustm_resiliency\CUBE\01_DLCS.S
 1
 MAT
 ISCR1 
 999999
-3058
--166
-3346
--223
+3021
+-145
+3345
+-208
 -1
 -1
 0
@@ -6623,10 +6623,10 @@ MAT
 MAT
 MATI1 
 999999
-3058
--227
-3346
--284
+3021
+-213
+3345
+-276
 2
 1
 0
@@ -6641,10 +6641,10 @@ MAT
 MAT
 MATI2 
 999999
-3058
--288
-3346
--345
+3021
+-281
+3345
+-344
 -1
 -1
 0
@@ -7001,10 +7001,10 @@ HH Productions
 ZON
 ZDATI1
 999999
-3058
+3021
 -349
-3346
--406
+3345
+-412
 -1
 -1
 0
@@ -7019,10 +7019,10 @@ SE Data 2012
 ZON
 ZDATI2
 999999
-3058
--410
-3346
--467
+3021
+-417
+3345
+-480
 -1
 -1
 0
@@ -7361,10 +7361,10 @@ Dest Choice Params
 LOK
 LOOKUPI1
 999999
-3058
--471
-3346
--528
+3021
+-485
+3345
+-548
 -1
 -1
 0
@@ -7737,10 +7737,10 @@ MAT
 MAT
 MATO1 
 999999
-3550
--196
-3833
--253
+3584
+-179
+3902
+-242
 0
 #OUTFIL2
 Matrix File 2
@@ -8057,10 +8057,10 @@ DBF
 MAT
 RECO1 
 999999
-3550
--257
-3833
--314
+3584
+-247
+3902
+-310
 0
 #OUTFIL22
 Record File 2
@@ -8297,10 +8297,10 @@ PRN
 MAT
 PRINTO1
 999999
-3550
--318
-3833
--375
+3584
+-315
+3902
+-378
 0
 #OUTFIL37
 Print Data 2
@@ -8313,10 +8313,10 @@ PRN
 MAT
 PRINTO2
 999999
-3550
--379
-3833
--436
+3584
+-383
+3902
+-446
 0
 #OUTFIL38
 Print Data 3
@@ -8329,10 +8329,10 @@ PRN
 MAT
 PRINTO3
 999999
-3550
--440
-3833
--497
+3584
+-451
+3902
+-514
 0
 #OUTFIL39
 Print Data 4
