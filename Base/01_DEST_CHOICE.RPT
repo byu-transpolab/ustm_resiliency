@@ -13,7 +13,7 @@ Selected Interchange for Tracing:       1- 159
  SizeTerm = Other Emp coefficient                          1.68 *    3976.00    481.00    550.00     32.00
  SizeTerm = Retail Emp coefficient                         0.61 *     550.00     32.00
  Capped distance (this is a value)                22.00
- Logsum coefficient                                        0.50 *       0.20
+ Logsum coefficient                                        0.50 *       0.21
  distance coefficient                                      0.04 *      11.24
  distance square coeffficient                             -0.00 *     126.34
  distance cube coefficient                                 0.00 *    1420.03
@@ -32,4 +32,3 @@ Selected Interchange for Tracing:       1- 159
  Computed Utility                                          8.43
  Total Productions in Origin                             898.22
  Trip Attractions                                             0
- Intrazonal Sum                     0
