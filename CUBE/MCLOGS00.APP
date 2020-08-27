@@ -16,7 +16,7 @@ MC Logsums
 00
 
 
-Wed Aug 26 17:31:51 2020
+Thu Aug 27 09:30:34 2020
 
 D:\projects\ustm_resiliency\CUBE\resili00.app
 D:\PROJECTS\USTM_RESILIENCY\CUBE\MCLOGS00.APP
@@ -3798,7 +3798,7 @@ Script File
 0
 0
 S
-D:\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00G.S
+D:\projects\ustm_resiliency\CUBE\01_NHB_MCLS.S
 1
 MAT
 ISCR1 
@@ -5671,7 +5671,7 @@ Script File
 0
 0
 S
-D:\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00H.S
+D:\projects\ustm_resiliency\CUBE\01_HBC_MCLS.S
 1
 MAT
 ISCR1 
@@ -7544,7 +7544,7 @@ Script File
 0
 0
 S
-D:\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00I.S
+D:\projects\ustm_resiliency\CUBE\01_REC_MCLS.S
 1
 MAT
 ISCR1 
