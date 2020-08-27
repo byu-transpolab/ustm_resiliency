@@ -51,11 +51,11 @@ ZONES = {TOTAL_ZONES}
 		KDIST67       = COEFF(1,19)        ; distance calibration constant (6-7 Mile)
 
 		; Mode choice logsums
-		MW[101]   = MI.1.1 ;HBW logsum
-    MW[201] = MI.2.1 ;HBO logsum
-		MW[301] = MI.3.1 ;NHB logsum
-    MW[401] = MI.4.1 ;HBC logsum
-    MW[501] = MI.5.1 ;REC logsum
+		MW[101] = MI.1.1 ;HBW logsum
+    MW[201] = MI.1.2 ;HBO logsum
+		MW[301] = MI.1.3 ;NHB logsum
+    MW[401] = MI.1.4 ;HBC logsum
+    MW[501] = MI.1.5 ;REC logsum
     
 		; Hwy distance skim
 		MW[2] = DISTCAP
