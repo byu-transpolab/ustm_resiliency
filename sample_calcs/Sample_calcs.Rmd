@@ -6,21 +6,28 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(tidyr)
 ```
-#HBW Calculation
+
 
 $$HighwayTime_{AM} =MW[1] = 1.55$$
 $$HighwayDist = MW[2] = 0.72$$
 $$Transit_{PK} = MW[3] = 0$$
 $$MW[4] = (MW[2]/)*60$$
+##HBW Calculation##
 MW <- vector()
 MW[1] <- 1.55
-MW[2] <- 1.11
+MW[2] <- 0.72
 MW[3] <- 0
 MW[4] <- (MW[2]/3)*60
-K_SR <- vector
-K_SR <- constants[1,3]
+MW[11] <- 0 + coefficients[1,3] + coefficients[7,3] + coefficients[5,3] * coefficients[19,3] * MW[2]
+HBWAutoUtility <- vector()
+HBWAutoUtility <- MW[11]
+HBWAutoUtility
+MW[12] <- constants[3,3] + coefficients[9,3] * 20 + coefficients[10,3] * 20 * MW[4]
+MW[12]
+
+
+##Parameters##
 constants <- read_csv("Data/MC_Constants.csv")
 coefficients <- read_csv("Data/MC_Coefficients.csv")
-
-
