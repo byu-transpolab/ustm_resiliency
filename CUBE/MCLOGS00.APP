@@ -17,10 +17,10 @@ MC Logsums
 00
 
 
-Thu Aug 27 10:36:45 2020
+Tue Sep 01 21:35:54 2020
 
-D:\projects\ustm_resiliency\CUBE\resili00.app
-D:\PROJECTS\USTM_RESILIENCY\CUBE\MCLOGS00.APP
+C:\projects\ustm_resiliency\CUBE\resili00.app
+C:\PROJECTS\USTM_RESILIENCY\CUBE\MCLOGS00.APP
 VOYAGER
 
 
@@ -42,8 +42,8 @@ HBW MCLS
 999999
 997
 -397
-1206
--468
+1174
+-461
 0
 0
 0
@@ -53,15 +53,15 @@ Script File
 0
 0
 S
-D:\projects\ustm_resiliency\Base\01_HBW_MCLS.S
+C:\projects\ustm_resiliency\Base\01_HBW_MCLS.S
 1
 MAT
 ISCR1 
 999999
-661
--262
-985
--325
+698
+-279
+986
+-336
 -1
 -1
 0
@@ -76,12 +76,12 @@ MAT
 MAT
 MATI1 
 999999
-661
--330
-985
--393
+698
+-340
+986
+-397
 -1
--9
+-19
 1
 #INFIL2
 Matrix File 2
@@ -94,10 +94,10 @@ MAT
 MAT
 MATI2 
 999999
-661
--398
-985
--461
+698
+-401
+986
+-458
 -1
 -9
 1
@@ -814,10 +814,10 @@ MC Coefficients
 LOK
 LOOKUPI1
 999999
-661
--466
-985
--529
+698
+-462
+986
+-519
 -1
 -9
 1
@@ -832,10 +832,10 @@ MC Constants
 LOK
 LOOKUPI2
 999999
-661
--534
-985
--597
+698
+-523
+986
+-580
 -1
 -9
 1
@@ -1174,10 +1174,10 @@ PRN
 MAT
 OPRN  
 999999
-1224
--296
-1542
--359
+1190
+-309
+1473
+-366
 0
 #OUTFIL1
 Matrix File 1
@@ -1190,9 +1190,9 @@ MAT
 MAT
 MATO1 
 999999
-1224
--364
-1542
+1190
+-370
+1473
 -427
 1
 #OUTFIL2
@@ -1206,10 +1206,10 @@ MAT
 MAT
 MATO2 
 999999
-1224
--432
-1542
--495
+1190
+-431
+1473
+-488
 0
 #OUTFIL3
 Matrix File 3
@@ -1222,10 +1222,10 @@ MAT
 MAT
 MATO3 
 999999
-1224
--500
-1542
--563
+1190
+-492
+1473
+-549
 0
 #OUTFIL4
 Matrix File 4
@@ -1915,8 +1915,8 @@ HBO MCLS
 999999
 1022
 -1194
-1231
--1265
+1199
+-1258
 0
 0
 0
@@ -1926,15 +1926,15 @@ Script File
 0
 0
 S
-D:\projects\ustm_resiliency\Base\01_HBO_MCLS.S
+C:\projects\ustm_resiliency\Base\01_HBO_MCLS.S
 1
 MAT
 ISCR1 
 999999
-686
--1059
-1010
--1122
+723
+-1076
+1011
+-1133
 -1
 -1
 0
@@ -1949,10 +1949,10 @@ MAT
 MAT
 MATI1 
 999999
-686
--1127
-1010
--1190
+723
+-1137
+1011
+-1194
 -1
 -1
 0
@@ -1967,10 +1967,10 @@ MAT
 MAT
 MATI2 
 999999
-686
--1195
-1010
--1258
+723
+-1198
+1011
+-1255
 -1
 -1
 0
@@ -2687,10 +2687,10 @@ MC Coefficients
 LOK
 LOOKUPI1
 999999
-686
--1263
-1010
--1326
+723
+-1259
+1011
+-1316
 -1
 -1
 0
@@ -2705,10 +2705,10 @@ MC Constants
 LOK
 LOOKUPI2
 999999
-686
--1331
-1010
--1394
+723
+-1320
+1011
+-1377
 -1
 -1
 0
@@ -3047,10 +3047,10 @@ PRN
 MAT
 OPRN  
 999999
-1249
--1093
-1567
--1156
+1215
+-1106
+1498
+-1163
 0
 #OUTFIL1
 Matrix File 1
@@ -3063,9 +3063,9 @@ MAT
 MAT
 MATO1 
 999999
-1249
--1161
-1567
+1215
+-1167
+1498
 -1224
 1
 #OUTFIL2
@@ -3079,10 +3079,10 @@ MAT
 MAT
 MATO2 
 999999
-1249
--1229
-1567
--1292
+1215
+-1228
+1498
+-1285
 0
 #OUTFIL3
 Matrix File 3
@@ -3095,10 +3095,10 @@ MAT
 MAT
 MATO3 
 999999
-1249
--1297
-1567
--1360
+1215
+-1289
+1498
+-1346
 0
 #OUTFIL4
 Matrix File 4
@@ -3788,8 +3788,8 @@ NHB MCLS
 999999
 2218
 -397
-2427
--468
+2395
+-461
 0
 0
 0
@@ -3799,15 +3799,15 @@ Script File
 0
 0
 S
-D:\projects\ustm_resiliency\CUBE\01_NHB_MCLS.S
+C:\projects\ustm_resiliency\CUBE\01_NHB_MCLS.S
 1
 MAT
 ISCR1 
 999999
-1882
--262
-2206
--325
+1919
+-279
+2207
+-336
 -1
 -1
 0
@@ -3822,10 +3822,10 @@ MAT
 MAT
 MATI1 
 999999
-1882
--330
-2206
--393
+1919
+-340
+2207
+-397
 -1
 -1
 0
@@ -3840,10 +3840,10 @@ MAT
 MAT
 MATI2 
 999999
-1882
--398
-2206
--461
+1919
+-401
+2207
+-458
 -1
 -1
 0
@@ -4560,10 +4560,10 @@ MC Coefficients
 LOK
 LOOKUPI1
 999999
-1882
--466
-2206
--529
+1919
+-462
+2207
+-519
 -1
 -1
 0
@@ -4578,10 +4578,10 @@ MC Constants
 LOK
 LOOKUPI2
 999999
-1882
--534
-2206
--597
+1919
+-523
+2207
+-580
 -1
 -1
 0
@@ -4920,10 +4920,10 @@ PRN
 MAT
 OPRN  
 999999
-2445
--296
-2763
--359
+2411
+-309
+2694
+-366
 0
 #OUTFIL1
 Matrix File 1
@@ -4936,9 +4936,9 @@ MAT
 MAT
 MATO1 
 999999
-2445
--364
-2763
+2411
+-370
+2694
 -427
 1
 #OUTFIL2
@@ -4952,10 +4952,10 @@ MAT
 MAT
 MATO2 
 999999
-2445
--432
-2763
--495
+2411
+-431
+2694
+-488
 0
 #OUTFIL3
 Matrix File 3
@@ -4968,10 +4968,10 @@ MAT
 MAT
 MATO3 
 999999
-2445
--500
-2763
--563
+2411
+-492
+2694
+-549
 0
 #OUTFIL4
 Matrix File 4
@@ -5661,8 +5661,8 @@ HBC MCLS
 999999
 2218
 -1194
-2427
--1265
+2395
+-1258
 0
 0
 0
@@ -5672,15 +5672,15 @@ Script File
 0
 0
 S
-D:\projects\ustm_resiliency\CUBE\01_HBC_MCLS.S
+C:\projects\ustm_resiliency\CUBE\01_HBC_MCLS.S
 1
 MAT
 ISCR1 
 999999
-1882
--1059
-2206
--1122
+1919
+-1076
+2207
+-1133
 -1
 -1
 0
@@ -5695,10 +5695,10 @@ MAT
 MAT
 MATI1 
 999999
-1882
--1127
-2206
--1190
+1919
+-1137
+2207
+-1194
 -1
 -1
 0
@@ -5713,10 +5713,10 @@ MAT
 MAT
 MATI2 
 999999
-1882
--1195
-2206
--1258
+1919
+-1198
+2207
+-1255
 -1
 -1
 0
@@ -6433,10 +6433,10 @@ MC Coefficients
 LOK
 LOOKUPI1
 999999
-1882
--1263
-2206
--1326
+1919
+-1259
+2207
+-1316
 -1
 -1
 0
@@ -6451,10 +6451,10 @@ MC Constants
 LOK
 LOOKUPI2
 999999
-1882
--1331
-2206
--1394
+1919
+-1320
+2207
+-1377
 -1
 -1
 0
@@ -6793,10 +6793,10 @@ PRN
 MAT
 OPRN  
 999999
-2445
--1093
-2763
--1156
+2411
+-1106
+2694
+-1163
 0
 #OUTFIL1
 Matrix File 1
@@ -6809,9 +6809,9 @@ MAT
 MAT
 MATO1 
 999999
-2445
--1161
-2763
+2411
+-1167
+2694
 -1224
 1
 #OUTFIL2
@@ -6825,10 +6825,10 @@ MAT
 MAT
 MATO2 
 999999
-2445
--1229
-2763
--1292
+2411
+-1228
+2694
+-1285
 0
 #OUTFIL3
 Matrix File 3
@@ -6841,10 +6841,10 @@ MAT
 MAT
 MATO3 
 999999
-2445
--1297
-2763
--1360
+2411
+-1289
+2694
+-1346
 0
 #OUTFIL4
 Matrix File 4
@@ -7534,8 +7534,8 @@ REC MCLS
 999999
 3414
 -372
-3623
--443
+3591
+-436
 0
 0
 0
@@ -7545,15 +7545,15 @@ Script File
 0
 0
 S
-D:\projects\ustm_resiliency\CUBE\01_REC_MCLS.S
+C:\projects\ustm_resiliency\CUBE\01_REC_MCLS.S
 1
 MAT
 ISCR1 
 999999
-3078
--237
-3402
--300
+3115
+-254
+3403
+-311
 -1
 -1
 0
@@ -7568,10 +7568,10 @@ MAT
 MAT
 MATI1 
 999999
-3078
--305
-3402
--368
+3115
+-315
+3403
+-372
 -1
 -1
 0
@@ -7586,10 +7586,10 @@ MAT
 MAT
 MATI2 
 999999
-3078
--373
-3402
--436
+3115
+-376
+3403
+-433
 -1
 -1
 0
@@ -8306,10 +8306,10 @@ MC Coefficients
 LOK
 LOOKUPI1
 999999
-3078
--441
-3402
--504
+3115
+-437
+3403
+-494
 -1
 -1
 0
@@ -8324,10 +8324,10 @@ MC Constants
 LOK
 LOOKUPI2
 999999
-3078
--509
-3402
--572
+3115
+-498
+3403
+-555
 -1
 -1
 0
@@ -8666,10 +8666,10 @@ PRN
 MAT
 OPRN  
 999999
-3641
--271
-3959
--334
+3607
+-284
+3890
+-341
 0
 #OUTFIL1
 Matrix File 1
@@ -8682,9 +8682,9 @@ MAT
 MAT
 MATO1 
 999999
-3641
--339
-3959
+3607
+-345
+3890
 -402
 1
 #OUTFIL2
@@ -8698,10 +8698,10 @@ MAT
 MAT
 MATO2 
 999999
-3641
--407
-3959
--470
+3607
+-406
+3890
+-463
 0
 #OUTFIL3
 Matrix File 3
@@ -8714,10 +8714,10 @@ MAT
 MAT
 MATO3 
 999999
-3641
--475
-3959
--538
+3607
+-467
+3890
+-524
 0
 #OUTFIL4
 Matrix File 4
@@ -9407,31 +9407,31 @@ Combine All MCLS Calculations
 999999
 3414
 -1169
-3623
--1240
+3591
+-1233
 0
 0
 0
 #INFIL0
-Script File   
+Script File
 
 0
 0
 S
-D:\projects\ustm_resiliency\CUBE\01_MCLS_COMBINE.S
+C:\projects\ustm_resiliency\CUBE\01_MCLS_COMBINE.S
 1
 MAT
 ISCR1 
 999999
-3078
--1000
-3402
--1063
+3115
+-1021
+3403
+-1078
 -1
 -1
 0
 #INFIL1
-Matrix File 1 
+Matrix File 1
 HBW Logsum
 0
 0
@@ -9441,15 +9441,15 @@ MAT
 MAT
 MATI1 
 999999
-3078
--1068
-3402
--1131
+3115
+-1082
+3403
+-1139
 -1
 -1
 0
 #INFIL2
-Matrix File 2 
+Matrix File 2
 HBO Logsum
 0
 0
@@ -9459,15 +9459,15 @@ MAT
 MAT
 MATI2 
 999999
-3078
--1136
-3402
--1199
+3115
+-1143
+3403
+-1200
 -1
 -1
 0
 #INFIL3
-Matrix File 3 
+Matrix File 3
 NHB Logsum
 0
 0
@@ -9477,15 +9477,15 @@ MAT
 MAT
 MATI3 
 999999
-3078
+3115
 -1204
-3402
--1267
+3403
+-1261
 -1
 -1
 0
 #INFIL4
-Matrix File 4 
+Matrix File 4
 HBC Logsum
 0
 0
@@ -9495,15 +9495,15 @@ MAT
 MAT
 MATI4 
 999999
-3078
--1272
-3402
--1335
+3115
+-1265
+3403
+-1322
 -1
 -1
 0
 #INFIL5
-Matrix File 5 
+Matrix File 5
 REC Logsum
 0
 0
@@ -9513,15 +9513,15 @@ MAT
 MAT
 MATI5 
 999999
-3078
--1340
-3402
--1403
+3115
+-1326
+3403
+-1383
 -1
 -1
 0
 #INFIL6
-Matrix File 6 
+Matrix File 6
 
 0
 0
@@ -9539,7 +9539,7 @@ MATI6
 -1
 0
 #INFIL7
-Matrix File 7 
+Matrix File 7
 
 0
 0
@@ -9557,7 +9557,7 @@ MATI7
 -1
 0
 #INFIL8
-Matrix File 8 
+Matrix File 8
 
 0
 0
@@ -9575,7 +9575,7 @@ MATI8
 -1
 0
 #INFIL9
-Matrix File 9 
+Matrix File 9
 
 0
 0
@@ -9791,7 +9791,7 @@ MATI20
 -1
 0
 #INFIL21
-Record File   
+Record File
 
 0
 0
@@ -9809,7 +9809,7 @@ RECI
 -1
 0
 #INFIL22
-Zonal Data 1  
+Zonal Data 1
 
 0
 0
@@ -9827,7 +9827,7 @@ ZDATI1
 -1
 0
 #INFIL23
-Zonal Data 2  
+Zonal Data 2
 
 0
 0
@@ -9845,7 +9845,7 @@ ZDATI2
 -1
 0
 #INFIL24
-Zonal Data 3  
+Zonal Data 3
 
 0
 0
@@ -9863,7 +9863,7 @@ ZDATI3
 -1
 0
 #INFIL25
-Zonal Data 4  
+Zonal Data 4
 
 0
 0
@@ -9881,7 +9881,7 @@ ZDATI4
 -1
 0
 #INFIL26
-Zonal Data 5  
+Zonal Data 5
 
 0
 0
@@ -9899,7 +9899,7 @@ ZDATI5
 -1
 0
 #INFIL27
-Zonal Data 6  
+Zonal Data 6
 
 0
 0
@@ -9917,7 +9917,7 @@ ZDATI6
 -1
 0
 #INFIL28
-Zonal Data 7  
+Zonal Data 7
 
 0
 0
@@ -9935,7 +9935,7 @@ ZDATI7
 -1
 0
 #INFIL29
-Zonal Data 8  
+Zonal Data 8
 
 0
 0
@@ -9953,7 +9953,7 @@ ZDATI8
 -1
 0
 #INFIL30
-Zonal Data 9  
+Zonal Data 9
 
 0
 0
@@ -9971,7 +9971,7 @@ ZDATI9
 -1
 0
 #INFIL31
-Zonal Data 10 
+Zonal Data 10
 
 0
 0
@@ -9989,7 +9989,7 @@ ZDATI10
 -1
 0
 #INFIL32
-Database 1    
+Database 1
 
 0
 0
@@ -10007,7 +10007,7 @@ DBI1
 -1
 0
 #INFIL33
-Database 2    
+Database 2
 
 0
 0
@@ -10025,7 +10025,7 @@ DBI2
 -1
 0
 #INFIL34
-Database 3    
+Database 3
 
 0
 0
@@ -10043,7 +10043,7 @@ DBI3
 -1
 0
 #INFIL35
-Database 4    
+Database 4
 
 0
 0
@@ -10061,7 +10061,7 @@ DBI4
 -1
 0
 #INFIL36
-Database 5    
+Database 5
 
 0
 0
@@ -10079,7 +10079,7 @@ DBI5
 -1
 0
 #INFIL37
-Database 6    
+Database 6
 
 0
 0
@@ -10097,7 +10097,7 @@ DBI6
 -1
 0
 #INFIL38
-Database 7    
+Database 7
 
 0
 0
@@ -10115,7 +10115,7 @@ DBI7
 -1
 0
 #INFIL39
-Database 8    
+Database 8
 
 0
 0
@@ -10133,7 +10133,7 @@ DBI8
 -1
 0
 #INFIL40
-Database 9    
+Database 9
 
 0
 0
@@ -10151,7 +10151,7 @@ DBI9
 -1
 0
 #INFIL41
-Database 10   
+Database 10
 
 0
 0
@@ -10169,7 +10169,7 @@ DBI10
 -1
 0
 #INFIL42
-Lookup File 1 
+Lookup File 1
 
 0
 0
@@ -10187,7 +10187,7 @@ LOOKUPI1
 -1
 0
 #INFIL43
-Lookup File 2 
+Lookup File 2
 
 0
 0
@@ -10205,7 +10205,7 @@ LOOKUPI2
 -1
 0
 #INFIL44
-Lookup File 3 
+Lookup File 3
 
 0
 0
@@ -10223,7 +10223,7 @@ LOOKUPI3
 -1
 0
 #INFIL45
-Lookup File 4 
+Lookup File 4
 
 0
 0
@@ -10241,7 +10241,7 @@ LOOKUPI4
 -1
 0
 #INFIL46
-Lookup File 5 
+Lookup File 5
 
 0
 0
@@ -10259,7 +10259,7 @@ LOOKUPI5
 -1
 0
 #INFIL47
-Lookup File 6 
+Lookup File 6
 
 0
 0
@@ -10277,7 +10277,7 @@ LOOKUPI6
 -1
 0
 #INFIL48
-Lookup File 7 
+Lookup File 7
 
 0
 0
@@ -10295,7 +10295,7 @@ LOOKUPI7
 -1
 0
 #INFIL49
-Lookup File 8 
+Lookup File 8
 
 0
 0
@@ -10313,7 +10313,7 @@ LOOKUPI8
 -1
 0
 #INFIL50
-Lookup File 9 
+Lookup File 9
 
 0
 0
@@ -10529,7 +10529,7 @@ LOOKUPI20
 -1
 0
 #OUTFIL0
-Print File    
+Print File
 
 0
 0
@@ -10545,7 +10545,7 @@ OPRN
 -1097
 0
 #OUTFIL1
-Matrix File 1 
+Matrix File 1
 MCLS Combined
 0
 0
@@ -10555,13 +10555,13 @@ MAT
 MAT
 MATO1 
 999999
-3641
--1170
-3959
--1233
+3607
+-1171
+3890
+-1228
 1
 #OUTFIL2
-Matrix File 2 
+Matrix File 2
 
 0
 0
@@ -10577,7 +10577,7 @@ MATO2
 -1233
 0
 #OUTFIL3
-Matrix File 3 
+Matrix File 3
 
 0
 0
@@ -10593,7 +10593,7 @@ MATO3
 94
 0
 #OUTFIL4
-Matrix File 4 
+Matrix File 4
 
 0
 0
@@ -10609,7 +10609,7 @@ MATO4
 26
 0
 #OUTFIL5
-Matrix File 5 
+Matrix File 5
 
 0
 0
@@ -10625,7 +10625,7 @@ MATO5
 -42
 0
 #OUTFIL6
-Matrix File 6 
+Matrix File 6
 
 0
 0
@@ -10641,7 +10641,7 @@ MATO6
 -110
 0
 #OUTFIL7
-Matrix File 7 
+Matrix File 7
 
 0
 0
@@ -10657,7 +10657,7 @@ MATO7
 -178
 0
 #OUTFIL8
-Matrix File 8 
+Matrix File 8
 
 0
 0
@@ -10673,7 +10673,7 @@ MATO8
 -246
 0
 #OUTFIL9
-Matrix File 9 
+Matrix File 9
 
 0
 0
@@ -10865,7 +10865,7 @@ MATO20
 -1062
 0
 #OUTFIL21
-Record File 1 
+Record File 1
 
 0
 0
@@ -10881,7 +10881,7 @@ RECO1
 -1301
 0
 #OUTFIL22
-Record File 2 
+Record File 2
 
 0
 0
@@ -10897,7 +10897,7 @@ RECO2
 -1198
 0
 #OUTFIL23
-Record File 3 
+Record File 3
 
 0
 0
@@ -10913,7 +10913,7 @@ RECO3
 -1266
 0
 #OUTFIL24
-Record File 4 
+Record File 4
 
 0
 0
@@ -10929,7 +10929,7 @@ RECO4
 -1334
 0
 #OUTFIL25
-Record File 5 
+Record File 5
 
 0
 0
@@ -10945,7 +10945,7 @@ RECO5
 -1402
 0
 #OUTFIL26
-Record File 6 
+Record File 6
 
 0
 0
@@ -10961,7 +10961,7 @@ RECO6
 -1470
 0
 #OUTFIL27
-Record File 7 
+Record File 7
 
 0
 0
@@ -10977,7 +10977,7 @@ RECO7
 -1538
 0
 #OUTFIL28
-Record File 8 
+Record File 8
 
 0
 0
@@ -10993,7 +10993,7 @@ RECO8
 -1606
 0
 #OUTFIL29
-Record File 9 
+Record File 9
 
 0
 0
@@ -11105,7 +11105,7 @@ RECO15
 -2082
 0
 #OUTFIL36
-Print Data 1  
+Print Data 1
 
 0
 0
@@ -11121,7 +11121,7 @@ PRINTO1
 -1369
 0
 #OUTFIL37
-Print Data 2  
+Print Data 2
 
 0
 0
@@ -11137,7 +11137,7 @@ PRINTO2
 -2218
 0
 #OUTFIL38
-Print Data 3  
+Print Data 3
 
 0
 0
@@ -11153,7 +11153,7 @@ PRINTO3
 -2286
 0
 #OUTFIL39
-Print Data 4  
+Print Data 4
 
 0
 0
@@ -11169,7 +11169,7 @@ PRINTO4
 -2354
 0
 #OUTFIL40
-Print Data 5  
+Print Data 5
 
 0
 0
@@ -11185,7 +11185,7 @@ PRINTO5
 -2422
 0
 #OUTFIL41
-Print Data 6  
+Print Data 6
 
 0
 0
@@ -11201,7 +11201,7 @@ PRINTO6
 -2490
 0
 #OUTFIL42
-Print Data 7  
+Print Data 7
 
 0
 0
@@ -11217,7 +11217,7 @@ PRINTO7
 -2558
 0
 #OUTFIL43
-Print Data 8  
+Print Data 8
 
 0
 0
@@ -11233,7 +11233,7 @@ PRINTO8
 -2626
 0
 #OUTFIL44
-Print Data 9  
+Print Data 9
 
 0
 0
@@ -11249,7 +11249,7 @@ PRINTO9
 -2694
 0
 #OUTFIL45
-Print Data 10 
+Print Data 10
 
 0
 0

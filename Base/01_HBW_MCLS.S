@@ -87,7 +87,7 @@ ENDIF
       MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
  
       ; Calculate Utilities
-      MW[11] = 0 + COEFF_IVTT + COEFF_TERML + COEFF_COST * AUTOCOST * MW[1]    ;auto utility
+      MW[11] = 0 + COEFF_IVTT + COEFF_TERML + COEFF_COST * AUTOCOST * MW[2]    ;auto utility
       ;MW[11] = 0 + -0.025 + -0.0625 + -0.00158 * 13.6 * MW[1]    ;auto utility
       MW[12] = K_NMOT + COEFF_WALK1 * 20 + COEFF_WALK2 * 20 * MW[4] ;non-motorized utility
       ;MW[12] = (-1.2258 + -0.0625 * 20 + -0.09375 * 20) * MW[4] ;non-motorized utility
