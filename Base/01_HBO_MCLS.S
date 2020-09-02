@@ -8,9 +8,9 @@ FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
 FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBO_PROBABILITY.MAT",
   MO=31-33, DEC=10,NAME=HBOauto_prob,HBOnonmot_prob,HBOtransit_prob
 FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBO_UTILITY.MAT",
-  MO=11-13, DEC=12,NAME=HBOauto_util,HBOnonmot_util,HBOtransit_util
+  MO=1-2,11-13, DEC=10,NAME=HBOauto_util,HBOnonmot_util,HBOtransit_util
 FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBO_LOGSUM.MAT",
-  MO = 41,DEC=8, NAME=HBOlogsum
+  MO = 41,DEC=10, NAME=HBOlogsum
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -18,8 +18,8 @@ FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBO_LOGSUM.MAT",
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-  FILLMW MW[1]=MI.1.1 ;AM highway time
-  FILLMW MW[2]=MI.1.2 ;AM highway distance
+  FILLMW MW[1]=MI.1.TIME ;AM highway time
+  FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
   FILLMW MW[3]=MI.2.1 ;Walk bus time
   
 

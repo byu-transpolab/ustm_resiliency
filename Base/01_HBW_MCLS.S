@@ -4,9 +4,9 @@ RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBW_MCLS.PRN" MSG='HBW MCLS'
 FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBW_PROBABILITY.MAT",
   MO=31-33, DEC=10,NAME=HBWauto_prob,HBWnonmot_prob,HBWtransit_prob
 FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBW_UTILITY.MAT",
-  MO=11-13, DEC=12,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util
+  MO=1-2,11-13, DEC=10,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util
 FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBW_LOGSUM.MAT",
-  MO = 41,DEC=8, NAME=HBWlogsum
+  MO = 41,DEC=10, NAME=HBWlogsum
 FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
 FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
 FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
@@ -18,8 +18,8 @@ FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-  FILLMW MW[1]=MI.1.1 ;AM highway time
-  FILLMW MW[2]=MI.1.2 ;AM highway distance
+  FILLMW MW[1]=MI.1.TIME ;AM highway time
+  FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
   FILLMW MW[3]=MI.2.1 ;Walk bus time
   
 
