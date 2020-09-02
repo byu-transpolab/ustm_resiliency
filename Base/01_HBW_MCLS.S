@@ -77,7 +77,20 @@ IF (i=FirstZone)
 COEFF_NXFER   = COEFF(1,18)              ; number of xfers 
 
 ENDIF
+
+      ; Non motorized
+; distance portion that is 1 mile or less
+MW[18] = MIN(MW[2],1)
   
+; Distance portion that is longer than 1 mile
+  JLOOP
+      IF (MW[2][J] > 1)
+          MW[19] = MW[2][J] - 1
+      ELSE
+          MW[19] = 0
+      ENDIF
+
+  ENDJLOOP
   
   ;TODO: get minimum transit time, but include out-of-vehicle time as separate matrix
 
@@ -87,13 +100,10 @@ ENDIF
       MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
  
       ; Calculate Utilities
-      MW[11] = 0 + COEFF_IVTT + COEFF_TERML + COEFF_COST * AUTOCOST * MW[2]    ;auto utility
-      ;MW[11] = 0 + -0.025 + -0.0625 + -0.00158 * 13.6 * MW[1]    ;auto utility
-      MW[12] = K_NMOT + COEFF_WALK1 * 20 + COEFF_WALK2 * 20 * MW[4] ;non-motorized utility
-      ;MW[12] = (-1.2258 + -0.0625 * 20 + -0.09375 * 20) * MW[4] ;non-motorized utility
-      MW[13] = (K_TRN + COEFF_WALK + COEFF_SWAIT + (COEFF_LWAIT - COEFF_SWAIT) + COEFF_IVTT + COEFF_COST + COEFF_NXFER) * MW[3] ;transit utility
-      ;MW[13] = (-0.3903 + -0.0625 + -0.05625 + (-0.025- -0.05625) + -0.0625 + -0.025 + -0.00158 + 0) * MW[3] ;transit utility
-      
+      MW[11] = (COEFF_IVTT * MW[1] + COEFF_COST * AUTOCOST * MW[2])             ;Drive alone auto utility
+      MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
+      MW[13] = (K_TRN) * MW[3]                                                  ;transit utility
+          
       ; Exponentiate Utilities
       MW[21] = exp(MW[11])
       MW[22] = exp(MW[12])

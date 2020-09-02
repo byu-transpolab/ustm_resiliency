@@ -367,12 +367,71 @@ summary {
 
 
 <p><span class="math display">\[HighwayTime_{AM} =MW[1] = 1.55\]</span> <span class="math display">\[HighwayDist = MW[2] = 0.72\]</span> <span class="math display">\[Transit_{PK} = MW[3] = 0\]</span> <span class="math display">\[MW[4] = (MW[2]/)*60\]</span></p>
-<div id="hbw-calculation" class="section level2">
-<h2>HBW Calculation</h2>
+<div id="hbw-utility-calculations" class="section level2">
+<h2>HBW Utility Calculations</h2>
+<pre class="r"><code>constants &lt;- read_csv(&quot;Data/MC_Constants.csv&quot;)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   `;N` = col_double(),
+##   Name = col_character(),
+##   HBW = col_double(),
+##   HBO = col_double(),
+##   NHB = col_double(),
+##   HBC = col_double(),
+##   REC = col_double()
+## )</code></pre>
+<pre class="r"><code>coefficients &lt;- read_csv(&quot;Data/MC_Coefficients.csv&quot;)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   `;N` = col_double(),
+##   Name = col_character(),
+##   HBW = col_double(),
+##   HBO = col_double(),
+##   NHB = col_double(),
+##   HBC = col_double(),
+##   REC = col_double()
+## )</code></pre>
+<pre class="r"><code>MW &lt;- vector()
+MW[1] &lt;- 1.55
+MW[2] &lt;- 0.72
+MW[3] &lt;- 0
+MW[4] &lt;- (MW[2]/3)*60
+MW[11] &lt;- coefficients[1,3] * MW[1] + coefficients[5,3] * coefficients[19,3] * MW[2]
+AutoUtility &lt;- vector()
+AutoUtility &lt;- MW[11]
+AutoUtility </code></pre>
+<pre><code>## [[1]]
+## [1] -0.05422136</code></pre>
+<pre class="r"><code># &lt;!-- The math works out for HBW Utility. I havent fixed the bug that causes the processed matrix to round differently, but it doesn&#39;t make a large difference in the long run --&gt;
+         
+#MW[12] &lt;- constants[3,3] + coefficients[9,3] * 20 *  MW[18] + coefficients[10,3] * 20 * MW[19]
+#MW[12]</code></pre>
+<p><span class="math display">\[HBW_{Auto Utility} = -0.05422136\]</span></p>
 </div>
 <div id="parameters" class="section level2">
 <h2>Parameters</h2>
-<p>constants &lt;- read_csv(“Data/MC_Constants.csv”) coefficients &lt;- read_csv(“Data/MC_Coefficients.csv”)</p>
+<pre class="r"><code>constants &lt;- read_csv(&quot;Data/MC_Constants.csv&quot;)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   `;N` = col_double(),
+##   Name = col_character(),
+##   HBW = col_double(),
+##   HBO = col_double(),
+##   NHB = col_double(),
+##   HBC = col_double(),
+##   REC = col_double()
+## )</code></pre>
+<pre class="r"><code>coefficients &lt;- read_csv(&quot;Data/MC_Coefficients.csv&quot;)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   `;N` = col_double(),
+##   Name = col_character(),
+##   HBW = col_double(),
+##   HBO = col_double(),
+##   NHB = col_double(),
+##   HBC = col_double(),
+##   REC = col_double()
+## )</code></pre>
 </div>
 
 
