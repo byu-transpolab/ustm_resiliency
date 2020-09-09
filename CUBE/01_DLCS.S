@@ -24,7 +24,7 @@ FILEI ZDATI[1] = "{SCENARIO_DIR}\HH_PROD.DBF"
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-ZONES = {TOTAL_ZONES}
+ZONES = {Total ZONES}
 		ARRAY personTrips = ZONES
 
 		; READ IN MODEL PARAMETERS
@@ -114,7 +114,7 @@ ZONES = {TOTAL_ZONES}
   	DEMAND = personTrips[I],
   	UTILITIESMW = 100,
   	ODEMANDMW = 118,
-  	DESTSPLIT= TOTAL All, INCLUDE=1-{TOTAL_ZONES},
+  	DESTSPLIT= TOTAL All, INCLUDE=1-{Total ZONES},
   	STARTMW = 119 
     
 ; Report coefficient values to summary file and debug file;
@@ -346,13 +346,13 @@ JLOOP
   SeNHB = SeNHB + exp(MW[300])
   SeHBC = SeHBC + exp(MW[400])
   SeREC = SeREC + exp(MW[500])
+ENDJLOOP
   Ro.A = A
   Ro.lnHBW = ln(SeHBW)
   Ro.lnHBO = ln(SeHBO)
   Ro.lnNBH = ln(SeNHB)
   Ro.lnHBC = ln(SeHBC)
   Ro.lnREC = ln(SeREC)
-ENDJLOOP
 
 WRITE RECO = 1
     
