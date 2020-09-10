@@ -7,10 +7,10 @@ resiliency
 00
 
 
-Wed Sep 09 11:41:36 2020
+Wed Sep 09 13:07:10 2020
 
 
-D:\projects\ustm_resiliency\CUBE\resili00.app
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
 VOYAGER
 
 
@@ -43,7 +43,7 @@ Script File
 0
 0
 S
-D:\projects\ustm_resiliency\CUBE\01_HIGHWAY.S
+C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_HIGHWAY.S
 1
 HWY
 ISCR1 
@@ -2854,7 +2854,7 @@ Script File
 0
 0
 S
-D:\projects\ustm_resiliency\CUBE\01_PROCESSING.S
+C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_PROCESSING.S
 1
 MAT
 ISCR1 
@@ -4727,7 +4727,7 @@ Script File
 0
 0
 S
-D:\projects\ustm_resiliency\CUBE\01_DLCS.S
+C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_DLCS.S
 1
 MAT
 ISCR1 
@@ -6578,7 +6578,7 @@ PRINTO10
 1
 3
 
-D:\PROJECTS\USTM_RESILIENCY\CUBE\MCLOGS00.APP
+C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\MCLOGS00.APP
 MC Logsums
 
 0
