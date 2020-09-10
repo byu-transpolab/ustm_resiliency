@@ -1,9 +1,9 @@
 {
-    "path" : "~/Projects/ustm_resiliency/sample_calcs",
-    "sortOrder" : [
+    "path": "~/Projects/ustm_resiliency/sample_calcs",
+    "sortOrder": [
         {
-            "ascending" : true,
-            "columnIndex" : 2
+            "ascending": true,
+            "columnIndex": 2
         }
     ]
 }

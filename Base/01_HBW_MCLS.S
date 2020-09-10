@@ -4,7 +4,7 @@ RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBW_MCLS.PRN" MSG='HBW MCLS'
 FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBW_PROBABILITY.MAT",
   MO=31-33, DEC=12,NAME=TIME,DISTANCE,HBWauto_prob,HBWnonmot_prob,HBWtransit_prob
 FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBW_UTILITY.MAT",
-  MO=111, 112,11-13, DEC=12,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util
+  MO=111-113, DEC=12,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util
 FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBW_LOGSUM.MAT",
   MO =41,DEC=12, NAME=HBWlogsum
 FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
@@ -19,9 +19,10 @@ FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
 ; at each J by using a JLOOP.
 
   
-  FILLMW MW[1]=MI.1.TIME ;AM highway time
+  FILLMW MW[1]=MI.1.TIME     ;AM highway time
+  MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
-  FILLMW MW[3]=MI.2.WBUS ;Walk bus time
+  FILLMW MW[3]=MI.2.WBUS     ;Walk bus time
 
 
 ; Progress Bar update for evey 100 zones
@@ -100,12 +101,13 @@ MW[18] = MIN(MW[2],1)
       ; calculate travel time of non-motorized modes
       MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
  
-      ; Calculate Utilities
-      MW[111] = (COEFF_IVTT * MW[1]) 
-      MW[112] = (COEFF_COST * AUTOCOST * MW[2])             ;Drive alone auto utility
-      MW[11] = MW[111] + MW[112]
+      ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
+      MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])          ;Drive alone auto utility
+      MW[111] = MW[11] * 100                                                    ;Printed auto utility
       MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
-      MW[13] = (K_TRN) * MW[3]                                                  ;transit utility
+      MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
+      MW[13] = (K_TRN * MW[3])                                                  ;transit utility
+      MW[113] = MW[13] * 100                                                    ;Printed transity utility
           
       ; Exponentiate Utilities
       MW[21] = exp(MW[11])
@@ -121,7 +123,7 @@ MW[18] = MIN(MW[2],1)
       MW[33] =  MW[23] / MW[30]       ;transit probability
       
       ; LOGSUM
-      MW[40] = log(MW[30])
+      MW[40] = ln(MW[30])
       
 
       ; Calculate logit average of the mode choice logsums
