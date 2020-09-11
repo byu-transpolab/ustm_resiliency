@@ -6,11 +6,11 @@ FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
 FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_NHB_LOGSUM.MAT",
-  MO = 41,DEC=8, NAME=NHBlogsum
+  MO = 41,DEC=12, NAME=NHBlogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_NHB_UTILITY.MAT",
-  MO=11-13, DEC=12,NAME=NHBauto_util,NHBnonmot_util,NHBtransit_util
+  MO=111-113, DEC=12,NAME=NHBauto_util,NHBnonmot_util,NHBtransit_util
 FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_NHB_PROBABILITY.MAT",
- MO=31-33, DEC=10,NAME=NHBauto_prob,NHBnonmot_prob,NHBtransit_prob
+ MO=31-33, DEC=12,NAME=NHBauto_prob,NHBnonmot_prob,NHBtransit_prob
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -18,10 +18,12 @@ FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_NHB_PROBABILITY.MAT",
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-  FILLMW MW[1]=MI.1.1 ;AM highway time
-  FILLMW MW[2]=MI.1.2 ;AM highway distance
-  FILLMW MW[3]=MI.2.1 ;Walk bus time
   
+  FILLMW MW[1]=MI.1.TIME     ;AM highway time
+  MW[150] = MW[1] * 100      ;AM highway time * 100
+  FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
+  FILLMW MW[3]=MI.2.WBUS     ;Walk bus time
+
 
 ; Progress Bar update for evey 100 zones
 zonemsg=50
@@ -32,26 +34,26 @@ zonemsg=50
  ARRAY TYPE=C30 MARKET_NAME=1
     
 ; Read alternative specific Constants
-LOOKUP, NAME=CONSTANTS, LOOKUP[1]=1, RESULT=3, INTERPOLATE=N, , LIST=Y, LOOKUPI=2
+LOOKUP, NAME=CONSTANTS, LOOKUP[1]=1, RESULT=5, INTERPOLATE=N, , LIST=Y, LOOKUPI=2
     
 ; Read mode choice coefficients
-LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=3, INTERPOLATE=N, LIST=Y, LOOKUPI=1 
+LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=5, INTERPOLATE=N, LIST=Y, LOOKUPI=1 
 
 IF (i=FirstZone)
 
   ; constants
-   K_AUT  = CONSTANTS(1,1)           ; auto 
-   K_SR  = CONSTANTS(1,1)             ; shared-ride 2 & 3+
-   K_TRN  = CONSTANTS(1,2)            ; transit
-   K_NMOT = CONSTANTS(1,3)            ; non-motorized (walk & bike)
+   K_AUT  = CONSTANTS(1,1)                 ; auto 
+   K_SR  = CONSTANTS(1,1)                  ; shared-ride 2 & 3+
+   K_TRN  = CONSTANTS(1,2)                 ; transit
+   K_NMOT = CONSTANTS(1,3)                 ; non-motorized (walk & bike)
      
 ; Mode-specific constants 
-   K_PREM = CONSTANTS(1,4)                        ; premium transit
+   K_PREM = CONSTANTS(1,4)                 ; premium transit
                                         
 ; Nesting coefficients
-   NC_1        = COEFF(1,14)                          ; Level 1 - auto, trn, non-mot
-   NC_2        = COEFF(1,15)                          ; Level 2 - transit sub mode choice
-   NC_3        = COEFF(1,16)                          ; Level 3 - not used
+   NC_1        = COEFF(1,14)               ; Level 1 - auto, trn, non-mot
+   NC_2        = COEFF(1,15)               ; Level 2 - transit sub mode choice
+   NC_3        = COEFF(1,16)               ; Level 3 - not used
    ;NCP = NC_1 * NC_2
 
    ; Level of Service Coefficients
@@ -71,29 +73,42 @@ IF (i=FirstZone)
   OCC          = COEFF(1,20)               ; Cost Sharing Factor for Shared Ride
 
 ; Cost coefficients
-  COEFF_COST  = COEFF(1,5)                ; Cost 
+  COEFF_COST  = COEFF(1,5)                 ; Cost 
   
 ; Calibration specific
-COEFF_NXFER   = COEFF(1,18)              ; number of xfers 
+COEFF_NXFER   = COEFF(1,18)                ; number of xfers 
 
 ENDIF
+
+      ; Non motorized
+; distance portion that is 1 mile or less
+MW[18] = MIN(MW[2],1)
   
+; Distance portion that is longer than 1 mile
+  JLOOP
+      IF (MW[2][J] > 1)
+          MW[19] = MW[2][J] - 1
+      ELSE
+          MW[19] = 0
+      ENDIF
+
+  ENDJLOOP
   
   ;TODO: get minimum transit time, but include out-of-vehicle time as separate matrix
 
-;;;;;;Begin HBW MCLS Calculation;;;;;
+;;;;;;Begin NHB MCLS Calculation;;;;;
       
       ; calculate travel time of non-motorized modes
       MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
  
-      ; Calculate Utilities
-      MW[11] = 0 + COEFF_IVTT + COEFF_TERML + COEFF_COST * AUTOCOST * MW[1]    ;auto utility
-      ;MW[11] = 0 + -0.025 + -0.0625 + -0.00158 * 13.6 * MW[1]    ;auto utility
-      MW[12] = K_NMOT + COEFF_WALK1 * 20 + COEFF_WALK2 * 20 * MW[4] ;non-motorized utility
-      ;MW[12] = (-1.2258 + -0.0625 * 20 + -0.09375 * 20) * MW[4] ;non-motorized utility
-      MW[13] = (K_TRN + COEFF_WALK + COEFF_SWAIT + (COEFF_LWAIT - COEFF_SWAIT) + COEFF_IVTT + COEFF_COST + COEFF_NXFER) * MW[3] ;transit utility
-      ;MW[13] = (-0.3903 + -0.0625 + -0.05625 + (-0.025- -0.05625) + -0.0625 + -0.025 + -0.00158 + 0) * MW[3] ;transit utility
-      
+      ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
+      MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])          ;Drive alone auto utility
+      MW[111] = MW[11] * 100                                                    ;Printed auto utility
+      MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
+      MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
+      MW[13] = (K_TRN * MW[3])                                                  ;transit utility
+      MW[113] = MW[13] * 100                                                    ;Printed transity utility
+          
       ; Exponentiate Utilities
       MW[21] = exp(MW[11])
       MW[22] = exp(MW[12])
@@ -108,7 +123,7 @@ ENDIF
       MW[33] =  MW[23] / MW[30]       ;transit probability
       
       ; LOGSUM
-      MW[40] = log(MW[30])
+      MW[40] = ln(MW[30])
       
 
       ; Calculate logit average of the mode choice logsums

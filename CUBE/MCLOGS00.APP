@@ -17,7 +17,7 @@ MC Logsums
 00
 
 
-Thu Sep 10 17:46:56 2020
+Fri Sep 11 12:05:13 2020
 
 C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\resili00.app
 C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\MCLOGS00.APP
@@ -9490,7 +9490,7 @@ HBC Logsum
 0
 0
 MAT
-{SCENARIO_DIR}\01_MC_HBC_UTILTIY.MAT
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MC_HBC_LOGSUM.MAT
 0
 MAT
 MATI4 
