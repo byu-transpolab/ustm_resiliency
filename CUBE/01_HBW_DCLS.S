@@ -1,22 +1,19 @@
- ;;<<Default Template>><<MATRIX>><<Default>>;;
-
-;;;;;;In this code, HBW related data are labeled in the 100's, HBO in the 200's, NHB in the 300's, HBC in the 400's and REC in the 500's;;;;;;
-
+;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX MSG='Calculate Destination Choice Logsum'
-FILEI ZDATI[1] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF"
-FILEI MATI[2] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT"
-FILEO PRINTO[3] = "{SCENARIO_DIR}\01_HBW_ZONAL_TRIPS.CSV"
-FILEO PRINTO[2] = "{SCENARIO_DIR}\01_DEST_CHOICE_DEBUG.TXT"
-FILEO PRINTO[1] = "{SCENARIO_DIR}\01_DEST_CHOICE.RPT"
-FILEO RECO[1] = "{SCENARIO_DIR}\01_DCLS_ROWSUM.DBF",
+RUN PGM=MATRIX
+FILEO RECO[1] = "{SCENARIO_DIR}\01_HBW_DCLS_ROWSUM.DBF",
   FIELDS = A, lnHBW, lnHBO, lnNHB, lnHBC, lnREC
+FILEO PRINTO[3] = "{SCENARIO_DIR}\01_HBW_ZONAL_TRIPS.CSV"
+FILEO PRINTO[2] = "{SCENARIO_DIR}\01_HBW_DEST_CHOICE_DEBUG.TXT"
+FILEO PRINTO[1] = "{SCENARIO_DIR}\01_HBW_DEST_CHOICE.RPT"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_HBW.MAT",
   MO = 112, 212, 313, 412, 523, 100, 200, 300, 400, 500, DEC = 8, NAME = HBWSizeTerm, HBOSizeTerm, 
     NHBSizeTerm, HBCSizeTerm, RECSizeTerm, HBWUtil, HBOUtil, NHBUtil, HBCUtil, RECUtil
-FILEI ZDATI[2] = "{SCENARIO_DIR}\se_classified_2012A.dbf"
+FILEI LOOKUPI[1] = "{SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "{SCENARIO_DIR}\se_classified_2012A.dbf"
+FILEI MATI[2] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT"
+
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -69,7 +66,7 @@ ZONES = {Total ZONES}
 		JLOOP
 		  ; Compute size term
         ;MW[112] = Coeff_HH + Coeff_OFF_EMP + Coeff_OTH_EMP + Coeff_OTH_OFF_EMP
-		  MW[112] = Coeff_HH * ZI.2.HH[J] + Coeff_OFF_EMP * ZI.2.OFF[J] + Coeff_RET_EMP * (ZI.2.RET[J] + ZI.2.HTRET[J]) + Coeff_OTH_EMP * (ZI.2.EMP_NOSG[J] - ZI.2.OFF[J]  - ZI.2.RET[J] - ZI.2.HTRET[J]) + Coeff_OTH_OFF_EMP * (ZI.2.EMP_NOSG[J] - ZI.2.RET[J] - ZI.2.HTRET[J])
+		  MW[112] = Coeff_HH * ZI.1.HH[J] + Coeff_OFF_EMP * ZI.1.OFF[J] + Coeff_RET_EMP * (ZI.1.RET[J] + ZI.1.HTRET[J]) + Coeff_OTH_EMP * (ZI.1.EMP_NOSG[J] - ZI.1.OFF[J]  - ZI.1.RET[J] - ZI.1.HTRET[J]) + Coeff_OTH_OFF_EMP * (ZI.1.EMP_NOSG[J] - ZI.1.RET[J] - ZI.1.HTRET[J])
       
 		  ; Log (sizeTerm)
 		  IF(MW[112] > 0)   MW[113] = Ln(MW[112])  
@@ -107,7 +104,6 @@ ZONES = {Total ZONES}
   	; Destination choice model 
   	XCHOICE,  
   	ALTERNATIVES = All, 
-    DEMAND = personTrips[I],
   	UTILITIESMW = 100,
   	ODEMANDMW = 118,
   	DESTSPLIT= TOTAL All, INCLUDE=1-{Total ZONES},
@@ -121,11 +117,11 @@ ZONES = {Total ZONES}
 	  	PRINT PRINTO=1 CSV=F LIST =' Destination Choice Model Trace \n\nSelected Interchange for Tracing:    ',{SelOrigin}(4.0),'-',{SelDest}(4.0),'\n'
 	  	PRINT PRINTO=1 CSV=F LIST ='\n PURPOSE -                   @PURP@  '
 	  	PRINT PRINTO=1 CSV=F LIST ='\n Size Term is computed on the Destination '	  	      
-	  	PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = household coefficient                    ', Coeff_HH          , ' * ' , ZI.1.HH[J]  
-		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Other + Office Emp coefficient           ', Coeff_OTH_OFF_EMP , ' * ' , ZI.1.EMP[J], ZI.1.RET[J] ,ZI.1.HTRET[J]   
-		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Office Emp coefficient                   ', Coeff_OFF_EMP     , ' * ' , ZI.1.OFF[J] 
-		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Other Emp coefficient                    ', Coeff_OTH_EMP     , ' * ' , ZI.1.EMP[J],  ZI.1.OFF[J], ZI.1.RET[J], ZI.1.HTRET[J] 
-		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Retail Emp coefficient                   ', Coeff_RET_EMP     , ' * ' , ZI.1.RET[J] , ZI.1.HTRET[J]
+	  	PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = household coefficient                    ', Coeff_HH          , ' * ' , ZI.2.HH[J]  
+		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Other + Office Emp coefficient           ', Coeff_OTH_OFF_EMP , ' * ' , ZI.2.EMP[J], ZI.2.RET[J] ,ZI.2.HTRET[J]   
+		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Office Emp coefficient                   ', Coeff_OFF_EMP     , ' * ' , ZI.2.OFF[J] 
+		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Other Emp coefficient                    ', Coeff_OTH_EMP     , ' * ' , ZI.2.EMP[J],  ZI.2.OFF[J], ZI.2.RET[J], ZI.2.HTRET[J] 
+		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Retail Emp coefficient                   ', Coeff_RET_EMP     , ' * ' , ZI.2.RET[J] , ZI.2.HTRET[J]
 		  PRINT PRINTO=1 CSV=F LIST ='\n Capped distance (this is a value)  								 ', DISTCAP             
 		  PRINT PRINTO=1 CSV=F LIST ='\n Logsum coefficient                                  ', CLSUM             , ' * ' , MW[101]   
 		  PRINT PRINTO=1 CSV=F LIST ='\n distance coefficient                                ', CDIST             , ' * ' , MW[2]  
@@ -167,17 +163,17 @@ JLOOP
  ;Ro.lnS = ln(SeU)
   A = ZI.1.TAZ
   SeHBW = SeHBW + exp(MW[100])
-  SeHBO = SeHBO + exp(MW[200])
-  SeNHB = SeNHB + exp(MW[300])
-  SeHBC = SeHBC + exp(MW[400])
-  SeREC = SeREC + exp(MW[500])
+  ;SeHBO = SeHBO + exp(MW[200])
+  ;SeNHB = SeNHB + exp(MW[300])
+  ;SeHBC = SeHBC + exp(MW[400])
+  ;SeREC = SeREC + exp(MW[500])
 ENDJLOOP
   Ro.A = A
   Ro.lnHBW = ln(SeHBW)
-  Ro.lnHBO = ln(SeHBO)
-  Ro.lnNBH = ln(SeNHB)
-  Ro.lnHBC = ln(SeHBC)
-  Ro.lnREC = ln(SeREC)
+  ;Ro.lnHBO = ln(SeHBO)
+  ;Ro.lnNBH = ln(SeNHB)
+  ;Ro.lnHBC = ln(SeHBC)
+  ;Ro.lnREC = ln(SeREC)
 
 WRITE RECO = 1
     

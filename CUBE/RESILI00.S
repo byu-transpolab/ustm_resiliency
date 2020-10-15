@@ -801,6 +801,7 @@ ENDRUN
 
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Calculate Destination Choice Logsum'
+FILEI LOOKUPI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
 FILEI MATI[2] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT"
 FILEO PRINTO[3] = "{SCENARIO_DIR}\01_HBW_ZONAL_TRIPS.CSV"
@@ -811,9 +812,7 @@ FILEO RECO[1] = "{SCENARIO_DIR}\01_DCLS_ROWSUM.DBF",
 FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_HBW.MAT",
   MO = 112, 212, 313, 412, 523, 100, 200, 300, 400, 500, DEC = 8, NAME = HBWSizeTerm, HBOSizeTerm, 
     NHBSizeTerm, HBCSizeTerm, RECSizeTerm, HBWUtil, HBOUtil, NHBUtil, HBCUtil, RECUtil
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF"
 FILEI ZDATI[2] = "{SCENARIO_DIR}\se_classified_2012A.dbf"
-FILEI ZDATI[1] = "{SCENARIO_DIR}\HH_PROD.DBF"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -864,10 +863,6 @@ ZONES = {Total ZONES}
 ;;;;;BEGIN HBW DCLS;;;;;
 
 		JLOOP
-		
-		  ; Read productions
-		  personTrips[I] = ZI.1.HBWP
-		  
 		  ; Compute size term
         ;MW[112] = Coeff_HH + Coeff_OFF_EMP + Coeff_OTH_EMP + Coeff_OTH_OFF_EMP
 		  MW[112] = Coeff_HH * ZI.2.HH[J] + Coeff_OFF_EMP * ZI.2.OFF[J] + Coeff_RET_EMP * (ZI.2.RET[J] + ZI.2.HTRET[J]) + Coeff_OTH_EMP * (ZI.2.EMP_NOSG[J] - ZI.2.OFF[J]  - ZI.2.RET[J] - ZI.2.HTRET[J]) + Coeff_OTH_OFF_EMP * (ZI.2.EMP_NOSG[J] - ZI.2.RET[J] - ZI.2.HTRET[J])
@@ -908,7 +903,6 @@ ZONES = {Total ZONES}
   	; Destination choice model 
   	XCHOICE,  
   	ALTERNATIVES = All, 
-  	DEMAND = personTrips[I],
   	UTILITIESMW = 100,
   	ODEMANDMW = 118,
   	DESTSPLIT= TOTAL All, INCLUDE=1-{Total ZONES},
@@ -956,11 +950,32 @@ ZONES = {Total ZONES}
  
 ;;;;;BEGIN HBO DCLS;;;;;
 
-JLOOP
+	; READ IN MODEL PARAMETERS
+		LOOKUP, NAME=COEFF, LOOKUP[1]=NVAR, RESULT=HBO, INTERPOLATE=N, LIST=Y, LOOKUPI=1
+    
+		Coeff_HH = COEFF(1,1)              ; SizeTerm = household coefficient
+		Coeff_OTH_OFF_EMP = COEFF(1,2)     ; SizeTerm = Other + Office Emp coefficient
+		Coeff_OFF_EMP = COEFF(1,3)         ; SizeTerm = Office Emp coefficient
+		Coeff_OTH_EMP = COEFF(1,4)         ; SizeTerm = Other Emp coefficient
+		Coeff_RET_EMP = COEFF(1,5)         ; SizeTerm = Retail Emp coefficient
+		DISTCAP       = COEFF(1,6)         ; Capped distance (this is a value, not coefficient) ?
+		CLSUM         = COEFF(1,7)         ; Logsum coefficient
+		CDIST         = COEFF(1,8)         ; distance coefficient 
+		CDISTSQ       = COEFF(1,9)         ; distance square coeffficient
+		CDISTCUB      = COEFF(1,10)        ; distance cube coefficient
+		CDISTLN       = COEFF(1,11)        ; distance log coefficient		
+		KINTRAZ       = COEFF(1,12)        ; Intrazonal constant
+		KDIST01       = COEFF(1,13)        ; distance calibration constant (0-1 Mile)
+		KDIST12       = COEFF(1,14)        ; distance calibration constant (1-2 Mile)
+		KDIST23       = COEFF(1,15)        ; distance calibration constant (2-3 Mile)
+		KDIST34       = COEFF(1,16)        ; distance calibration cOnstant (3-4 Mile)
+		KDIST45       = COEFF(1,17)        ; distance calibration constant (4-5 Mile)
+		KDIST56       = COEFF(1,18)        ; distance calibration constant (5-6 Mile)
+		KDIST67       = COEFF(1,19)        ; distance calibration constant (6-7 Mile)
+
 		
-		  ; Read productions
-       personTrips[I] = ZI.1.HBOP
-		  
+
+JLOOP		  
 		  ; Compute size term
 		  MW[212] = Coeff_HH * ZI.2.HH[J] + Coeff_OFF_EMP * ZI.2.OFF[J] + Coeff_RET_EMP * (ZI.2.RET[J] + ZI.2.HTRET[J]) + Coeff_OTH_EMP * (ZI.2.EMP_NOSG[J] - ZI.2.OFF[J]  - ZI.2.RET[J] - ZI.2.HTRET[J]) + Coeff_OTH_OFF_EMP * (ZI.2.EMP_NOSG[J] - ZI.2.RET[J] - ZI.2.HTRET[J])
       
@@ -999,11 +1014,31 @@ ENDJLOOP
 
 ;;;;;BEGIN NHB DCLS;;;;;
 
-JLOOP
+	; READ IN MODEL PARAMETERS
+		LOOKUP, NAME=COEFF, LOOKUP[1]=NVAR, RESULT=NHB, INTERPOLATE=N, LIST=Y, LOOKUPI=1
+    
+		Coeff_HH = COEFF(1,1)              ; SizeTerm = household coefficient
+		Coeff_OTH_OFF_EMP = COEFF(1,2)     ; SizeTerm = Other + Office Emp coefficient
+		Coeff_OFF_EMP = COEFF(1,3)         ; SizeTerm = Office Emp coefficient
+		Coeff_OTH_EMP = COEFF(1,4)         ; SizeTerm = Other Emp coefficient
+		Coeff_RET_EMP = COEFF(1,5)         ; SizeTerm = Retail Emp coefficient
+		DISTCAP       = COEFF(1,6)         ; Capped distance (this is a value, not coefficient) ?
+		CLSUM         = COEFF(1,7)         ; Logsum coefficient
+		CDIST         = COEFF(1,8)         ; distance coefficient 
+		CDISTSQ       = COEFF(1,9)         ; distance square coeffficient
+		CDISTCUB      = COEFF(1,10)        ; distance cube coefficient
+		CDISTLN       = COEFF(1,11)        ; distance log coefficient		
+		KINTRAZ       = COEFF(1,12)        ; Intrazonal constant
+		KDIST01       = COEFF(1,13)        ; distance calibration constant (0-1 Mile)
+		KDIST12       = COEFF(1,14)        ; distance calibration constant (1-2 Mile)
+		KDIST23       = COEFF(1,15)        ; distance calibration constant (2-3 Mile)
+		KDIST34       = COEFF(1,16)        ; distance calibration cOnstant (3-4 Mile)
+		KDIST45       = COEFF(1,17)        ; distance calibration constant (4-5 Mile)
+		KDIST56       = COEFF(1,18)        ; distance calibration constant (5-6 Mile)
+		KDIST67       = COEFF(1,19)        ; distance calibration constant (6-7 Mile)
+
 		
-		  ; Read productions
-       personTrips[I] = ZI.1.HBSCP
-		  
+JLOOP
 		  ; Compute size term
 		  MW[312] = Coeff_HH * ZI.2.HH[J] + Coeff_OFF_EMP * ZI.2.OFF[J] + Coeff_RET_EMP * (ZI.2.RET[J] + ZI.2.HTRET[J]) + Coeff_OTH_EMP * (ZI.2.EMP_NOSG[J] - ZI.2.OFF[J]  - ZI.2.RET[J] - ZI.2.HTRET[J]) + Coeff_OTH_OFF_EMP * (ZI.2.EMP_NOSG[J] - ZI.2.RET[J] - ZI.2.HTRET[J])
       
@@ -1042,11 +1077,31 @@ ENDJLOOP
 
 ;;;;;BEGIN HBC DCLS;;;;;
 
-JLOOP
+	; READ IN MODEL PARAMETERS
+		LOOKUP, NAME=COEFF, LOOKUP[1]=NVAR, RESULT=HBC, INTERPOLATE=N, LIST=Y, LOOKUPI=1
+    
+		Coeff_HH = COEFF(1,1)              ; SizeTerm = household coefficient
+		Coeff_OTH_OFF_EMP = COEFF(1,2)     ; SizeTerm = Other + Office Emp coefficient
+		Coeff_OFF_EMP = COEFF(1,3)         ; SizeTerm = Office Emp coefficient
+		Coeff_OTH_EMP = COEFF(1,4)         ; SizeTerm = Other Emp coefficient
+		Coeff_RET_EMP = COEFF(1,5)         ; SizeTerm = Retail Emp coefficient
+		DISTCAP       = COEFF(1,6)         ; Capped distance (this is a value, not coefficient) ?
+		CLSUM         = COEFF(1,7)         ; Logsum coefficient
+		CDIST         = COEFF(1,8)         ; distance coefficient 
+		CDISTSQ       = COEFF(1,9)         ; distance square coeffficient
+		CDISTCUB      = COEFF(1,10)        ; distance cube coefficient
+		CDISTLN       = COEFF(1,11)        ; distance log coefficient		
+		KINTRAZ       = COEFF(1,12)        ; Intrazonal constant
+		KDIST01       = COEFF(1,13)        ; distance calibration constant (0-1 Mile)
+		KDIST12       = COEFF(1,14)        ; distance calibration constant (1-2 Mile)
+		KDIST23       = COEFF(1,15)        ; distance calibration constant (2-3 Mile)
+		KDIST34       = COEFF(1,16)        ; distance calibration cOnstant (3-4 Mile)
+		KDIST45       = COEFF(1,17)        ; distance calibration constant (4-5 Mile)
+		KDIST56       = COEFF(1,18)        ; distance calibration constant (5-6 Mile)
+		KDIST67       = COEFF(1,19)        ; distance calibration constant (6-7 Mile)
+
 		
-		  ; Read productions
-       personTrips[I] = ZI.1.NHBWP
-		  
+JLOOP
 		  ; Compute size term
 		  MW[412] = Coeff_HH * ZI.2.HH[J] + Coeff_OFF_EMP * ZI.2.OFF[J] + Coeff_RET_EMP * (ZI.2.RET[J] + ZI.2.HTRET[J]) + Coeff_OTH_EMP * (ZI.2.EMP_NOSG[J] - ZI.2.OFF[J]  - ZI.2.RET[J] - ZI.2.HTRET[J]) + Coeff_OTH_OFF_EMP * (ZI.2.EMP_NOSG[J] - ZI.2.RET[J] - ZI.2.HTRET[J])
       
@@ -1085,11 +1140,31 @@ ENDJLOOP
 
 ;;;;;BEGIN REC DCLS;;;;;
 
+	; READ IN MODEL PARAMETERS
+		LOOKUP, NAME=COEFF, LOOKUP[1]=NVAR, RESULT=REC, INTERPOLATE=N, LIST=Y, LOOKUPI=1
+    
+		Coeff_HH = COEFF(1,1)              ; SizeTerm = household coefficient
+		Coeff_OTH_OFF_EMP = COEFF(1,2)     ; SizeTerm = Other + Office Emp coefficient
+		Coeff_OFF_EMP = COEFF(1,3)         ; SizeTerm = Office Emp coefficient
+		Coeff_OTH_EMP = COEFF(1,4)         ; SizeTerm = Other Emp coefficient
+		Coeff_RET_EMP = COEFF(1,5)         ; SizeTerm = Retail Emp coefficient
+		DISTCAP       = COEFF(1,6)         ; Capped distance (this is a value, not coefficient) ?
+		CLSUM         = COEFF(1,7)         ; Logsum coefficient
+		CDIST         = COEFF(1,8)         ; distance coefficient 
+		CDISTSQ       = COEFF(1,9)         ; distance square coeffficient
+		CDISTCUB      = COEFF(1,10)        ; distance cube coefficient
+		CDISTLN       = COEFF(1,11)        ; distance log coefficient		
+		KINTRAZ       = COEFF(1,12)        ; Intrazonal constant
+		KDIST01       = COEFF(1,13)        ; distance calibration constant (0-1 Mile)
+		KDIST12       = COEFF(1,14)        ; distance calibration constant (1-2 Mile)
+		KDIST23       = COEFF(1,15)        ; distance calibration constant (2-3 Mile)
+		KDIST34       = COEFF(1,16)        ; distance calibration cOnstant (3-4 Mile)
+		KDIST45       = COEFF(1,17)        ; distance calibration constant (4-5 Mile)
+		KDIST56       = COEFF(1,18)        ; distance calibration constant (5-6 Mile)
+		KDIST67       = COEFF(1,19)        ; distance calibration constant (6-7 Mile)
+
+	
 JLOOP
-		
-		  ; Read productions
-       personTrips[I] = ZI.1.RECP
-		  
 		  ; Compute size term
 		  MW[512] = Coeff_HH * ZI.2.HH[J] + Coeff_OFF_EMP * ZI.2.OFF[J] + Coeff_RET_EMP * (ZI.2.RET[J] + ZI.2.HTRET[J]) + Coeff_OTH_EMP * (ZI.2.EMP_NOSG[J] - ZI.2.OFF[J]  - ZI.2.RET[J] - ZI.2.HTRET[J]) + Coeff_OTH_OFF_EMP * (ZI.2.EMP_NOSG[J] - ZI.2.RET[J] - ZI.2.HTRET[J])
       
@@ -1155,6 +1230,139 @@ WRITE RECO = 1
     
  ;Write in stuff that computes the dcls ,using the utilities 
  ;create another matrix thta writes out the utilites for each matrix (HBW)
+
+ENDRUN
+
+
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_HBO_DCLS.S"
+;;<<Default Template>><<MATRIX>><<Default>>;;
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=MATRIX
+FILEI ZDATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
+FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
+
+; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
+; where I is the origin zones.  All user statements in the module are processed once for each origin.
+; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
+; the values for all destination zones J are automatically computed.  The user can control the computations
+; at each J by using a JLOOP.
+
+ENDRUN
+
+
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_NHB_DCLS.S"
+;;<<Default Template>><<MATRIX>><<Default>>;;
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=MATRIX
+FILEI LOOKUPI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
+FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
+
+; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
+; where I is the origin zones.  All user statements in the module are processed once for each origin.
+; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
+; the values for all destination zones J are automatically computed.  The user can control the computations
+; at each J by using a JLOOP.
+
+ENDRUN
+
+
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_HBC_DCLS.S"
+;;<<Default Template>><<MATRIX>><<Default>>;;
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=MATRIX
+FILEI ZDATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
+FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
+
+LOOKUP LOOKUPI=1,
+       NAME=DESTCHOICE_PARA,
+         LOOKUP[1]=NVAR, RESULT=HBW,
+         LOOKUP[2]=NVAR, RESULT=HBO,
+         LOOKUP[3]=NVAR, RESULT=HBC,
+         LOOKUP[4]=NVAR, RESULT=REC,
+         LOOKUP[5]=NVAR, RESULT=NHB,
+       FAIL[3]=0
+; example of use: v=DESTCHOICE_PARA(5,25)
+; look for 25 in the NVAR field and returns the NHB value
+
+
+LOOKUP LOOKUPI=1,
+       NAME=DESTCHOICE_PARA,
+         LOOKUP[1]=NVAR, RESULT=HBW,
+         LOOKUP[2]=NVAR, RESULT=HBO,
+         LOOKUP[3]=NVAR, RESULT=HBC,
+         LOOKUP[4]=NVAR, RESULT=REC,
+         LOOKUP[5]=NVAR, RESULT=NHB,
+       FAIL[3]=0
+; example of use: v=DESTCHOICE_PARA(5,25)
+; look for 25 in the NVAR field and returns the NHB value
+
+
+LOOKUP LOOKUPI=1,
+       NAME=DESTCHOICE_PARA,
+         LOOKUP[1]=NVAR, RESULT=HBW,
+         LOOKUP[2]=NVAR, RESULT=HBO,
+         LOOKUP[3]=NVAR, RESULT=HBC,
+         LOOKUP[4]=NVAR, RESULT=REC,
+         LOOKUP[5]=NVAR, RESULT=NHB,
+       FAIL[3]=0
+; example of use: v=DESTCHOICE_PARA(5,25)
+; look for 25 in the NVAR field and returns the NHB value
+
+FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
+
+; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
+; where I is the origin zones.  All user statements in the module are processed once for each origin.
+; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
+; the values for all destination zones J are automatically computed.  The user can control the computations
+; at each J by using a JLOOP.
+
+ENDRUN
+
+
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_REC_DCLS.S"
+;;<<Default Template>><<MATRIX>><<Default>>;;
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=MATRIX
+FILEI ZDATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
+FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
+
+; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
+; where I is the origin zones.  All user statements in the module are processed once for each origin.
+; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
+; the values for all destination zones J are automatically computed.  The user can control the computations
+; at each J by using a JLOOP.
+
+ENDRUN
+
+
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DCLS_COMBINE.S"
+;;<<Default Template>><<MATRIX>><<Default>>;;
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=MATRIX
+
+; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
+; where I is the origin zones.  All user statements in the module are processed once for each origin.
+; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
+; the values for all destination zones J are automatically computed.  The user can control the computations
+; at each J by using a JLOOP.
+
+ENDRUN
+
+
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_HBW_DCLS.S"
+;;<<Default Template>><<MATRIX>><<Default>>;;
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=MATRIX
+
+; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
+; where I is the origin zones.  All user statements in the module are processed once for each origin.
+; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
+; the values for all destination zones J are automatically computed.  The user can control the computations
+; at each J by using a JLOOP.
 
 ENDRUN
 
