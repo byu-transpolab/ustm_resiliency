@@ -1,13 +1,14 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX
+RUN PGM=MATRIX MSG='HBW DCLS'
+FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
 FILEO RECO[1] = "{SCENARIO_DIR}\01_HBW_DCLS_ROWSUM.DBF",
-  FIELDS = A, lnHBW, lnHBO, lnNHB, lnHBC, lnREC
+  FIELDS = A, lnHBW
 FILEO PRINTO[3] = "{SCENARIO_DIR}\01_HBW_ZONAL_TRIPS.CSV"
 FILEO PRINTO[2] = "{SCENARIO_DIR}\01_HBW_DEST_CHOICE_DEBUG.TXT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\01_HBW_DEST_CHOICE.RPT"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_HBW.MAT",
-  MO = 112, 212, 313, 412, 523, 100, 200, 300, 400, 500, DEC = 8, NAME = HBWSizeTerm, HBOSizeTerm, 
+  MO = 112, 100 DEC = 8, NAME = HBWSizeTerm, HBOSizeTerm, 
     NHBSizeTerm, HBCSizeTerm, RECSizeTerm, HBWUtil, HBOUtil, NHBUtil, HBCUtil, RECUtil
 FILEI LOOKUPI[1] = "{SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF"
 FILEI ZDATI[1] = "{SCENARIO_DIR}\se_classified_2012A.dbf"
@@ -104,6 +105,7 @@ ZONES = {Total ZONES}
   	; Destination choice model 
   	XCHOICE,  
   	ALTERNATIVES = All, 
+    DEMAND = personTrips[I],
   	UTILITIESMW = 100,
   	ODEMANDMW = 118,
   	DESTSPLIT= TOTAL All, INCLUDE=1-{Total ZONES},
@@ -152,16 +154,16 @@ ZONES = {Total ZONES}
 
 ;SeU = 0
 SeHBW = 0
-SeHBO = 0
-SeHBC = 0
-SeNHB = 0
-SeREC = 0
+;SeHBO = 0
+;SeHBC = 0
+;SeNHB = 0
+;SeREC = 0
 ;A = 1
 JLOOP
  ;SeU = SeU + exp(MW[100])
  ;Ro.SeU = SeU
  ;Ro.lnS = ln(SeU)
-  A = ZI.1.TAZ
+  A = ZI.2.TAZ
   SeHBW = SeHBW + exp(MW[100])
   ;SeHBO = SeHBO + exp(MW[200])
   ;SeNHB = SeNHB + exp(MW[300])

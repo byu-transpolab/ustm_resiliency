@@ -1,0 +1,35 @@
+DESTINTION CHOICE TRACE @PURP@
+
+
+ Destination Choice Model Trace 
+
+Selected Interchange for Tracing:       1- 159
+
+ PURPOSE -                   @PURP@  
+ Size Term is computed on the Destination 
+ SizeTerm = household coefficient                          0.57 *          ?
+ SizeTerm = Other + Office Emp coefficient                 0.56 *          ?         ?         ?
+ SizeTerm = Office Emp coefficient                            0 *          ?
+ SizeTerm = Other Emp coefficient                             0 *          ?         ?         ?         ?
+ SizeTerm = Retail Emp coefficient                         5.12 *          ?         ?
+ Capped distance (this is a value)                22.00
+ Logsum coefficient                                        0.75 *       0.40
+ distance coefficient                                         0 *      11.30
+ distance square coeffficient                                 0 *     127.69
+ distance cube coefficient                                    0 *    1442.90
+ distance log coefficient                                     0 *          0
+ Intrazonal constant                                          0 *          0
+ distance calibration constant (0-1 Mile)                     0
+ distance calibration constant (1-2 Mile)                     0
+ distance calibration constant (2-3 Mile)                     0
+ distance calibration constant (3-4 Mile)                     0
+ distance calibration constant (4-5 Mile)                     0
+ distance calibration constant (5-6 Mile)                     0
+ distance calibration constant (6-7 Mile)                     0
+ Applied  calibration constant                                0
+ Size Term                                                    0
+ Ln(Size Term)                                                0
+ Computed Utility                                             0
+ Total Productions in Origin                                  0
+ Trip Attractions                                             0
+ Intrazonal Sum                     0

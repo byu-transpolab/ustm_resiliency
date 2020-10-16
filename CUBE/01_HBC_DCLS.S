@@ -1,6 +1,11 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX
+RUN PGM=MATRIX MSG='HBC DCLS'
+FILEO PRINTO[3] = "{SCENARIO_DIR}\01_HBC_ZONAL_TRIPS.CSV"
+FILEO PRINTO[2] = "{SCENARIO_DIR}\01_HBC_DEST_CHOICE_DEBUG.TXT"
+FILEO PRINTO[1] = "{SCENARIO_DIR}\01_HBC_DEST_CHOICE.RPT"
+FILEO RECO[1] = "{SCENARIO_DIR}\01_HBC_DCLS_ROWSUM.DBF"
+FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
 FILEO MATO[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DEST_HBC.MAT"
 FILEI LOOKUPI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
 FILEI ZDATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
