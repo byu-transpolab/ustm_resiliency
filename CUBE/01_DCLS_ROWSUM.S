@@ -1,4 +1,3 @@
-; Script for program MATRIX in file "D:\projects\ustm_resiliency\CUBE\01_DCLS_ROWSUM.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_DCLS_ROWSUM.PRN"
@@ -46,5 +45,3 @@ WRITE RECO = 1
 
 
 ENDRUN
-
-

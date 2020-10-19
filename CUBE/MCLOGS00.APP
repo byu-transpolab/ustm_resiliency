@@ -17,10 +17,10 @@ MC Logsums
 00
 
 
-Fri Sep 11 12:05:13 2020
+Mon Oct 19 12:01:39 2020
 
-C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\resili00.app
-C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\MCLOGS00.APP
+D:\projects\ustm_resiliency\CUBE\resili00.app
+D:\PROJECTS\USTM_RESILIENCY\CUBE\MCLOGS00.APP
 VOYAGER
 
 
@@ -53,7 +53,7 @@ Script File
 0
 0
 S
-C:\Users\mbarnes7\Documents\projects\ustm_resiliency\Base\01_HBW_MCLS.S
+D:\projects\ustm_resiliency\Base\01_HBW_MCLS.S
 1
 MAT
 ISCR1 
@@ -1926,7 +1926,7 @@ Script File
 0
 0
 S
-C:\Users\mbarnes7\Documents\projects\ustm_resiliency\Base\01_HBO_MCLS.S
+D:\projects\ustm_resiliency\Base\01_HBO_MCLS.S
 1
 MAT
 ISCR1 
@@ -3799,7 +3799,7 @@ Script File
 0
 0
 S
-C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_NHB_MCLS.S
+D:\projects\ustm_resiliency\CUBE\01_NHB_MCLS.S
 1
 MAT
 ISCR1 
@@ -5672,7 +5672,7 @@ Script File
 0
 0
 S
-C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_HBC_MCLS.S
+D:\projects\ustm_resiliency\CUBE\01_HBC_MCLS.S
 1
 MAT
 ISCR1 
@@ -7545,7 +7545,7 @@ Script File
 0
 0
 S
-C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_REC_MCLS.S
+D:\projects\ustm_resiliency\CUBE\01_REC_MCLS.S
 1
 MAT
 ISCR1 
@@ -9418,7 +9418,7 @@ Script File
 0
 0
 S
-C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_MCLS_COMBINE.S
+D:\projects\ustm_resiliency\CUBE\01_MCLS_COMBINE.S
 1
 MAT
 ISCR1 
@@ -9490,7 +9490,7 @@ HBC Logsum
 0
 0
 MAT
-C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MC_HBC_LOGSUM.MAT
+D:\Projects\ustm_resiliency\Base\01_MC_HBC_LOGSUM.MAT
 0
 MAT
 MATI4 

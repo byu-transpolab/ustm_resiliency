@@ -2,14 +2,11 @@
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBW DCLS'
 FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEO RECO[1] = "{SCENARIO_DIR}\01_HBW_DCLS_ROWSUM.DBF",
-  FIELDS = A, lnHBW
 FILEO PRINTO[3] = "{SCENARIO_DIR}\01_HBW_ZONAL_TRIPS.CSV"
 FILEO PRINTO[2] = "{SCENARIO_DIR}\01_HBW_DEST_CHOICE_DEBUG.TXT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\01_HBW_DEST_CHOICE.RPT"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_HBW.MAT",
-  MO = 112, 100 DEC = 8, NAME = HBWSizeTerm, HBOSizeTerm, 
-    NHBSizeTerm, HBCSizeTerm, RECSizeTerm, HBWUtil, HBOUtil, NHBUtil, HBCUtil, RECUtil
+  MO = 112, 100 DEC = 8, NAME = HBWSizeTerm, HBWUtil
 FILEI LOOKUPI[1] = "{SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF"
 FILEI ZDATI[1] = "{SCENARIO_DIR}\se_classified_2012A.dbf"
 FILEI MATI[2] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT"
@@ -50,11 +47,7 @@ ZONES = {Total ZONES}
 
 		; Mode choice logsums
 		MW[101] = MI.1.1 ;HBW logsum
-    MW[201] = MI.1.2 ;HBO logsum
-		MW[301] = MI.1.3 ;NHB logsum
-    MW[401] = MI.1.4 ;HBC logsum
-    MW[501] = MI.1.5 ;REC logsum
-    
+
 		; Hwy distance skim
 		MW[2] = DISTCAP
     
@@ -150,36 +143,5 @@ ZONES = {Total ZONES}
     IF(I = J)  INTRAZONAL_sum = INTRAZONAL_sum + MW[119]
     IF (I = ZONES && J = ZONES) PRINT PRINTO=1 CSV=F LIST ='\n Intrazonal Sum            ', INTRAZONAL_sum 
  ENDJLOOP
-
-
-;SeU = 0
-SeHBW = 0
-;SeHBO = 0
-;SeHBC = 0
-;SeNHB = 0
-;SeREC = 0
-;A = 1
-JLOOP
- ;SeU = SeU + exp(MW[100])
- ;Ro.SeU = SeU
- ;Ro.lnS = ln(SeU)
-  A = ZI.2.TAZ
-  SeHBW = SeHBW + exp(MW[100])
-  ;SeHBO = SeHBO + exp(MW[200])
-  ;SeNHB = SeNHB + exp(MW[300])
-  ;SeHBC = SeHBC + exp(MW[400])
-  ;SeREC = SeREC + exp(MW[500])
-ENDJLOOP
-  Ro.A = A
-  Ro.lnHBW = ln(SeHBW)
-  ;Ro.lnHBO = ln(SeHBO)
-  ;Ro.lnNBH = ln(SeNHB)
-  ;Ro.lnHBC = ln(SeHBC)
-  ;Ro.lnREC = ln(SeREC)
-
-WRITE RECO = 1
-    
- ;Write in stuff that computes the dcls ,using the utilities 
- ;create another matrix thta writes out the utilites for each matrix (HBW)
 
 ENDRUN

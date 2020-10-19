@@ -3,7 +3,7 @@
 ;;;;;;In this code, HBW related data are labeled in the 100's, HBO in the 200's, NHB in the 300's, HBC in the 400's and REC in the 500's;;;;;;
 
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX MSG='Calculate Destination Choice Logsum'
+RUN PGM=MATRIX PRNFILE="deletethis" MSG='Calculate Destination Choice Logsum'
 FILEI ZDATI[1] = "{SCENARIO_DIR}\HH_PROD.DBF"
 FILEI LOOKUPI[1] = "{SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF"
 FILEI MATI[2] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"

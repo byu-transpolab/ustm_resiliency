@@ -7,29 +7,29 @@ Selected Interchange for Tracing:       1- 159
 
  PURPOSE -                   @PURP@  
  Size Term is computed on the Destination 
- SizeTerm = household coefficient                          1.17 *          ?
- SizeTerm = Other + Office Emp coefficient                 0.81 *          ?         ?         ?
+ SizeTerm = household coefficient                             0 *          ?
+ SizeTerm = Other + Office Emp coefficient                    0 *          ?         ?         ?
  SizeTerm = Office Emp coefficient                            0 *          ?
  SizeTerm = Other Emp coefficient                             0 *          ?         ?         ?         ?
- SizeTerm = Retail Emp coefficient                         2.26 *          ?         ?
+ SizeTerm = Retail Emp coefficient                         3.81 *          ?         ?
  Capped distance (this is a value)                22.00
- Logsum coefficient                                        0.35 *       0.20
- distance coefficient                                     -0.16 *      11.30
- distance square coeffficient                              0.01 *     127.69
+ Logsum coefficient                                        0.80 *          0
+ distance coefficient                                     -0.12 *      11.30
+ distance square coeffficient                              0.00 *     127.69
  distance cube coefficient                                -0.00 *    1442.90
  distance log coefficient                                     0 *       2.42
- Intrazonal constant                                       0.44 *          0
+ Intrazonal constant                                       0.45 *          0
  distance calibration constant (0-1 Mile)                     0
  distance calibration constant (1-2 Mile)                     0
- distance calibration constant (2-3 Mile)                     0
- distance calibration constant (3-4 Mile)                  0.25
+ distance calibration constant (2-3 Mile)                  0.50
+ distance calibration constant (3-4 Mile)                     0
  distance calibration constant (4-5 Mile)                     0
  distance calibration constant (5-6 Mile)                     0
  distance calibration constant (6-7 Mile)                     0
- Applied  calibration constant                             8.20
- Size Term                                              3651.77
- Ln(Size Term)                                             8.20
- Computed Utility                                          7.60
+ Applied  calibration constant                             7.71
+ Size Term                                              2219.63
+ Ln(Size Term)                                             7.71
+ Computed Utility                                          6.91
  Total Productions in Origin                                  0
  Trip Attractions                                             0
  Intrazonal Sum                     0

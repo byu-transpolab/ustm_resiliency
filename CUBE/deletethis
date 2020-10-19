@@ -1,0 +1,316 @@
+ 
+MATRIX (v.08/13/2019 [6.4.5 x64])  Mon Oct 19 13:17:57 2020
+
+FILEI ZDATI[1] = "D:\projects\ustm_resiliency\Base\HH_PROD.DBF"
+FILEI LOOKUPI[1] = "D:\projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
+FILEI MATI[2] = "D:\projects\ustm_resiliency\Base\01_PROCESSED_SKIMS.MAT"
+FILEI MATI[1] = "D:\projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
+FILEO PRINTO[3] = "D:\projects\ustm_resiliency\Base\01_HBW_ZONAL_TRIPS.CSV"
+FILEO PRINTO[2] = "D:\projects\ustm_resiliency\Base\01_DEST_CHOICE_DEBUG.TXT"
+FILEO PRINTO[1] = "D:\projects\ustm_resiliency\Base\01_DEST_CHOICE.RPT"
+FILEO RECO[1] = "D:\projects\ustm_resiliency\Base\01_DCLS_ROWSUM.DBF",
+  FIELDS = A, lnHBW, lnHBO, lnNHB, lnHBC, lnREC
+FILEO MATO[1] = "D:\projects\ustm_resiliency\Base\01_DEST_HBW.MAT",
+  MO = 112, 212, 313, 412, 523, 100, 200, 300, 400, 500, DEC = 8, NAME = HBWSizeTerm, HBOSizeTerm,
+    NHBSizeTerm, HBCSizeTerm, RECSizeTerm, HBWUtil, HBOUtil, NHBUtil, HBCUtil, RECUtil
+FILEI ZDATI[2] = "D:\projects\ustm_resiliency\Base\se_classified_2012A.dbf"
+
+; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
+; where I is the origin zones.  All user statements in the module are processed once for each origin.
+; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
+; the values for all destination zones J are automatically computed.  The user can control the computations
+; at each J by using a JLOOP.
+
+ZONES = 267
+  ARRAY personTrips = ZONES
+
+  ; READ IN MODEL PARAMETERS
+  LOOKUP, NAME=COEFF, LOOKUP[1]=NVAR, RESULT=HBW, INTERPOLATE=N, LIST=Y, LOOKUPI=1
+
+  Coeff_HH = COEFF(1,1)              ; SizeTerm = household coefficient
+  Coeff_OTH_OFF_EMP = COEFF(1,2)     ; SizeTerm = Other + Office Emp coefficient
+  Coeff_OFF_EMP = COEFF(1,3)         ; SizeTerm = Office Emp coefficient
+  Coeff_OTH_EMP = COEFF(1,4)         ; SizeTerm = Other Emp coefficient
+  Coeff_RET_EMP = COEFF(1,5)         ; SizeTerm = Retail Emp coefficient
+  DISTCAP       = COEFF(1,6)         ; Capped distance (this is a value, not coefficient) ?
+  CLSUM         = COEFF(1,7)         ; Logsum coefficient
+  CDIST         = COEFF(1,8)         ; distance coefficient
+  CDISTSQ       = COEFF(1,9)         ; distance square coeffficient
+  CDISTCUB      = COEFF(1,10)        ; distance cube coefficient
+  CDISTLN       = COEFF(1,11)        ; distance log coefficient
+  KINTRAZ       = COEFF(1,12)        ; Intrazonal constant
+  KDIST01       = COEFF(1,13)        ; distance calibration constant (0-1 Mile)
+  KDIST12       = COEFF(1,14)        ; distance calibration constant (1-2 Mile)Page 2  (VOYAGER MATRIX) 
+Brigham Young University
+-------------------------
+  KDIST23       = COEFF(1,15)        ; distance calibration constant (2-3 Mile)
+  KDIST34       = COEFF(1,16)        ; distance calibration cOnstant (3-4 Mile)
+  KDIST45       = COEFF(1,17)        ; distance calibration constant (4-5 Mile)
+  KDIST56       = COEFF(1,18)        ; distance calibration constant (5-6 Mile)
+  KDIST67       = COEFF(1,19)        ; distance calibration constant (6-7 Mile)
+
+  ; Mode choice logsums
+  MW[101] = MI.1.1 ;HBW logsum
+    MW[201] = MI.1.2 ;HBO logsum
+  MW[301] = MI.1.3 ;NHB logsum
+    MW[401] = MI.1.4 ;HBC logsum
+    MW[501] = MI.1.5 ;REC logsum
+
+  ; Hwy distance skim
+  MW[2] = DISTCAP
+
+    ; Distance calibration
+    MW[113] = 0
+
+
+;;;;;BEGIN HBW DCLS;;;;;
+
+  JLOOP
+    ; Compute size term
+        ;MW[112] = Coeff_HH + Coeff_OFF_EMP + Coeff_OTH_EMP + Coeff_OTH_OFF_EMP
+    MW[112] = Coeff_HH * ZI.2.HH[J] + Coeff_OFF_EMP * ZI.2.OFF[J] + Coeff_RET_EMP * (ZI.2.RET[J] + ZI.2.HTRET[J]) + Coeff_OTH_EMP * (ZI.2.EMP_NOSG[J] - ZI.2.OFF[J]  - ZI.2.RET[J] - ZI.2.HTRET[J]) + Coeff_OTH_OFF_EMP * (ZI.2.EMP_NOSG[J] - ZI.2.RET[J] - ZI.2.HTRET[J])
+
+    ; Log (sizeTerm)
+    IF (MW[112] > 0)   MW[113] = Ln(MW[112])
+
+    ; Intrazonal boolean
+    IF (J == I) MW[111] = 1
+
+    ; Hwy distance
+    IF (MI.2.Distance < DISTCAP)  MW[2] = MI.2.Distance
+    IF (MI.2.Distance > 0)  MW[114] = Ln(MI.2.Distance)
+
+    ; Distance calibration constants
+    IF (MW[2] > 0 && MW[2] <=1) MW[115] = KDIST01    ; Calibration constant for distance 0-1 bin
+    IF (MW[2] > 1 && MW[2] <=2) MW[115] = KDIST12    ; Calibration constant for distance 1-2 bin
+    IF (MW[2] > 2 && MW[2] <=3) MW[115] = KDIST23    ; Calibration constant for distance 2-5 bin
+    IF (MW[2] > 3 && MW[2] <=4) MW[115] = KDIST34    ; Calibration constant for distance 2-5 bin
+    IF (MW[2] > 4 && MW[2] <=5) MW[115] = KDIST45    ; Calibration constant for distance 2-5 bin
+    IF (MW[2] > 5 && MW[2] <=6) MW[115] = KDIST56    ; Calibration constant for distance 2-5 bin
+    IF (MW[2] > 6 && MW[2] <=7) MW[115] = KDIST67    ; Calibration constant for distance 2-5 bin
+
+
+
+    ; Utility expression--has the MCLS in the expression already
+    MW[100] =  CLSUM * MW[101] +                ; modechoice logsum
+               CDIST * MW[2] +                ; distance
+               CDISTSQ * (POW(MW[2],2)) +     ; distance sq
+               CDISTCUB * (POW(MW[2],3)) +    ; distance cube
+               CDISTLN * MW[114] +       ; log(distance)Page 3  (VOYAGER MATRIX) 
+Brigham Young University
+-------------------------
+               MW[113] +            ; log(sizeterm)
+               KINTRAZ * MW[111] +            ; intrazonal
+               MW[115] +                      ; calibration distance
+               MW[116]                        ; Shadow Price
+  ENDJLOOP
+
+   ; Destination choice model
+   XCHOICE,
+   ALTERNATIVES = All,
+    DEMAND = personTrips[I],
+   UTILITIESMW = 100,
+   ODEMANDMW = 118,
+   DESTSPLIT= TOTAL All, INCLUDE=1-267,
+   STARTMW = 119
+
+; Report coefficient values to summary file and debug file;
+    JLOOP
+   ;Debug destination choice
+   IF (1 = 1 && I = 1 && J = 159)
+      PRINT PRINTO=1 CSV=F LIST ='DESTINTION CHOICE TRACE @PURP@','\n\n'
+    PRINT PRINTO=1 CSV=F LIST =' Destination Choice Model Trace \n\nSelected Interchange for Tracing:    ',1(4.0),'-',159(4.0),'\n'
+    PRINT PRINTO=1 CSV=F LIST ='\n PURPOSE -                   @PURP@  '
+    PRINT PRINTO=1 CSV=F LIST ='\n Size Term is computed on the Destination '
+    PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = household coefficient                    ', Coeff_HH          , ' * ' , ZI.1.HH[J]
+    PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Other + Office Emp coefficient           ', Coeff_OTH_OFF_EMP , ' * ' , ZI.1.EMP[J], ZI.1.RET[J] ,ZI.1.HTRET[J]
+    PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Office Emp coefficient                   ', Coeff_OFF_EMP     , ' * ' , ZI.1.OFF[J]
+    PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Other Emp coefficient                    ', Coeff_OTH_EMP     , ' * ' , ZI.1.EMP[J],  ZI.1.OFF[J], ZI.1.RET[J], ZI.1.HTRET[J]
+    PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Retail Emp coefficient                   ', Coeff_RET_EMP     , ' * ' , ZI.1.RET[J] , ZI.1.HTRET[J]
+    PRINT PRINTO=1 CSV=F LIST ='\n Capped distance (this is a value)           ', DISTCAP
+    PRINT PRINTO=1 CSV=F LIST ='\n Logsum coefficient                                  ', CLSUM             , ' * ' , MW[101]
+    PRINT PRINTO=1 CSV=F LIST ='\n distance coefficient                                ', CDIST             , ' * ' , MW[2]
+    PRINT PRINTO=1 CSV=F LIST ='\n distance square coeffficient                        ', CDISTSQ           , ' * ' , POW(MW[2],2)
+    PRINT PRINTO=1 CSV=F LIST ='\n distance cube coefficient                           ', CDISTCUB          , ' * ' , POW(MW[2],3)
+    PRINT PRINTO=1 CSV=F LIST ='\n distance log coefficient                            ', CDISTLN           , ' * ' , MW[114]
+    PRINT PRINTO=1 CSV=F LIST ='\n Intrazonal constant                                 ', KINTRAZ           , ' * ' , MW[111]
+    PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (0-1 Mile)            ', KDIST01
+    PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (1-2 Mile)            ', KDIST12
+    PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (2-3 Mile)            ', KDIST23
+    PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (3-4 Mile)            ', KDIST34
+    PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (4-5 Mile)            ', KDIST45
+    PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (5-6 Mile)            ', KDIST56
+    PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (6-7 Mile)            ', KDIST67
+    PRINT PRINTO=1 CSV=F LIST ='\n Applied  calibration constant                       ', MW[113]
+      PRINT PRINTO=1 CSV=F LIST ='\n Size Term                                           ', MW[112]
+      PRINT PRINTO=1 CSV=F LIST ='\n Ln(Size Term)                                       ', MW[113]
+    PRINT PRINTO=1 CSV=F LIST ='\n Computed Utility                                    ', MW[100]
+    PRINT PRINTO=1 CSV=F LIST ='\n Total Productions in Origin                         ', personTrips[I]
+    PRINT PRINTO=1 CSV=F LIST ='\n Trip Attractions                                    ', MW[119]
+   ENDIF
+
+   ; Report total intrazonals
+    IF (I = J)  INTRAZONAL_sum = INTRAZONAL_sum + MW[119]
+    IF (I = ZONES && J = ZONES) PRINT PRINTO=1 CSV=F LIST ='\n Intrazonal Sum            ', INTRAZONAL_sum
+ ENDJLOOPPage 4  (VOYAGER MATRIX) 
+Brigham Young University
+-------------------------
+
+
+;SeU = 0
+SeHBW = 0
+SeHBO = 0
+SeHBC = 0
+SeNHB = 0
+SeREC = 0
+;A = 1
+JLOOP
+ ;SeU = SeU + exp(MW[100])
+ ;Ro.SeU = SeU
+ ;Ro.lnS = ln(SeU)
+  A = ZI.1.TAZ
+  SeHBW = SeHBW + exp(MW[100])
+  SeHBO = SeHBO + exp(MW[200])
+  SeNHB = SeNHB + exp(MW[300])
+  SeHBC = SeHBC + exp(MW[400])
+  SeREC = SeREC + exp(MW[500])
+ENDJLOOP
+  Ro.A = A
+  Ro.lnHBW = ln(SeHBW)
+  Ro.lnHBO = ln(SeHBO)
+  Ro.lnNBH = ln(SeNHB)
+  Ro.lnHBC = ln(SeHBC)
+  Ro.lnREC = ln(SeREC)
+
+WRITE RECO = 1
+
+ ;Write in stuff that computes the dcls ,using the utilities
+ ;create another matrix thta writes out the utilites for each matrix (HBW)
+
+
+MATRIX Stack Size = 12822 bytes.
+................................................................................
+
+
+FILEI ZDATI=D:\projects\ustm_resiliency\Base\HH_PROD.DBF Opened: 267 data records  8 Fields:
+TAZ(N)          HBWP(N)         NHBWP(N)        HBOP(N)         HBSCP(N)       
+HBSHP(N)        NHBOP(N)        RECP(N)        
+
+
+MATI[2] TPP D:\projects\ustm_resiliency\Base\01_PROCESSED_SKIMS.MAT Opened
+MAT PGM=MATRIX (v.06/18/2018 [6.4.4 x64])  DATE=Wed Oct 14 21:10:33 2020 
+ID=
+PAR Zones=267 M=2
+  TIME  DISTANCE
+
+MATI[1] TPP D:\projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT Opened
+MAT PGM=MATRIX (v.06/18/2018 [6.4.4 x64])  DATE=Wed Oct 14 21:10:34 2020 
+ID=
+PAR Zones=267 M=5
+  HBWlogsum  HBOlogsum  NHBlogsum  HBClogsum  REClogsumPage 5  (VOYAGER MATRIX) 
+Brigham Young University
+-------------------------
+
+FILEI ZDATI=D:\projects\ustm_resiliency\Base\se_classified_2012A.dbf Opened: 205 data records  55 Fields:
+Z(N)            DISTRICT(N)     COUNTY(N)       ACRES(N)        POP(N)         
+HH(N)           WORK(N)         VEH(N)          EMP(N)          EMP_NOSG(N)    
+SCHOOL(N)       IND(N)          RET(N)          HTRET(N)        OFF(N)         
+SER(N)          SG_RET(N)       SG_HOS(N)       SG_AIR(N)       SG_COL(N)      
+SG_NAME(C)      ID(N)           N(N)            w0v0(N)         w0v1(N)        
+w0v2(N)         w0v3(N)         w1v0(N)         w1v1(N)         w1v2(N)        
+w1v3(N)         w2v0(N)         w2v1(N)         w2v2(N)         w2v3(N)        
+w3v0(N)         w3v1(N)         w3v2(N)         w3v3(N)         p1v0(N)        
+p1v1(N)         p1v2(N)         p1v3(N)         p2v0(N)         p2v1(N)        
+p2v2(N)         p2v3(N)         p3v0(N)         p3v1(N)         p3v2(N)        
+p3v3(N)         p4v0(N)         p4v1(N)         p4v2(N)         p4v3(N)        
+
+LOOKUP #1: COEFF D:\projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF:
+NVAR        N8      VAR         C22     HBW         N15.4   HBO         N15.4  
+HBC         N15.4   NHB         N15.4   REC         N15.4  
+
+
+LOOKUP   COEFF:  FAIL=  --  --  --
+         COEFF(1,1)   = 0
+         COEFF(1,2)   = 0
+         COEFF(1,3)   = 0.4586
+         COEFF(1,4)   = 1.6827
+         COEFF(1,5)   = 0.6087
+         COEFF(1,6)   = 22
+         COEFF(1,7)   = 0.5
+         COEFF(1,8)   = 0.039
+         COEFF(1,9)   = -0.0046
+         COEFF(1,10)  = 0.00003
+         COEFF(1,11)  = 0
+         COEFF(1,12)  = -0.0673
+         COEFF(1,13)  = 0
+         COEFF(1,14)  = 0
+         COEFF(1,15)  = 0
+         COEFF(1,16)  = 0
+         COEFF(1,17)  = 0
+         COEFF(1,18)  = 0
+         COEFF(1,19)  = 0
+
+
+M(792): ARRAY PERSONTRIPS requires 2,144 bytes.
+
+W(754): Following RO.vars not in any RECO:
+   LNNBH      
+
+W(207): PRINT (#5) has undefined variables which will be printed as ?:
+
+W(207): PRINT (#6) has undefined variables which will be printed as ?:
+
+W(207): PRINT (#7) has undefined variables which will be printed as ?:
+
+W(207): PRINT (#8) has undefined variables which will be printed as ?:Page 6  (VOYAGER MATRIX) 
+Brigham Young University
+-------------------------
+
+W(207): PRINT (#9) has undefined variables which will be printed as ?:
+
+Totals after Iteration 1 I loop:
+
+	MI.02.DISTANCE:    469,781.79
+	MI.01.001     :     40,413.6    @J=I:        213.6 
+	MI.01.002     :     18,471.4    @J=I:        104.6 
+	MI.01.003     :     40,533.7    @J=I:        240.3 
+	MI.01.004     :     20,462.93   @J=I:        220.46
+	MI.01.005     :     17,736.96   @J=I:        229.32
+	MW[2]         :    462,368.13
+	MW[100]       :    338,053.6    @J=I:      1,305.37
+	MW[101]       :     40,413.6    @J=I:        213.6 
+	MW[111]       :        267      @J=I:        267   
+	MW[112]       : 39,147,107.06   @J=I:    146,618.38
+	MW[113]       :    324,814.62   @J=I:      1,216.53
+	MW[114]       :     98,000.26
+	MW[115]       :            --
+	MW[118]       :            --
+	MW[201]       :     18,471.4    @J=I:        104.6 
+	MW[301]       :     40,533.7    @J=I:        240.3 
+	MW[401]       :     20,462.93   @J=I:        220.46
+	MW[501]       :     17,736.96   @J=I:        229.32
+	MO.01.001     : 39,147,107.06
+	MO.01.006     :    338,055.46
+
+Variable Values at end of Iteration 1 I loop:
+
+    COEFF_OFF_EMP:       0.4586 
+    COEFF_OTH_EMP:       1.6827 
+    COEFF_RET_EMP:       0.6087 
+    DISTCAP      :      22      
+    CLSUM        :       0.5    
+    CDIST        :       0.039  
+    CDISTSQ      :      -0.0046 
+    CDISTCUB     :       0.00003
+    KINTRAZ      :      -0.0673 
+    SEHBW        : 119,648.25984
+    SEHBO        :     267      
+    SEHBC        :     267      
+    SENHB        :     267      
+    SEREC        :     267      
+    A            :     267      
+
+M(751): 267 records written to RECO[1]=D:\projects\ustm_resiliency\Base\01_DCLS_ROWSUM.DBF
+
+MATRIX   ReturnCode = 1  Elapsed Time = 00:00:01
+################################################################################
