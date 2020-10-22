@@ -13,10 +13,10 @@ DC Logsums
 00
 
 
-Mon Oct 19 15:22:31 2020
+Wed Oct 21 18:57:20 2020
 
-D:\Projects\ustm_resiliency\CUBE\resili00.app
-D:\PROJECTS\USTM_RESILIENCY\CUBE\DCLOGS00.APP
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
+C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\DCLOGS00.APP
 VOYAGER
 
 
@@ -49,7 +49,7 @@ Script File
 0
 0
 S
-D:\Projects\ustm_resiliency\CUBE\01_HBO_DCLS.S
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_HBO_DCLS.S
 1
 MAT
 ISCR1 
@@ -1922,7 +1922,7 @@ Script File
 0
 0
 S
-D:\Projects\ustm_resiliency\CUBE\01_NHB_DCLS.S
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_NHB_DCLS.S
 1
 MAT
 ISCR1 
@@ -1940,7 +1940,7 @@ Combined MCLS
 0
 0
 MAT
-D:\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT
 0
 MAT
 MATI1 
@@ -1958,7 +1958,7 @@ Highway Skim
 0
 0
 MAT
-D:\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT
 0
 MAT
 MATI2 
@@ -2318,7 +2318,7 @@ SE Data
 0
 0
 *
-D:\Projects\ustm_resiliency\Base\se_classified_2012A.dbf
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf
 0
 ZON
 ZDATI1
@@ -2678,7 +2678,7 @@ DC Params
 0
 0
 *
-D:\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF
 0
 LOK
 LOOKUPI1
@@ -3054,7 +3054,7 @@ NHB Utility
 0
 0
 MAT
-D:\Projects\ustm_resiliency\Base\01_DEST_NHB.MAT
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DEST_NHB.MAT
 0
 MAT
 MATO1 
@@ -3795,7 +3795,7 @@ Script File
 0
 0
 S
-D:\Projects\ustm_resiliency\CUBE\01_HBC_DCLS.S
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_HBC_DCLS.S
 1
 MAT
 ISCR1 
@@ -3813,7 +3813,7 @@ Combined MCLS
 0
 0
 MAT
-D:\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT
 0
 MAT
 MATI1 
@@ -3831,7 +3831,7 @@ Highway Skim
 0
 0
 MAT
-D:\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT
 0
 MAT
 MATI2 
@@ -4191,7 +4191,7 @@ SE Data
 0
 0
 *
-D:\Projects\ustm_resiliency\Base\se_classified_2012A.dbf
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf
 0
 ZON
 ZDATI1
@@ -4551,7 +4551,7 @@ DC Params
 0
 0
 *
-D:\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF
 0
 LOK
 LOOKUPI1
@@ -4927,7 +4927,7 @@ HBC Utility
 0
 0
 MAT
-D:\Projects\ustm_resiliency\Base\01_DEST_HBC.MAT
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DEST_HBC.MAT
 0
 MAT
 MATO1 
@@ -5668,7 +5668,7 @@ Script File
 0
 0
 S
-D:\Projects\ustm_resiliency\CUBE\01_REC_DCLS.S
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_REC_DCLS.S
 1
 MAT
 ISCR1 
@@ -5686,7 +5686,7 @@ Combined MCLS
 0
 0
 MAT
-D:\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT
 0
 MAT
 MATI1 
@@ -5704,7 +5704,7 @@ Highway Skim
 0
 0
 MAT
-D:\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT
 0
 MAT
 MATI2 
@@ -6064,7 +6064,7 @@ SE Data
 0
 0
 *
-D:\Projects\ustm_resiliency\Base\se_classified_2012A.dbf
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf
 0
 ZON
 ZDATI1
@@ -6424,7 +6424,7 @@ DC Params
 0
 0
 *
-D:\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF
 0
 LOK
 LOOKUPI1
@@ -7541,7 +7541,7 @@ Script File
 0
 0
 S
-D:\Projects\ustm_resiliency\Base\01_DCLS_COMBINE.S
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DCLS_COMBINE.S
 1
 MAT
 ISCR1 
@@ -9414,7 +9414,7 @@ Script File
 0
 0
 S
-D:\Projects\ustm_resiliency\CUBE\01_HBW_DCLS.S
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_HBW_DCLS.S
 1
 MAT
 ISCR1 
@@ -11287,7 +11287,7 @@ Script File
 0
 0
 S
-D:\projects\ustm_resiliency\CUBE\01_DCLS_ROWSUM.S
+C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_DCLS_ROWSUM.S
 1
 MAT
 ISCR1 

@@ -7,10 +7,10 @@ FILEO PRINTO[1] = "{SCENARIO_DIR}\01_REC_DEST_CHOICE.RPT"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_REC.MAT",
   MO = 112, 100 DEC = 8, NAME = RECSizeTerm, RECUtil
 FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEI LOOKUPI[1] = "D:\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "D:\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
-FILEI MATI[2] = "D:\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "D:\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
+FILEI LOOKUPI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
+FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
