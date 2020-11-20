@@ -1,7 +1,7 @@
 &PROJFIL
 EXP5 1 1Matrix File 1  {SCENARIO_DIR}\01_MCLS_COMBINED.MAT                         
 EXP5 2 1Matrix File 2  {SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT                         
-EXP5 221Zonal Data 1   {SCENARIO_DIR}\se_classified_2012A.dbf                      
+EXP5 221Zonal Data 1   {SCENARIO_DIR}\LOADED_2012A.NET                             
 EXP5 231Zonal Data 2   {SCENARIO_DIR}\HH_PROD.DBF                                  
 EXP5 421Lookup File 1  {SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF                    
 EXP6 210Record File 1  {SCENARIO_DIR}\01_ROWSUMS.DBF                               
@@ -13,7 +13,7 @@ DC Logsums
 00
 
 
-Wed Oct 21 18:57:20 2020
+Fri Nov 13 14:54:25 2020
 
 C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
 C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\DCLOGS00.APP
@@ -9810,7 +9810,7 @@ SE Data
 0
 0
 *
-{SCENARIO_DIR}\se_classified_2012A.dbf
+{SCENARIO_DIR}\LOADED_2012A.NET
 0
 ZON
 ZDATI1

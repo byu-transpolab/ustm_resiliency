@@ -1,10 +1,10 @@
-; Script for program HIGHWAY in file "D:\projects\ustm_resiliency\CUBE\01_HIGHWAY.S"
+; Script for program HIGHWAY in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_HIGHWAY.S"
 ;;<<Default Template>><<HIGHWAY>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=HIGHWAY MSG='Whole Network'
 FILEO MATO[1] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT",
   MO = 1-2, DEC = 8, NAME = TIME, DISTANCE
-FILEI NETI = "{SCENARIO_DIR}\highway.NET"
+FILEI NETI = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\LOADED_2012A.NET"
 
 PROCESS PHASE=LINKREAD
 ; Use this phase to obtain initial values from the input network (LI.varname) and compute 
@@ -37,7 +37,7 @@ ENDPROCESS
 ENDRUN
 
 
-; Script for program MATRIX in file "D:\projects\ustm_resiliency\CUBE\01_PROCESSING.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_PROCESSING.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Process Skims'
@@ -69,7 +69,7 @@ FILLMW MW[1]=MI.1.1(2)                ; highway skims
 ENDRUN
 
 
-; Script for program MATRIX in file "D:\projects\ustm_resiliency\Base\01_HBW_MCLS.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\Base\01_HBW_MCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBW_MCLS.PRN" MSG='HBW MCLS'
@@ -212,7 +212,7 @@ MW[18] = MIN(MW[2],1)
 ENDRUN
 
 
-; Script for program MATRIX in file "D:\projects\ustm_resiliency\Base\01_HBO_MCLS.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\Base\01_HBO_MCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBO_MCLS.PRN" MSG='HBO MCLS'
@@ -341,7 +341,7 @@ ENDIF
 ENDRUN
 
 
-; Script for program MATRIX in file "D:\projects\ustm_resiliency\CUBE\01_NHB_MCLS.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_NHB_MCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_NHB_MCLS.PRN" MSG='NHB MCLS'
@@ -482,7 +482,7 @@ MW[18] = MIN(MW[2],1)
 ENDRUN
 
 
-; Script for program MATRIX in file "D:\projects\ustm_resiliency\CUBE\01_HBC_MCLS.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_HBC_MCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBC_MCLS.PRN" MSG='HBC MCLS'
@@ -624,7 +624,7 @@ MW[18] = MIN(MW[2],1)
 ENDRUN
 
 
-; Script for program MATRIX in file "D:\projects\ustm_resiliency\CUBE\01_REC_MCLS.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_REC_MCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_REC_MCLS.PRN" MSG='REC MCLS'
@@ -766,14 +766,14 @@ MW[18] = MIN(MW[2],1)
 ENDRUN
 
 
-; Script for program MATRIX in file "D:\projects\ustm_resiliency\CUBE\01_MCLS_COMBINE.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_MCLS_COMBINE.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Combine All MCLS Calculations'
 FILEO MATO[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT",
   MO = 1-5, DEC = 8, NAME = HBWlogsum, HBOlogsum, NHBlogsum, HBClogsum, REClogsum
 FILEI MATI[5] = "{SCENARIO_DIR}\01_MC_REC_LOGSUM.MAT"
-FILEI MATI[4] = "D:\Projects\ustm_resiliency\Base\01_MC_HBC_LOGSUM.MAT"
+FILEI MATI[4] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MC_HBC_LOGSUM.MAT"
 FILEI MATI[3] = "{SCENARIO_DIR}\01_MC_NHB_LOGSUM.MAT"
 FILEI MATI[2] = "{SCENARIO_DIR}\01_MC_HBO_LOGSUM.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_MC_HBW_LOGSUM.MAT"
@@ -795,7 +795,7 @@ FILEI MATI[1] = "{SCENARIO_DIR}\01_MC_HBW_LOGSUM.MAT"
 ENDRUN
 
 
-; Script for program MATRIX in file "D:\Projects\ustm_resiliency\CUBE\01_HBO_DCLS.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_HBO_DCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBO DCLS'
@@ -944,7 +944,7 @@ ZONES = {Total ZONES}
 ENDRUN
 
 
-; Script for program MATRIX in file "D:\Projects\ustm_resiliency\CUBE\01_NHB_DCLS.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_NHB_DCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='NHB DCLS'
@@ -952,12 +952,12 @@ FILEO PRINTO[3] = "{SCENARIO_DIR}\01_NHB_ZONAL_TRIPS.CSV"
 FILEO PRINTO[2] = "{SCENARIO_DIR}\01_NHB_DEST_CHOICE_DEBUG.TXT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\01_NHB_DEST_CHOICE.RPT"
 FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEO MATO[1] = "D:\Projects\ustm_resiliency\Base\01_DEST_NHB.MAT",
+FILEO MATO[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DEST_NHB.MAT",
   MO = 112, 100 DEC = 8, NAME = NHBSizeTerm, NHBUtil
-FILEI LOOKUPI[1] = "D:\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "D:\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
-FILEI MATI[2] = "D:\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "D:\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
+FILEI LOOKUPI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
+FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -1094,7 +1094,7 @@ ZONES = {Total ZONES}
 ENDRUN
 
 
-; Script for program MATRIX in file "D:\Projects\ustm_resiliency\CUBE\01_HBC_DCLS.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_HBC_DCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBC DCLS'
@@ -1102,12 +1102,12 @@ FILEO PRINTO[3] = "{SCENARIO_DIR}\01_HBC_ZONAL_TRIPS.CSV"
 FILEO PRINTO[2] = "{SCENARIO_DIR}\01_HBC_DEST_CHOICE_DEBUG.TXT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\01_HBC_DEST_CHOICE.RPT"
 FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEO MATO[1] = "D:\Projects\ustm_resiliency\Base\01_DEST_HBC.MAT",
+FILEO MATO[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DEST_HBC.MAT",
   MO = 112, 100 DEC = 8, NAME = HBCSizeTerm, HBCUtil
-FILEI LOOKUPI[1] = "D:\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "D:\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
-FILEI MATI[2] = "D:\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "D:\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
+FILEI LOOKUPI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
+FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -1243,7 +1243,7 @@ ZONES = {Total ZONES}
 ENDRUN
 
 
-; Script for program MATRIX in file "D:\Projects\ustm_resiliency\CUBE\01_REC_DCLS.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_REC_DCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='REC DCLS'
@@ -1253,10 +1253,10 @@ FILEO PRINTO[1] = "{SCENARIO_DIR}\01_REC_DEST_CHOICE.RPT"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_REC.MAT",
   MO = 112, 100 DEC = 8, NAME = RECSizeTerm, RECUtil
 FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEI LOOKUPI[1] = "D:\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "D:\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
-FILEI MATI[2] = "D:\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "D:\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
+FILEI LOOKUPI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
+FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -1392,7 +1392,7 @@ ZONES = {Total ZONES}
 ENDRUN
 
 
-; Script for program MATRIX in file "D:\Projects\ustm_resiliency\Base\01_DCLS_COMBINE.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DCLS_COMBINE.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_DCLS_COMBINE.PRN" MSG='COMBINE UTILITIES'
@@ -1419,7 +1419,7 @@ FILEI MATI[1] = "{SCENARIO_DIR}\01_DEST_HBW.MAT"
 ENDRUN
 
 
-; Script for program MATRIX in file "D:\Projects\ustm_resiliency\CUBE\01_HBW_DCLS.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_HBW_DCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBW DCLS'
@@ -1430,7 +1430,7 @@ FILEO PRINTO[1] = "{SCENARIO_DIR}\01_HBW_DEST_CHOICE.RPT"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_HBW.MAT",
   MO = 112, 100 DEC = 8, NAME = HBWSizeTerm, HBWUtil
 FILEI LOOKUPI[1] = "{SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "{SCENARIO_DIR}\se_classified_2012A.dbf"
+FILEI ZDATI[1] = "{SCENARIO_DIR}\LOADED_2012A.NET"
 FILEI MATI[2] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT"
 
@@ -1569,7 +1569,7 @@ ZONES = {Total ZONES}
 ENDRUN
 
 
-; Script for program MATRIX in file "D:\projects\ustm_resiliency\CUBE\01_DCLS_ROWSUM.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_DCLS_ROWSUM.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_DCLS_ROWSUM.PRN"

@@ -7,7 +7,7 @@ resiliency
 00
 
 
-Wed Nov 04 15:29:20 2020
+Fri Nov 13 16:41:54 2020
 
 
 C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
@@ -421,7 +421,7 @@ Network File
 0
 0
 NET
-{SCENARIO_DIR}\highway.NET
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\LOADED_2012A.NET
 0
 HWY
 NETI  
@@ -4952,7 +4952,7 @@ SE Data
 0
 0
 *
-{SCENARIO_DIR}\se_classified_2012A.dbf
+{SCENARIO_DIR}\LOADED_2012A.NET
 1
 0522
       

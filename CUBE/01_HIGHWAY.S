@@ -3,7 +3,7 @@
 RUN PGM=HIGHWAY MSG='Whole Network'
 FILEO MATO[1] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT",
   MO = 1-2, DEC = 8, NAME = TIME, DISTANCE
-FILEI NETI = "{SCENARIO_DIR}\highway.NET"
+FILEI NETI = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\LOADED_2012A.NET"
 
 PROCESS PHASE=LINKREAD
 ; Use this phase to obtain initial values from the input network (LI.varname) and compute 

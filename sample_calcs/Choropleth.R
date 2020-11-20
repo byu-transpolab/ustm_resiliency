@@ -1,4 +1,3 @@
-
 library("arsenal")
 library("tidyr")
 library("tidyverse")
@@ -6,43 +5,130 @@ library("sf")
 library("leaflet")
 library("foreign")
 library("maptools")
-rowsum <- read.dbf("Data/01_DCLS_ROWSUM.DBF")
-rowsum1 <- read.dbf("Data/01_DCLS_ROWSUM1.DBF")
-rowsum2 <- read.dbf("Data/01_DCLS_ROWSUM2.DBF")
-rowsum3 <- read.dbf("Data/01_DCLS_ROWSUM3.DBF")
-rowsum4 <- read.dbf("Data/01_DCLS_ROWSUM4.DBF")
+library("modelr")
 
-map <- st_read("Data/RoanokeTAZ.shp")
+# Loading two data sets and a base map from the data folder
+# The first data set is the whole network named WHOLE_ROWSUMS.DBF
+# The second data set is 01_ROWSUMS.DBF, which should be taken
+# from the CUBE model each time a new iteration is run
+whole_rowsum <- read.dbf("Data/WHOLE_ROWSUMS.DBF")  #original unbroken network
+broken_rowsum <- read.dbf("Data/01_ROWSUMS.DBF")    #altered broken network
+map <- st_read("Data/RoanokeTAZ.shp")               #load shapefile
 
-mean(rowsum$LNHBW)
-mean(rowsum1$LNHBW)
-mean(rowsum2$LNHBW)
-mean(rowsum3$LNHBW)
-n.diffs(comparedf(rowsum, rowsum4))
+# Calculate the number of differences between data sets
+n.diffs(comparedf(whole_rowsum, broken_rowsum))
 
-rowsum5 <- left_join(map, rowsum4, by = c("ID" = "A"))
+# Create rowsum_map object and plot the HBW map and data
+# for initial visualization
+rowsum_map <- left_join(map, broken_rowsum, by = c("ID" = "TAZ"))
+plot(rowsum_map[, "LNHBW"])
+plot(whole_rowsum[, "LNHBW"])
 
-plot(rowsum5[, "LNHBW"])
-plot(rowsum[, "LNHBW"])
 
+
+# Difference comparison
 
 change_broken <- list(
-  "Original" = rowsum,
-  "Broken Link" = rowsum4
+  "Original" = whole_rowsum,
+  "Broken Link" = broken_rowsum
 ) %>%
   bind_rows(.id = "Scenario") %>%
   as_tibble() %>%
-  gather("purpose", "logsum", -Scenario, -A) %>%
+  gather("purpose", "logsum", -Scenario, -TAZ) %>%
   spread(Scenario, logsum, fill = NA) %>%
   mutate(
     difference = (`Broken Link` - Original)
   ) %>%
-  select(A, purpose, difference) %>%
+  select(TAZ, purpose, difference) %>%
   spread(purpose, difference, NA)
 
 
-broken_map <- left_join(map, change_broken, by = c("ID" = "A"))
+broken_map <- left_join(map, change_broken, by = c("ID" = "TAZ"))
 
 plot(broken_map[, c("LNHBO", "LNHBW", "LNREC", "LNHBC", "LNNHB")])
 
-                
+# Absolute error comparison
+
+change_broken <- list(
+  "Original" = whole_rowsum,
+  "Broken Link" = broken_rowsum
+) %>%
+  bind_rows(.id = "Scenario") %>%
+  as_tibble() %>%
+  gather("purpose", "logsum", -Scenario, -TAZ) %>%
+  spread(Scenario, logsum, fill = NA) %>%
+  mutate(
+    difference = (abs(`Broken Link` - Original))
+  ) %>%
+  select(TAZ, purpose, difference) %>%
+  spread(purpose, difference, NA)
+
+
+broken_map <- left_join(map, change_broken, by = c("ID" = "TAZ"))
+
+plot(broken_map[, c("LNHBO", "LNHBW", "LNREC", "LNHBC", "LNNHB")])
+
+# RMSE comparison <--shows minor change between outer zones
+
+change_broken <- list(
+  "Original" = whole_rowsum,
+  "Broken Link" = broken_rowsum
+) %>%
+  bind_rows(.id = "Scenario") %>%
+  as_tibble() %>%
+  gather("purpose", "logsum", -Scenario, -TAZ) %>%
+  spread(Scenario, logsum, fill = NA) %>%
+  mutate(
+    difference = sqrt(((Original - `Broken Link`)^2)/nrow(whole_rowsum))
+  ) %>%
+  select(TAZ, purpose, difference) %>%
+  spread(purpose, difference, NA)
+
+
+broken_map <- left_join(map, change_broken, by = c("ID" = "TAZ"))
+
+plot(broken_map[, c("LNHBO", "LNHBW", "LNREC", "LNHBC", "LNNHB")])
+
+# Mean absolute error comparison <- shows more change in downtown areas
+
+change_broken <- list(
+  "Original" = whole_rowsum,
+  "Broken Link" = broken_rowsum
+) %>%
+  bind_rows(.id = "Scenario") %>%
+  as_tibble() %>%
+  gather("purpose", "logsum", -Scenario, -TAZ) %>%
+  spread(Scenario, logsum, fill = NA) %>%
+  mutate(
+    difference = (abs(`Broken Link` - Original)/nrow(whole_rowsum))
+  ) %>%
+  select(TAZ, purpose, difference) %>%
+  spread(purpose, difference, NA)
+
+
+broken_map <- left_join(map, change_broken, by = c("ID" = "TAZ"))
+
+plot(broken_map[, c("LNHBO", "LNHBW", "LNREC", "LNHBC", "LNNHB")])
+
+# Mean absolute percentage error <- shows spread out
+
+change_broken <- list(
+  "Original" = whole_rowsum,
+  "Broken Link" = broken_rowsum
+) %>%
+  bind_rows(.id = "Scenario") %>%
+  as_tibble() %>%
+  gather("purpose", "logsum", -Scenario, -TAZ) %>%
+  spread(Scenario, logsum, fill = NA) %>%
+  mutate(
+    difference = (abs((Original - `Broken Link`)/`Broken Link`))*(1/nrow(whole_rowsum))
+  ) %>%
+  select(TAZ, purpose, difference) %>%
+  spread(purpose, difference, NA)
+
+
+broken_map <- left_join(map, change_broken, by = c("ID" = "TAZ"))
+
+plot(broken_map[, c("LNHBO", "LNHBW", "LNREC", "LNHBC", "LNNHB")])
+
+

@@ -1,6 +1,0 @@
-install.packages("sf")
-install.packages("leaflet")
-library("tidyr")
-library("tidyverse")
-library("sf")
-library("leaflet")
