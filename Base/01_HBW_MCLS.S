@@ -1,16 +1,15 @@
-;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBW_MCLS.PRN" MSG='HBW MCLS'
-FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBW_PROBABILITY.MAT",
-  MO=31-33, DEC=12,NAME=TIME,DISTANCE,HBWauto_prob,HBWnonmot_prob,HBWtransit_prob
-FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBW_UTILITY.MAT",
-  MO=111-113, DEC=12,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util
-FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBW_LOGSUM.MAT",
-  MO =41,DEC=12, NAME=HBWlogsum
-FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
-FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
+FILEI MATI[2] = "{CATALOG_DIR}\Base\USTM_transit_skim.MAT"
+FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
+FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
+FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBW_LOGSUM.MAT",
+  MO = 41,DEC=12, NAME=HBWlogsum
+FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBW_UTILITY.MAT",
+   MO=111-113, DEC=12,NAME=NHBauto_util,NHBnonmot_util,NHBtransit_util
+FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBW_PROBABILITY.MAT",
+  MO=31-33, DEC=12,NAME=NHBauto_prob,NHBnonmot_prob,NHBtransit_prob
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -22,7 +21,7 @@ FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
   MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
-  FILLMW MW[3]=MI.2.WBUS     ;Walk bus time
+  FILLMW MW[3]=MI.2.1     ;Walk bus time
 
 
 ; Progress Bar update for evey 100 zones
@@ -135,6 +134,4 @@ MW[18] = MIN(MW[2],1)
         MW[41] = 0
      ENDIF
    ENDJLOOP
-
-
 ENDRUN

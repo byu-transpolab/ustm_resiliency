@@ -25,7 +25,7 @@ SeNHB = 0
 SeREC = 0
 
 JLOOP
-
+;change to an if statement to exclude rows/columns that don't exist i would need to set those values correctly to exclude them (its the column that matters)
   TAZ = ZI.1.TAZ
   SeHBW = SeHBW + exp(MW[100])
   SeHBO = SeHBO + exp(MW[200])

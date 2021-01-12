@@ -3,7 +3,7 @@
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBC_MCLS.PRN" MSG='HBC MCLS'
 FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
 FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
-FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
+FILEI MATI[2] = "{CATALOG_DIR}\Base\USTM_transit_skim.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBC_LOGSUM.MAT",
   MO = 41,DEC=8, NAME=HBClogsum
@@ -22,7 +22,7 @@ FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBC_PROBABILITY.MAT",
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
   MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
-  FILLMW MW[3]=MI.2.WBUS     ;Walk bus time
+  FILLMW MW[3]=MI.2.1     ;Walk bus time
 
 
 ; Progress Bar update for evey 100 zones

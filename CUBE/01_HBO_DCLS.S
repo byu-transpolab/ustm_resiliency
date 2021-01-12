@@ -18,7 +18,7 @@ FILEI MATI[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT"
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-ZONES = {Total ZONES}
+ZONES = {TOTAL_ZONES}
 		ARRAY personTrips = ZONES
 
 		; READ IN MODEL PARAMETERS
