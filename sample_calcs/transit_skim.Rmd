@@ -1,0 +1,20 @@
+---
+title: "Data test"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library("dplyr")
+library("readr")
+```
+
+```{r}
+data <- read_csv("Data/USTM_transit_skimNEW.csv", col_names = F)
+
+newdata <- data[order(X1),]
+
+write_csv(data, "Data/USTM-transit_skim1.csv", col_names = F)
+
+
+```
+
