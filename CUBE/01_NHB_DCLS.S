@@ -8,8 +8,8 @@ FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
 FILEO MATO[1] = "D:\Projects\ustm_resiliency\Base\01_DEST_NHB.MAT",
   MO = 112, 100 DEC = 8, NAME = NHBSizeTerm, NHBUtil
 FILEI LOOKUPI[1] = "D:\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "D:\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
-FILEI MATI[2] = "D:\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
+FILEI MATI[2] = "{CATALOG_DIR}\Base\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[1] = "D:\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP

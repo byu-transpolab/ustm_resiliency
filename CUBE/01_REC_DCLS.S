@@ -8,7 +8,7 @@ FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_REC.MAT",
   MO = 112, 100 DEC = 8, NAME = RECSizeTerm, RECUtil
 FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
 FILEI LOOKUPI[1] = "D:\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "D:\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
 FILEI MATI[2] = "D:\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[1] = "D:\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
 
