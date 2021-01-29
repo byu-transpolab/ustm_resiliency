@@ -7,10 +7,10 @@ resiliency
 00
 
 
-Mon Jan 25 14:43:17 2021
+Fri Jan 29 16:21:04 2021
 
 
-D:\projects\ustm_resiliency\CUBE\resili00.app
+C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
 VOYAGER
 
 
@@ -43,7 +43,7 @@ Script File
 0
 0
 S
-D:\projects\ustm_resiliency\CUBE\01_HIGHWAY.S
+C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_HIGHWAY.S
 1
 HWY
 ISCR1 
@@ -2854,7 +2854,7 @@ Script File
 0
 0
 S
-D:\projects\ustm_resiliency\CUBE\01_PROCESSING.S
+C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_PROCESSING.S
 1
 MAT
 ISCR1 
@@ -4705,7 +4705,7 @@ PRINTO10
 1
 3
 
-D:\PROJECTS\USTM_RESILIENCY\CUBE\MCLOGS00.APP
+C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\MCLOGS00.APP
 MC Logsums
 
 0
@@ -4894,7 +4894,7 @@ MCLS Combined
 1
 4
 
-D:\PROJECTS\USTM_RESILIENCY\CUBE\DCLOGS00.APP
+C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\DCLOGS00.APP
 DC Logsums
 
 0
@@ -5043,7 +5043,7 @@ Script File
 0
 0
 S
-D:\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00H.S
+C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00H.S
 1
 MAT
 ISCR1 
@@ -5061,7 +5061,7 @@ Matrix File 1
 0
 0
 MAT
-D:\projects\ustm_resiliency\sample_calcs\Data\USTM-transit_skim1.csv
+C:\Users\mbarnes7\Documents\projects\ustm_resiliency\sample_calcs\Data\USTM-transit_skim1.csv
 0
 MAT
 MATI1 
@@ -6175,7 +6175,7 @@ Matrix File 1
 0
 0
 MAT
-D:\projects\ustm_resiliency\Base\USTM_transit_skim.MAT
+C:\Users\mbarnes7\Documents\projects\ustm_resiliency\Base\USTM_transit_skim.MAT
 0
 MAT
 MATO1 
@@ -6911,12 +6911,12 @@ MATRIX
 0
 0
 #INFIL0
-Script File   
+Script File
 
 0
 0
 S
-D:\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00J.S
+C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00J.S
 1
 MAT
 ISCR1 
@@ -6929,12 +6929,12 @@ ISCR1
 -1
 0
 #INFIL1
-Matrix File 1 
+Matrix File 1
 
 0
 0
 MAT
-D:\PROJECTS\USTM_RESILIENCY\BASE\01_PROCESSED_SKIMS.MAT
+C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\BASE\01_PROCESSED_SKIMS.MAT
 0
 MAT
 MATI1 
@@ -6947,12 +6947,12 @@ MATI1
 -9
 0
 #INFIL2
-Matrix File 2 
+Matrix File 2
 
 0
 0
 MAT
-D:\PROJECTS\USTM_RESILIENCY\BASE\01_PROCESSED_SKIMS.MAT
+C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\BASE\01_PROCESSED_SKIMS.MAT
 0
 MAT
 MATI2 
@@ -6965,7 +6965,7 @@ MATI2
 -9
 0
 #INFIL3
-Matrix File 3 
+Matrix File 3
 
 0
 0
@@ -6983,7 +6983,7 @@ MATI3
 -1
 0
 #INFIL4
-Matrix File 4 
+Matrix File 4
 
 0
 0
@@ -7001,7 +7001,7 @@ MATI4
 -1
 0
 #INFIL5
-Matrix File 5 
+Matrix File 5
 
 0
 0
@@ -7019,7 +7019,7 @@ MATI5
 -1
 0
 #INFIL6
-Matrix File 6 
+Matrix File 6
 
 0
 0
@@ -7037,7 +7037,7 @@ MATI6
 -1
 0
 #INFIL7
-Matrix File 7 
+Matrix File 7
 
 0
 0
@@ -7055,7 +7055,7 @@ MATI7
 -1
 0
 #INFIL8
-Matrix File 8 
+Matrix File 8
 
 0
 0
@@ -7073,7 +7073,7 @@ MATI8
 -1
 0
 #INFIL9
-Matrix File 9 
+Matrix File 9
 
 0
 0
@@ -7289,7 +7289,7 @@ MATI20
 -1
 0
 #INFIL21
-Record File   
+Record File
 
 0
 0
@@ -7307,7 +7307,7 @@ RECI
 -1
 0
 #INFIL22
-Zonal Data 1  
+Zonal Data 1
 
 0
 0
@@ -7325,7 +7325,7 @@ ZDATI1
 -1
 0
 #INFIL23
-Zonal Data 2  
+Zonal Data 2
 
 0
 0
@@ -7343,7 +7343,7 @@ ZDATI2
 -1
 0
 #INFIL24
-Zonal Data 3  
+Zonal Data 3
 
 0
 0
@@ -7361,7 +7361,7 @@ ZDATI3
 -1
 0
 #INFIL25
-Zonal Data 4  
+Zonal Data 4
 
 0
 0
@@ -7379,7 +7379,7 @@ ZDATI4
 -1
 0
 #INFIL26
-Zonal Data 5  
+Zonal Data 5
 
 0
 0
@@ -7397,7 +7397,7 @@ ZDATI5
 -1
 0
 #INFIL27
-Zonal Data 6  
+Zonal Data 6
 
 0
 0
@@ -7415,7 +7415,7 @@ ZDATI6
 -1
 0
 #INFIL28
-Zonal Data 7  
+Zonal Data 7
 
 0
 0
@@ -7433,7 +7433,7 @@ ZDATI7
 -1
 0
 #INFIL29
-Zonal Data 8  
+Zonal Data 8
 
 0
 0
@@ -7451,7 +7451,7 @@ ZDATI8
 -1
 0
 #INFIL30
-Zonal Data 9  
+Zonal Data 9
 
 0
 0
@@ -7469,7 +7469,7 @@ ZDATI9
 -1
 0
 #INFIL31
-Zonal Data 10 
+Zonal Data 10
 
 0
 0
@@ -7487,7 +7487,7 @@ ZDATI10
 -1
 0
 #INFIL32
-Database 1    
+Database 1
 
 0
 0
@@ -7505,7 +7505,7 @@ DBI1
 -1
 0
 #INFIL33
-Database 2    
+Database 2
 
 0
 0
@@ -7523,7 +7523,7 @@ DBI2
 -1
 0
 #INFIL34
-Database 3    
+Database 3
 
 0
 0
@@ -7541,7 +7541,7 @@ DBI3
 -1
 0
 #INFIL35
-Database 4    
+Database 4
 
 0
 0
@@ -7559,7 +7559,7 @@ DBI4
 -1
 0
 #INFIL36
-Database 5    
+Database 5
 
 0
 0
@@ -7577,7 +7577,7 @@ DBI5
 -1
 0
 #INFIL37
-Database 6    
+Database 6
 
 0
 0
@@ -7595,7 +7595,7 @@ DBI6
 -1
 0
 #INFIL38
-Database 7    
+Database 7
 
 0
 0
@@ -7613,7 +7613,7 @@ DBI7
 -1
 0
 #INFIL39
-Database 8    
+Database 8
 
 0
 0
@@ -7631,7 +7631,7 @@ DBI8
 -1
 0
 #INFIL40
-Database 9    
+Database 9
 
 0
 0
@@ -7649,7 +7649,7 @@ DBI9
 -1
 0
 #INFIL41
-Database 10   
+Database 10
 
 0
 0
@@ -7667,7 +7667,7 @@ DBI10
 -1
 0
 #INFIL42
-Lookup File 1 
+Lookup File 1
 
 0
 0
@@ -7685,7 +7685,7 @@ LOOKUPI1
 -1
 0
 #INFIL43
-Lookup File 2 
+Lookup File 2
 
 0
 0
@@ -7703,7 +7703,7 @@ LOOKUPI2
 -1
 0
 #INFIL44
-Lookup File 3 
+Lookup File 3
 
 0
 0
@@ -7721,7 +7721,7 @@ LOOKUPI3
 -1
 0
 #INFIL45
-Lookup File 4 
+Lookup File 4
 
 0
 0
@@ -7739,7 +7739,7 @@ LOOKUPI4
 -1
 0
 #INFIL46
-Lookup File 5 
+Lookup File 5
 
 0
 0
@@ -7757,7 +7757,7 @@ LOOKUPI5
 -1
 0
 #INFIL47
-Lookup File 6 
+Lookup File 6
 
 0
 0
@@ -7775,7 +7775,7 @@ LOOKUPI6
 -1
 0
 #INFIL48
-Lookup File 7 
+Lookup File 7
 
 0
 0
@@ -7793,7 +7793,7 @@ LOOKUPI7
 -1
 0
 #INFIL49
-Lookup File 8 
+Lookup File 8
 
 0
 0
@@ -7811,7 +7811,7 @@ LOOKUPI8
 -1
 0
 #INFIL50
-Lookup File 9 
+Lookup File 9
 
 0
 0
@@ -8027,7 +8027,7 @@ LOOKUPI20
 -1
 0
 #OUTFIL0
-Print File    
+Print File
 
 0
 0
@@ -8043,7 +8043,7 @@ OPRN
 -1171
 0
 #OUTFIL1
-Matrix File 1 
+Matrix File 1
 
 0
 0
@@ -8059,7 +8059,7 @@ MATO1
 -1239
 0
 #OUTFIL2
-Matrix File 2 
+Matrix File 2
 
 0
 0
@@ -8075,7 +8075,7 @@ MATO2
 88
 0
 #OUTFIL3
-Matrix File 3 
+Matrix File 3
 
 0
 0
@@ -8091,7 +8091,7 @@ MATO3
 20
 0
 #OUTFIL4
-Matrix File 4 
+Matrix File 4
 
 0
 0
@@ -8107,7 +8107,7 @@ MATO4
 -48
 0
 #OUTFIL5
-Matrix File 5 
+Matrix File 5
 
 0
 0
@@ -8123,7 +8123,7 @@ MATO5
 -116
 0
 #OUTFIL6
-Matrix File 6 
+Matrix File 6
 
 0
 0
@@ -8139,7 +8139,7 @@ MATO6
 -184
 0
 #OUTFIL7
-Matrix File 7 
+Matrix File 7
 
 0
 0
@@ -8155,7 +8155,7 @@ MATO7
 -252
 0
 #OUTFIL8
-Matrix File 8 
+Matrix File 8
 
 0
 0
@@ -8171,7 +8171,7 @@ MATO8
 -320
 0
 #OUTFIL9
-Matrix File 9 
+Matrix File 9
 
 0
 0
@@ -8363,12 +8363,12 @@ MATO20
 -1136
 0
 #OUTFIL21
-Record File 1 
+Record File 1
 
 0
 0
 DBF
-D:\PROJECTS\USTM_RESILIENCY\BASE\01_TLFD.DBF
+C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\BASE\01_TLFD.DBF
 0
 MAT
 RECO1 
@@ -8379,7 +8379,7 @@ RECO1
 -1307
 0
 #OUTFIL22
-Record File 2 
+Record File 2
 
 0
 0
@@ -8395,7 +8395,7 @@ RECO2
 -1375
 0
 #OUTFIL23
-Record File 3 
+Record File 3
 
 0
 0
@@ -8411,7 +8411,7 @@ RECO3
 -1340
 0
 #OUTFIL24
-Record File 4 
+Record File 4
 
 0
 0
@@ -8427,7 +8427,7 @@ RECO4
 -1408
 0
 #OUTFIL25
-Record File 5 
+Record File 5
 
 0
 0
@@ -8443,7 +8443,7 @@ RECO5
 -1476
 0
 #OUTFIL26
-Record File 6 
+Record File 6
 
 0
 0
@@ -8459,7 +8459,7 @@ RECO6
 -1544
 0
 #OUTFIL27
-Record File 7 
+Record File 7
 
 0
 0
@@ -8475,7 +8475,7 @@ RECO7
 -1612
 0
 #OUTFIL28
-Record File 8 
+Record File 8
 
 0
 0
@@ -8491,7 +8491,7 @@ RECO8
 -1680
 0
 #OUTFIL29
-Record File 9 
+Record File 9
 
 0
 0
@@ -8603,7 +8603,7 @@ RECO15
 -2156
 0
 #OUTFIL36
-Print Data 1  
+Print Data 1
 
 0
 0
@@ -8619,7 +8619,7 @@ PRINTO1
 -1443
 0
 #OUTFIL37
-Print Data 2  
+Print Data 2
 
 0
 0
@@ -8635,7 +8635,7 @@ PRINTO2
 -2292
 0
 #OUTFIL38
-Print Data 3  
+Print Data 3
 
 0
 0
@@ -8651,7 +8651,7 @@ PRINTO3
 -2360
 0
 #OUTFIL39
-Print Data 4  
+Print Data 4
 
 0
 0
@@ -8667,7 +8667,7 @@ PRINTO4
 -2428
 0
 #OUTFIL40
-Print Data 5  
+Print Data 5
 
 0
 0
@@ -8683,7 +8683,7 @@ PRINTO5
 -2496
 0
 #OUTFIL41
-Print Data 6  
+Print Data 6
 
 0
 0
@@ -8699,7 +8699,7 @@ PRINTO6
 -2564
 0
 #OUTFIL42
-Print Data 7  
+Print Data 7
 
 0
 0
@@ -8715,7 +8715,7 @@ PRINTO7
 -2632
 0
 #OUTFIL43
-Print Data 8  
+Print Data 8
 
 0
 0
@@ -8731,7 +8731,7 @@ PRINTO8
 -2700
 0
 #OUTFIL44
-Print Data 9  
+Print Data 9
 
 0
 0
@@ -8747,7 +8747,7 @@ PRINTO9
 -2768
 0
 #OUTFIL45
-Print Data 10 
+Print Data 10
 
 0
 0
