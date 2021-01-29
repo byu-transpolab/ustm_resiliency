@@ -3,7 +3,7 @@
 RUN PGM=HIGHWAY MSG='Whole Network'
 FILEO MATO[1] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT",
   MO = 1-2, DEC = 8, NAME = TIME, DISTANCE
-FILEI NETI = "{SCENARIO_DIR}\BY_2015_45.net"
+FILEI NETI = "{CATALOG_DIR}\Base\BY_2015.NET"
 
 PROCESS PHASE=LINKREAD
 ; Use this phase to obtain initial values from the input network (LI.varname) and compute 

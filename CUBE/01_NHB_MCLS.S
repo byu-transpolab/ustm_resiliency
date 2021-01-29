@@ -3,14 +3,14 @@
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_NHB_MCLS.PRN" MSG='NHB MCLS'
 FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
 FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
-FILEI MATI[2] = "{CATALOG_DIR}\Base\USTM_transit_skim.MAT"
+FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_NHB_LOGSUM.MAT",
-  MO = 41,DEC=12, NAME=NHBlogsum
+  MO = 41,DEC=30, NAME=NHBlogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_NHB_UTILITY.MAT",
-  MO=111-113, DEC=12,NAME=NHBauto_util,NHBnonmot_util,NHBtransit_util
+  MO=111-113, DEC=30,NAME=NHBauto_util,NHBnonmot_util,NHBtransit_util
 FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_NHB_PROBABILITY.MAT",
- MO=31-33, DEC=12,NAME=NHBauto_prob,NHBnonmot_prob,NHBtransit_prob
+ MO=31-33, DEC=30,NAME=NHBauto_prob,NHBnonmot_prob,NHBtransit_prob
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.

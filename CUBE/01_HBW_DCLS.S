@@ -101,7 +101,7 @@ ZONES = {TOTAL_ZONES}
     DEMAND = personTrips[I],
   	UTILITIESMW = 100,
   	ODEMANDMW = 118,
-  	DESTSPLIT= TOTAL All, INCLUDE=1-{Total ZONES},
+  	DESTSPLIT= TOTAL All, INCLUDE=1-{TOTAL_ZONES},
   	STARTMW = 119 
     
 ; Report coefficient values to summary file and debug file;
