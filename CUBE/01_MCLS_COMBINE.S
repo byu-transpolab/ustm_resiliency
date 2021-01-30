@@ -7,7 +7,7 @@ FILEI MATI[8] = "{CATALOG_DIR}\Base\01_MC_NHB_PROBABILITY.MAT"
 FILEI MATI[7] = "{CATALOG_DIR}\Base\01_MC_HBO_PROBABILITY.MAT"
 FILEI MATI[6] = "{CATALOG_DIR}\Base\01_MC_HBW_PROBABILITY.MAT"
 FILEO MATO[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED_PROBABILITY.MAT",
-  MO = 11-15, 21-25, 31-35 DEC = 30, NAME = HBWauto_prob, HBOauto_prob, NHBauto_prob, HBCauto_prob, RECauto_prob, HBWnmot_prob, HBOnmot_prob, NHBnmot_prob, HBCnmot_prob, RECnmot_prob, HBWtransit_prob, HBOtransit_prob, NHBtransit_prob, HBCtransit_prob, RECtransit_prob
+  MO = 11-15, 21-25, 31-35 DEC = D, NAME = HBWauto_prob, HBOauto_prob, NHBauto_prob, HBCauto_prob, RECauto_prob, HBWnmot_prob, HBOnmot_prob, NHBnmot_prob, HBCnmot_prob, RECnmot_prob, HBWtransit_prob, HBOtransit_prob, NHBtransit_prob, HBCtransit_prob, RECtransit_prob
 FILEO MATO[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT",
   MO = 1-5, DEC = D, NAME = HBWlogsum, HBOlogsum, NHBlogsum, HBClogsum, REClogsum
 FILEI MATI[5] = "{SCENARIO_DIR}\01_MC_REC_LOGSUM.MAT"
