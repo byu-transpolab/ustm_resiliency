@@ -3,7 +3,7 @@
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=HIGHWAY MSG='Whole Network'
 FILEO MATO[1] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT",
-  MO = 1-2, DEC = 8, NAME = TIME, DISTANCE
+  MO = 1-2, DEC = D, NAME = TIME, DISTANCE
 FILEI NETI = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\LOADED_2012A.NET"
 
 PROCESS PHASE=LINKREAD

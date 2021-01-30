@@ -2,8 +2,8 @@
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=HIGHWAY MSG='Whole Network'
 FILEO MATO[1] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT",
-  MO = 1-2, DEC = 8, NAME = TIME, DISTANCE
 FILEI NETI = "{CATALOG_DIR}\Base\BY_2015.NET"
+  MO = 1-2, DEC = D, NAME = TIME, DISTANCE
 
 PROCESS PHASE=LINKREAD
 ; Use this phase to obtain initial values from the input network (LI.varname) and compute 
