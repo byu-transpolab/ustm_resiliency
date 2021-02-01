@@ -6,11 +6,11 @@ FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
 FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_REC_LOGSUM.MAT",
-  MO = 41,DEC=8, NAME=REClogsum
+  MO = 41,DEC=D, NAME=REClogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_REC_UTILITY.MAT",
-  MO=111-113, DEC=12,NAME=RECauto_util,RECnonmot_util,RECtransit_util
+  MO=111-113, DEC=D,NAME=RECauto_util,RECnonmot_util,RECtransit_util
 FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_REC_PROBABILITY.MAT",
- MO=31-33, DEC=10,NAME=RECauto_prob,RECnonmot_prob,RECtransit_prob
+ MO=31-33, DEC=D,NAME=RECauto_prob,RECnonmot_prob,RECtransit_prob
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.

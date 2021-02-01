@@ -2,7 +2,7 @@
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Process Skims'
 FILEO MATO[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT",
-  MO=1-2,DEC=12,NAME=TIME,DISTANCE
+  MO=1-2,DEC=D,NAME=TIME,DISTANCE
 FILEI MATI[1] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP

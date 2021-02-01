@@ -5,7 +5,7 @@ FILEI ZDATI[2] = "{CATALOG_DIR}\Base\01_ROWSUMS.DBF"
 FILEI ZDATI[1] = "{CATALOG_DIR}\Base\HH_PROD.DBF"
 FILEI MATI[1] = "{CATALOG_DIR}\Base\01_DCLS_COMBINED.MAT"
 FILEO MATO[1] = "{CATALOG_DIR}\CUBE\01_TRIPS_IJ.MAT",
-  MO = 10,20,30,40,50,100,200,300,400,500,98,99 DEC = 30, NAME = HBWDCProbability, HBODCProbability, NHBDCProbability, HBCDCProbability, RECDCProbability, HBWTrips,HBOTrips,NHBTrips,HBCTrips,RECTrips,CheckRowsum, CheckProd
+  MO = 10,20,30,40,50,100,200,300,400,500,98,99 DEC = D, NAME = HBWDCProbability, HBODCProbability, NHBDCProbability, HBCDCProbability, RECDCProbability, HBWTrips,HBOTrips,NHBTrips,HBCTrips,RECTrips,CheckRowsum, CheckProd
 
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP

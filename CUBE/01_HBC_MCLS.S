@@ -6,11 +6,11 @@ FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
 FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBC_LOGSUM.MAT",
-  MO = 41,DEC=8, NAME=HBClogsum
+  MO = 41,DEC=D, NAME=HBClogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBC_UTILTIY.MAT",
-  MO=111-113, DEC=12,NAME=HBCauto_util,HBCnonmot_util,HBCtransit_util
+  MO=111-113, DEC=D,NAME=HBCauto_util,HBCnonmot_util,HBCtransit_util
 FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBC_PROBABILITY.MAT",
- MO=31-33, DEC=10,NAME=HBCauto_prob,HBCnonmot_prob,HBCtransit_prob
+ MO=31-33, DEC=D,NAME=HBCauto_prob,HBCnonmot_prob,HBCtransit_prob
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
