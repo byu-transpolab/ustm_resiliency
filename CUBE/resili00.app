@@ -7,10 +7,10 @@ resiliency
 00
 
 
-Mon Feb 01 22:04:30 2021
+Tue Feb 02 14:41:33 2021
 
 
-C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
+C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\resili00.app
 VOYAGER
 
 
@@ -4745,7 +4745,7 @@ PK Transit (Fixed)
 0
 0
 *
-{SCENARIO_DIR}\PK_Transit.MAT
+{CATALOG_DIR}\Base\USTM_transit_skim.MAT
 1
 0002
       
@@ -4952,7 +4952,7 @@ SE Data
 0
 0
 *
-{SCENARIO_DIR}\LOADED_2012A.NET
+{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF
 1
 0522
       

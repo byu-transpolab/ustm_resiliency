@@ -1,7 +1,7 @@
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBW_MCLS.PRN" MSG='HBW MCLS'
 FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
-FILEI MATI[2] = "{CATALOG_DIR}\Base\USTM_transit_skim"
+FILEI MATI[2] = "{CATALOG_DIR}\Base\USTM_transit_skim.MAT"
 FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
 FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBW_LOGSUM.MAT",
@@ -109,11 +109,17 @@ MW[18] = MIN(MW[2],1)
       MW[13] = (K_TRN * MW[3])                                                  ;transit utility
       MW[113] = MW[13] * 100                                                    ;Printed transity utility
       
-      
-      ; Exponentiate Utilities
+        ; Exponentiate Utilities
       MW[21] = exp(MW[11])
-      MW[22] = exp(MW[12])
-      MW[23] = exp(MW[13])
+      MW[22] = exp(MW[12])   
+      
+      JLOOP
+      IF (MW[3] = 0)
+        MW[23] = 0
+      ELSE
+        MW[23] = exp(MW[13])
+      ENDIF
+      ENDJLOOP
       
       ; Sum demonominator
       MW[30] = MW[21] + MW[22] + MW[23]
@@ -123,13 +129,13 @@ MW[18] = MIN(MW[2],1)
       MW[32] =  MW[22] / MW[30]       ;non-motorized probability
       MW[33] =  MW[23] / MW[30]       ;transit probability
       
-      JLOOP
-      IF (MW[33] >= 0.98)
-      MW[33] = -9999.99
-      ELSE
-      MW[33] = MW[33]
-      ENDIF
-      ENDJLOOP
+      ;JLOOP
+      ;IF (MW[33] >= 0.98)
+     ; MW[33] = -9999.99
+     ; ELSE
+      ;MW[33] = MW[33]
+     ; ENDIF
+      ;ENDJLOOP
 
       
       ; LOGSUM

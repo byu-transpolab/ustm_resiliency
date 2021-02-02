@@ -1,7 +1,7 @@
 &PROJFIL
 EXP5 1 1Matrix File 1  {SCENARIO_DIR}\01_MCLS_COMBINED.MAT                         
 EXP5 2 1Matrix File 2  {SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT                         
-EXP5 221Zonal Data 1   {SCENARIO_DIR}\LOADED_2012A.NET                             
+EXP5 221Zonal Data 1   {CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF                     
 EXP5 231Zonal Data 2   {SCENARIO_DIR}\HH_PROD.DBF                                  
 EXP5 421Lookup File 1  {SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF                    
 EXP6 210Record File 1  {SCENARIO_DIR}\01_ROWSUMS.DBF                               
@@ -13,10 +13,10 @@ DC Logsums
 00
 
 
-Mon Feb 01 22:48:28 2021
+Tue Feb 02 12:41:33 2021
 
 C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
-C:\USERS\MBARNES7\DOCUMENTS\PROJECTS\USTM_RESILIENCY\CUBE\DCLOGS00.APP
+C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\DCLOGS00.APP
 VOYAGER
 
 
@@ -445,7 +445,7 @@ SE Data
 0
 0
 *
-{SCENARIO_DIR}\se_classified_2012A.dbf
+{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF
 0
 ZON
 ZDATI1
@@ -2318,7 +2318,7 @@ SE Data
 0
 0
 *
-C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf
+{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF
 0
 ZON
 ZDATI1
@@ -4191,7 +4191,7 @@ SE Data
 0
 0
 *
-C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf
+{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF
 0
 ZON
 ZDATI1
@@ -6064,7 +6064,7 @@ SE Data
 0
 0
 *
-C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf
+{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF
 0
 ZON
 ZDATI1
@@ -9810,7 +9810,7 @@ SE Data
 0
 0
 *
-{SCENARIO_DIR}\LOADED_2012A.NET
+{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF
 0
 ZON
 ZDATI1
