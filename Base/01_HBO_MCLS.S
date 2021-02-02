@@ -107,6 +107,14 @@ ENDIF
       MW[32] =  MW[22] / MW[30]       ;non-motorized probability
       MW[33] =  MW[23] / MW[30]       ;transit probability
       
+        JLOOP
+      IF (MW[33] >= 0.98)
+      MW[33] = -9999.99
+      ELSE
+      MW[33] = MW[33]
+      ENDIF
+      ENDJLOOP
+      
       ; LOGSUM
       MW[40] = log(MW[30])
       

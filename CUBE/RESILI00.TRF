@@ -12,10 +12,10 @@ C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resiliency.PRN
 2:DC Logsums,00,C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\DCLOGS00.APP
 #END
 1
-C:\Users\mbarnes7\AppData\Local\Temp\Cit25E3.tmp
+C:\Users\mbarnes7\AppData\Local\Temp\CitE115.tmp
 1
 Base
-#GROUP=resiliency, 00:4:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
+#GROUP=resiliency, 00:6:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
 #PROGRAM
 #PROGNAME=HIGHWAY<0:13;1
 #EXEC=1
@@ -38,7 +38,7 @@ Base
 #OUTPUT
 {SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT
 #END
-#GROUP=resiliency, 00:4:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
+#GROUP=resiliency, 00:6:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
 #PROGRAM
 #PROGNAME=StartOfGroup<0:7;0
 #EXEC=3
@@ -125,12 +125,12 @@ Base
 #OUTPUT
 {SCENARIO_DIR}\01_MCLS_COMBINED.MAT
 #END
-#GROUP=resiliency, 00:4:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
+#GROUP=resiliency, 00:6:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
 #PROGRAM
 #PROGNAME=EndOfGroup<0:8;0
 #EXEC=3
 #INCLUSTER=0
-#GROUP=resiliency, 00:4:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
+#GROUP=resiliency, 00:6:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
 #PROGRAM
 #PROGNAME=StartOfGroup<0:7;0
 #EXEC=4
@@ -230,11 +230,33 @@ C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DEST_HBC.MAT
 {SCENARIO_DIR}\01_DCLS_ROWSUM.PRN
 {SCENARIO_DIR}\01_ROWSUMS.DBF
 #END
-#GROUP=resiliency, 00:4:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
+#GROUP=resiliency, 00:6:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
 #PROGRAM
 #PROGNAME=EndOfGroup<0:8;0
 #EXEC=4
 #INCLUSTER=0
+#PROGRAM
+#PROGNAME=MATRIX<0:13;1
+#EXEC=5
+#INCLUSTER=0
+#PROGARGS=C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00H.S
+
+0
+#END
+#OUTPUT
+C:\Users\mbarnes7\Documents\projects\ustm_resiliency\Base\USTM_transit_skim.MAT
+#END
+#PROGRAM
+#PROGNAME=MATRIX<0:13;1
+#EXEC=6
+#INCLUSTER=0
+#PROGARGS=C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00J.S
+
+0
+#END
+#OUTPUT
+C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\BASE\01_TLFD.DBF
+#END
 #ENDOFPROGS
 1
 1

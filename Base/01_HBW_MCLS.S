@@ -94,6 +94,7 @@ MW[18] = MIN(MW[2],1)
   ENDJLOOP
   
   ;TODO: get minimum transit time, but include out-of-vehicle time as separate matrix
+   
 
 ;;;;;;Begin HBW MCLS Calculation;;;;;
       
@@ -107,7 +108,8 @@ MW[18] = MIN(MW[2],1)
       MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
       MW[13] = (K_TRN * MW[3])                                                  ;transit utility
       MW[113] = MW[13] * 100                                                    ;Printed transity utility
-          
+      
+      
       ; Exponentiate Utilities
       MW[21] = exp(MW[11])
       MW[22] = exp(MW[12])
@@ -121,8 +123,30 @@ MW[18] = MIN(MW[2],1)
       MW[32] =  MW[22] / MW[30]       ;non-motorized probability
       MW[33] =  MW[23] / MW[30]       ;transit probability
       
+      JLOOP
+      IF (MW[33] >= 0.98)
+      MW[33] = -9999.99
+      ELSE
+      MW[33] = MW[33]
+      ENDIF
+      ENDJLOOP
+
+      
       ; LOGSUM
       MW[40] = ln(MW[30])
+ 
+        
+         ;Process TAZ with no transit
+      ;JLOOP
+       ; Transit not available if no line-haul in-vehicle time on the transit path
+       ; Walk to bus or trolley
+       ;IF ((MW[3]) <= 0) 
+       ;MW[3]=-9999.99
+       ;ELSE
+       ;MW[3]=MW[3]
+       ;ENDIF
+      ;ENDJLOOP 
+         
       
 
       ; Calculate logit average of the mode choice logsums

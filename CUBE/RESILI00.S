@@ -4,7 +4,7 @@
 RUN PGM=HIGHWAY MSG='Whole Network'
 FILEO MATO[1] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT",
   MO = 1-2, DEC = D, NAME = TIME, DISTANCE
-FILEI NETI = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\LOADED_2012A.NET"
+FILEI NETI = "{CATALOG_DIR}\Base\BY_2015.NET"
 
 PROCESS PHASE=LINKREAD
 ; Use this phase to obtain initial values from the input network (LI.varname) and compute 
@@ -15,7 +15,6 @@ PROCESS PHASE=LINKREAD
  T0=LI.AM_TIME
 
 ENDPROCESS
-
 
 PROCESS PHASE=ILOOP
 ; This phase performs a zonal loop (I=1,Zones).  This phase is required and must contain
@@ -28,11 +27,9 @@ PROCESS PHASE=ILOOP
   MW[2][I] = 0                ; Set Intrazonal Dist = 0
 
   ;# Total Impedance including terminal times
-
   MW[3] = MW[1]+MW[2]
-
+   
 ENDPROCESS
-
 
 ENDRUN
 
@@ -42,7 +39,7 @@ ENDRUN
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Process Skims'
 FILEO MATO[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT",
-  MO=1-2,DEC=12,NAME=TIME,DISTANCE
+  MO=1-4,DEC=D,NAME=TIME,DISTANCE,EX_TIME, EX_DIST
 FILEI MATI[1] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -66,23 +63,34 @@ FILLMW MW[1]=MI.1.1(2)                ; highway skims
 
       ENDJLOOP
 
+ JLOOP
+  IF (I=1-27 && J=1-27) 
+      MW[3] = MW[1]
+ ENDIF
+ 
+ IF (I=1-27 && J=1-27)
+    MW[4] = MW[2]
+
+ ENDIF
+ENDJLOOP
+      
+      
 ENDRUN
 
 
 ; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\Base\01_HBW_MCLS.S"
-;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBW_MCLS.PRN" MSG='HBW MCLS'
-FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBW_PROBABILITY.MAT",
-  MO=31-33, DEC=12,NAME=TIME,DISTANCE,HBWauto_prob,HBWnonmot_prob,HBWtransit_prob
-FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBW_UTILITY.MAT",
-  MO=111-113, DEC=12,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util
-FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBW_LOGSUM.MAT",
-  MO =41,DEC=12, NAME=HBWlogsum
-FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
-FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
+FILEI MATI[2] = "{CATALOG_DIR}\Base\USTM_transit_skim"
+FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
+FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
+FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBW_LOGSUM.MAT",
+  MO = 41,DEC=D, NAME=HBWlogsum
+FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBW_UTILITY.MAT",
+   MO=111-113, DEC=D,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util
+FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBW_PROBABILITY.MAT",
+  MO=31-33, DEC=D, NAME=HBWauto_prob,HBWnonmot_prob,HBWtransit_prob
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -94,7 +102,7 @@ FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
   MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
-  FILLMW MW[3]=MI.2.WBUS     ;Walk bus time
+  FILLMW MW[3]=MI.2.1     ;Walk bus time
 
 
 ; Progress Bar update for evey 100 zones
@@ -207,8 +215,6 @@ MW[18] = MIN(MW[2],1)
         MW[41] = 0
      ENDIF
    ENDJLOOP
-
-
 ENDRUN
 
 
@@ -221,11 +227,11 @@ FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
 FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
 FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBO_PROBABILITY.MAT",
-  MO=31-33, DEC=10,NAME=HBOauto_prob,HBOnonmot_prob,HBOtransit_prob
+  MO=31-33, DEC=D,NAME=HBOauto_prob,HBOnonmot_prob,HBOtransit_prob
 FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBO_UTILITY.MAT",
-  MO=11-13, DEC=10,NAME=HBOauto_util,HBOnonmot_util,HBOtransit_util
+  MO=11-13, DEC=D,NAME=HBOauto_util,HBOnonmot_util,HBOtransit_util
 FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBO_LOGSUM.MAT",
-  MO = 41,DEC=10, NAME=HBOlogsum
+  MO = 41,DEC=D, NAME=HBOlogsum
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -350,11 +356,11 @@ FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
 FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_NHB_LOGSUM.MAT",
-  MO = 41,DEC=12, NAME=NHBlogsum
+  MO = 41,DEC=D, NAME=NHBlogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_NHB_UTILITY.MAT",
-  MO=111-113, DEC=12,NAME=NHBauto_util,NHBnonmot_util,NHBtransit_util
+  MO=111-113, DEC=D,NAME=NHBauto_util,NHBnonmot_util,NHBtransit_util
 FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_NHB_PROBABILITY.MAT",
- MO=31-33, DEC=12,NAME=NHBauto_prob,NHBnonmot_prob,NHBtransit_prob
+ MO=31-33, DEC=D,NAME=NHBauto_prob,NHBnonmot_prob,NHBtransit_prob
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -366,7 +372,7 @@ FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_NHB_PROBABILITY.MAT",
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
   MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
-  FILLMW MW[3]=MI.2.WBUS     ;Walk bus time
+  FILLMW MW[3]=MI.2.1     ;Walk bus time
 
 
 ; Progress Bar update for evey 100 zones
@@ -491,11 +497,11 @@ FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
 FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBC_LOGSUM.MAT",
-  MO = 41,DEC=8, NAME=HBClogsum
+  MO = 41,DEC=D, NAME=HBClogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBC_UTILTIY.MAT",
-  MO=111-113, DEC=12,NAME=HBCauto_util,HBCnonmot_util,HBCtransit_util
+  MO=111-113, DEC=D,NAME=HBCauto_util,HBCnonmot_util,HBCtransit_util
 FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBC_PROBABILITY.MAT",
- MO=31-33, DEC=10,NAME=HBCauto_prob,HBCnonmot_prob,HBCtransit_prob
+ MO=31-33, DEC=D,NAME=HBCauto_prob,HBCnonmot_prob,HBCtransit_prob
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -507,7 +513,7 @@ FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBC_PROBABILITY.MAT",
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
   MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
-  FILLMW MW[3]=MI.2.WBUS     ;Walk bus time
+  FILLMW MW[3]=MI.2.1     ;Walk bus time
 
 
 ; Progress Bar update for evey 100 zones
@@ -633,11 +639,11 @@ FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
 FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_REC_LOGSUM.MAT",
-  MO = 41,DEC=8, NAME=REClogsum
+  MO = 41,DEC=D, NAME=REClogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_REC_UTILITY.MAT",
-  MO=111-113, DEC=12,NAME=RECauto_util,RECnonmot_util,RECtransit_util
+  MO=111-113, DEC=D,NAME=RECauto_util,RECnonmot_util,RECtransit_util
 FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_REC_PROBABILITY.MAT",
- MO=31-33, DEC=10,NAME=RECauto_prob,RECnonmot_prob,RECtransit_prob
+ MO=31-33, DEC=D,NAME=RECauto_prob,RECnonmot_prob,RECtransit_prob
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -649,7 +655,7 @@ FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_REC_PROBABILITY.MAT",
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
   MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
-  FILLMW MW[3]=MI.2.WBUS     ;Walk bus time
+  FILLMW MW[3]=MI.2.1    ;Walk bus time
 
 
 ; Progress Bar update for evey 100 zones
@@ -770,8 +776,15 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Combine All MCLS Calculations'
+FILEI MATI[10] = "{CATALOG_DIR}\Base\01_MC_REC_PROBABILITY.MAT"
+FILEI MATI[9] = "{CATALOG_DIR}\Base\01_MC_HBC_PROBABILITY.MAT"
+FILEI MATI[8] = "{CATALOG_DIR}\Base\01_MC_NHB_PROBABILITY.MAT"
+FILEI MATI[7] = "{CATALOG_DIR}\Base\01_MC_HBO_PROBABILITY.MAT"
+FILEI MATI[6] = "{CATALOG_DIR}\Base\01_MC_HBW_PROBABILITY.MAT"
+FILEO MATO[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED_PROBABILITY.MAT",
+  MO = 11-15, 21-25, 31-35 DEC = D, NAME = HBWauto_prob, HBOauto_prob, NHBauto_prob, HBCauto_prob, RECauto_prob, HBWnmot_prob, HBOnmot_prob, NHBnmot_prob, HBCnmot_prob, RECnmot_prob, HBWtransit_prob, HBOtransit_prob, NHBtransit_prob, HBCtransit_prob, RECtransit_prob
 FILEO MATO[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT",
-  MO = 1-5, DEC = 8, NAME = HBWlogsum, HBOlogsum, NHBlogsum, HBClogsum, REClogsum
+  MO = 1-5, DEC = D, NAME = HBWlogsum, HBOlogsum, NHBlogsum, HBClogsum, REClogsum
 FILEI MATI[5] = "{SCENARIO_DIR}\01_MC_REC_LOGSUM.MAT"
 FILEI MATI[4] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MC_HBC_LOGSUM.MAT"
 FILEI MATI[3] = "{SCENARIO_DIR}\01_MC_NHB_LOGSUM.MAT"
@@ -784,13 +797,33 @@ FILEI MATI[1] = "{SCENARIO_DIR}\01_MC_HBW_LOGSUM.MAT"
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
+  ;Fill MCLS
   FILLMW MW[1]=MI.1.1 ;HBW Logsum
   FILLMW MW[2]=MI.2.1 ;HBO Logsum
   FILLMW MW[3]=MI.3.1 ;NHB Logsum
   FILLMW MW[4]=MI.4.1 ;HBC Logsum
   FILLMW MW[5]=MI.5.1 ;REC Logsum
   
+  ;Fill Auto Probabilities
+  FILLMW MW[11]=MI.6.1 ;HBW Auto Probability
+  FILLMW MW[12]=MI.7.1 ;HBO Auto Probability
+  FILLMW MW[13]=MI.8.1 ;NHB Auto Probability
+  FILLMW MW[14]=MI.9.1 ;HBC Auto Probability
+  FILLMW MW[15]=MI.10.1 ;REC Auto Probability
   
+  ;Fill Non-motorized Probability
+  FILLMW MW[21]=MI.6.2 ;HBW NMOT Probability
+  FILLMW MW[22]=MI.7.2 ;HBO NMOT Probability
+  FILLMW MW[23]=MI.8.2 ;NHB NMOT Probability
+  FILLMW MW[24]=MI.9.2 ;HBC NMOT Probability
+  FILLMW MW[25]=MI.10.2 ;REC NMOT Probability  
+  
+  ;Fill Transit Probability
+  FILLMW MW[31]=MI.6.3 ;HBW Transit Probability
+  FILLMW MW[32]=MI.7.3 ;HBO Transit Probability
+  FILLMW MW[33]=MI.8.3 ;NHB Transit Probability
+  FILLMW MW[34]=MI.9.3 ;HBC Transit Probability
+  FILLMW MW[35]=MI.10.3 ;REC Transit Probability 
 
 ENDRUN
 
@@ -804,9 +837,9 @@ FILEO PRINTO[2] = "{SCENARIO_DIR}\01_HBO_DEST_CHOICE_DEBUG.TXT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\01_HBO_DEST_CHOICE.RPT"
 FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_HBO.MAT",
-  MO = 112, 100 DEC = 8, NAME = HBOSizeTerm, HBOUtil
+  MO = 112, 100 DEC = D, NAME = HBOSizeTerm, HBOUtil
 FILEI LOOKUPI[1] = "{SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "{SCENARIO_DIR}\se_classified_2012A.dbf"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
 FILEI MATI[2] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT"
 
@@ -816,7 +849,7 @@ FILEI MATI[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT"
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-ZONES = {Total ZONES}
+ZONES = {TOTAL_ZONES}
 		ARRAY personTrips = ZONES
 
 		; READ IN MODEL PARAMETERS
@@ -857,7 +890,7 @@ ZONES = {Total ZONES}
 		JLOOP
 		  ; Compute size term
         ;MW[112] = Coeff_HH + Coeff_OFF_EMP + Coeff_OTH_EMP + Coeff_OTH_OFF_EMP
-		  MW[112] = Coeff_HH * ZI.1.HH[J] + Coeff_OFF_EMP * ZI.1.OFF[J] + Coeff_RET_EMP * (ZI.1.RET[J] + ZI.1.HTRET[J]) + Coeff_OTH_EMP * (ZI.1.EMP_NOSG[J] - ZI.1.OFF[J]  - ZI.1.RET[J] - ZI.1.HTRET[J]) + Coeff_OTH_OFF_EMP * (ZI.1.EMP_NOSG[J] - ZI.1.RET[J] - ZI.1.HTRET[J])
+		   MW[112] = Coeff_HH * ZI.1.TOTHH[J] + Coeff_OFF_EMP * ZI.1.OTHEMP[J] + Coeff_RET_EMP * (ZI.1.RETEMP[J]) + Coeff_OTH_EMP * (ZI.1.TOTEMP[J] - ZI.1.OTHEMP[J]  - ZI.1.RETEMP[J]) + Coeff_OTH_OFF_EMP * (ZI.1.TOTEMP[J] - ZI.1.RETEMP[J])
       
 		  ; Log (sizeTerm)
 		  IF(MW[112] > 0)   MW[113] = Ln(MW[112])  
@@ -898,7 +931,7 @@ ZONES = {Total ZONES}
     DEMAND = personTrips[I],
   	UTILITIESMW = 100,
   	ODEMANDMW = 118,
-  	DESTSPLIT= TOTAL All, INCLUDE=1-{Total ZONES},
+  	DESTSPLIT= TOTAL All, INCLUDE=1-{TOTAL_ZONES},
   	STARTMW = 119 
     
 ; Report coefficient values to summary file and debug file;
@@ -953,11 +986,11 @@ FILEO PRINTO[2] = "{SCENARIO_DIR}\01_NHB_DEST_CHOICE_DEBUG.TXT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\01_NHB_DEST_CHOICE.RPT"
 FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
 FILEO MATO[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DEST_NHB.MAT",
-  MO = 112, 100 DEC = 8, NAME = NHBSizeTerm, NHBUtil
 FILEI LOOKUPI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
 FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
+  MO = 112, 100 DEC = D, NAME = NHBSizeTerm, NHBUtil
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -965,7 +998,7 @@ FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MC
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-ZONES = {Total ZONES}
+ZONES = {TOTAL_ZONES}
 		ARRAY personTrips = ZONES
 
 		; READ IN MODEL PARAMETERS
@@ -1006,7 +1039,7 @@ ZONES = {Total ZONES}
 		JLOOP
 		  ; Compute size term
         ;MW[112] = Coeff_HH + Coeff_OFF_EMP + Coeff_OTH_EMP + Coeff_OTH_OFF_EMP
-		  MW[112] = Coeff_HH * ZI.1.HH[J] + Coeff_OFF_EMP * ZI.1.OFF[J] + Coeff_RET_EMP * (ZI.1.RET[J] + ZI.1.HTRET[J]) + Coeff_OTH_EMP * (ZI.1.EMP_NOSG[J] - ZI.1.OFF[J]  - ZI.1.RET[J] - ZI.1.HTRET[J]) + Coeff_OTH_OFF_EMP * (ZI.1.EMP_NOSG[J] - ZI.1.RET[J] - ZI.1.HTRET[J])
+		   MW[112] = Coeff_HH * ZI.1.TOTHH[J] + Coeff_OFF_EMP * ZI.1.OTHEMP[J] + Coeff_RET_EMP * (ZI.1.RETEMP[J]) + Coeff_OTH_EMP * (ZI.1.TOTEMP[J] - ZI.1.OTHEMP[J]  - ZI.1.RETEMP[J]) + Coeff_OTH_OFF_EMP * (ZI.1.TOTEMP[J] - ZI.1.RETEMP[J])
       
 		  ; Log (sizeTerm)
 		  IF(MW[112] > 0)   MW[113] = Ln(MW[112])  
@@ -1047,7 +1080,7 @@ ZONES = {Total ZONES}
     DEMAND = personTrips[I],
   	UTILITIESMW = 100,
   	ODEMANDMW = 118,
-  	DESTSPLIT= TOTAL All, INCLUDE=1-{Total ZONES},
+  	DESTSPLIT= TOTAL All, INCLUDE=1-{TOTAL_ZONES},
   	STARTMW = 119 
     
 ; Report coefficient values to summary file and debug file;
@@ -1103,11 +1136,11 @@ FILEO PRINTO[2] = "{SCENARIO_DIR}\01_HBC_DEST_CHOICE_DEBUG.TXT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\01_HBC_DEST_CHOICE.RPT"
 FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
 FILEO MATO[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DEST_HBC.MAT",
-  MO = 112, 100 DEC = 8, NAME = HBCSizeTerm, HBCUtil
 FILEI LOOKUPI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
 FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
+  MO = 112, 100 DEC = D, NAME = HBCSizeTerm, HBCUtil
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -1115,7 +1148,7 @@ FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MC
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-ZONES = {Total ZONES}
+ZONES = {TOTAL_ZONES}
 		ARRAY personTrips = ZONES
 
 		; READ IN MODEL PARAMETERS
@@ -1156,7 +1189,7 @@ ZONES = {Total ZONES}
 		JLOOP
 		  ; Compute size term
         ;MW[112] = Coeff_HH + Coeff_OFF_EMP + Coeff_OTH_EMP + Coeff_OTH_OFF_EMP
-		  MW[112] = Coeff_HH * ZI.1.HH[J] + Coeff_OFF_EMP * ZI.1.OFF[J] + Coeff_RET_EMP * (ZI.1.RET[J] + ZI.1.HTRET[J]) + Coeff_OTH_EMP * (ZI.1.EMP_NOSG[J] - ZI.1.OFF[J]  - ZI.1.RET[J] - ZI.1.HTRET[J]) + Coeff_OTH_OFF_EMP * (ZI.1.EMP_NOSG[J] - ZI.1.RET[J] - ZI.1.HTRET[J])
+		   MW[112] = Coeff_HH * ZI.1.TOTHH[J] + Coeff_OFF_EMP * ZI.1.OTHEMP[J] + Coeff_RET_EMP * (ZI.1.RETEMP[J]) + Coeff_OTH_EMP * (ZI.1.TOTEMP[J] - ZI.1.OTHEMP[J]  - ZI.1.RETEMP[J]) + Coeff_OTH_OFF_EMP * (ZI.1.TOTEMP[J] - ZI.1.RETEMP[J])
       
 		  ; Log (sizeTerm)
 		  IF(MW[112] > 0)   MW[113] = Ln(MW[112])  
@@ -1197,7 +1230,7 @@ ZONES = {Total ZONES}
     DEMAND = personTrips[I],
   	UTILITIESMW = 100,
   	ODEMANDMW = 118,
-  	DESTSPLIT= TOTAL All, INCLUDE=1-{Total ZONES},
+  	DESTSPLIT= TOTAL All, INCLUDE=1-{TOTAL_ZONES},
   	STARTMW = 119 
     
 ; Report coefficient values to summary file and debug file;
@@ -1251,10 +1284,10 @@ FILEO PRINTO[3] = "{SCENARIO_DIR}\01_REC_ZONAL_TRIPS.CSV"
 FILEO PRINTO[2] = "{SCENARIO_DIR}\01_REC_DEST_CHOICE_DEBUG.TXT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\01_REC_DEST_CHOICE.RPT"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_REC.MAT",
-  MO = 112, 100 DEC = 8, NAME = RECSizeTerm, RECUtil
+  MO = 112, 100 DEC = D, NAME = RECSizeTerm, RECUtil
 FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
 FILEI LOOKUPI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\se_classified_2012A.dbf"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
 FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
 
@@ -1264,7 +1297,7 @@ FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MC
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-ZONES = {Total ZONES}
+ZONES = {TOTAL_ZONES}
 		ARRAY personTrips = ZONES
 
 		; READ IN MODEL PARAMETERS
@@ -1305,7 +1338,7 @@ ZONES = {Total ZONES}
 		JLOOP
 		  ; Compute size term
         ;MW[112] = Coeff_HH + Coeff_OFF_EMP + Coeff_OTH_EMP + Coeff_OTH_OFF_EMP
-		  MW[112] = Coeff_HH * ZI.1.HH[J] + Coeff_OFF_EMP * ZI.1.OFF[J] + Coeff_RET_EMP * (ZI.1.RET[J] + ZI.1.HTRET[J]) + Coeff_OTH_EMP * (ZI.1.EMP_NOSG[J] - ZI.1.OFF[J]  - ZI.1.RET[J] - ZI.1.HTRET[J]) + Coeff_OTH_OFF_EMP * (ZI.1.EMP_NOSG[J] - ZI.1.RET[J] - ZI.1.HTRET[J])
+		   MW[112] = Coeff_HH * ZI.1.TOTHH[J] + Coeff_OFF_EMP * ZI.1.OTHEMP[J] + Coeff_RET_EMP * (ZI.1.RETEMP[J]) + Coeff_OTH_EMP * (ZI.1.TOTEMP[J] - ZI.1.OTHEMP[J]  - ZI.1.RETEMP[J]) + Coeff_OTH_OFF_EMP * (ZI.1.TOTEMP[J] - ZI.1.RETEMP[J])
       
 		  ; Log (sizeTerm)
 		  IF(MW[112] > 0)   MW[113] = Ln(MW[112])  
@@ -1346,7 +1379,7 @@ ZONES = {Total ZONES}
     DEMAND = personTrips[I],
   	UTILITIESMW = 100,
   	ODEMANDMW = 118,
-  	DESTSPLIT= TOTAL All, INCLUDE=1-{Total ZONES},
+  	DESTSPLIT= TOTAL All, INCLUDE=1-{TOTAL_ZONES},
   	STARTMW = 119 
     
 ; Report coefficient values to summary file and debug file;
@@ -1397,7 +1430,7 @@ ENDRUN
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_DCLS_COMBINE.PRN" MSG='COMBINE UTILITIES'
 FILEO MATO[1] = "{SCENARIO_DIR}\01_DCLS_COMBINED.MAT",
-  MO = 1-5, DEC = 8, NAME = HBWlogsum, HBOlogsum, NHBlogsum, HBClogsum, REClogsum
+  MO = 1-5, DEC = D, NAME = HBWDCUtility, HBODCUtility, NHBDCUtility, HBCDCUtility, RECDCUtility
 FILEI MATI[5] = "{SCENARIO_DIR}\01_DEST_REC.MAT"
 FILEI MATI[4] = "{SCENARIO_DIR}\01_DEST_HBC.MAT"
 FILEI MATI[3] = "{SCENARIO_DIR}\01_DEST_NHB.MAT"
@@ -1428,9 +1461,9 @@ FILEO PRINTO[3] = "{SCENARIO_DIR}\01_HBW_ZONAL_TRIPS.CSV"
 FILEO PRINTO[2] = "{SCENARIO_DIR}\01_HBW_DEST_CHOICE_DEBUG.TXT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\01_HBW_DEST_CHOICE.RPT"
 FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_HBW.MAT",
-  MO = 112, 100 DEC = 8, NAME = HBWSizeTerm, HBWUtil
+  MO = 112, 100 DEC = D, NAME = HBWSizeTerm, HBWUtil
 FILEI LOOKUPI[1] = "{SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "{SCENARIO_DIR}\LOADED_2012A.NET"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
 FILEI MATI[2] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT"
 
@@ -1441,7 +1474,7 @@ FILEI MATI[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT"
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-ZONES = {Total ZONES}
+ZONES = {TOTAL_ZONES}
 		ARRAY personTrips = ZONES
 
 		; READ IN MODEL PARAMETERS
@@ -1482,7 +1515,7 @@ ZONES = {Total ZONES}
 		JLOOP
 		  ; Compute size term
         ;MW[112] = Coeff_HH + Coeff_OFF_EMP + Coeff_OTH_EMP + Coeff_OTH_OFF_EMP
-		  MW[112] = Coeff_HH * ZI.1.HH[J] + Coeff_OFF_EMP * ZI.1.OFF[J] + Coeff_RET_EMP * (ZI.1.RET[J] + ZI.1.HTRET[J]) + Coeff_OTH_EMP * (ZI.1.EMP_NOSG[J] - ZI.1.OFF[J]  - ZI.1.RET[J] - ZI.1.HTRET[J]) + Coeff_OTH_OFF_EMP * (ZI.1.EMP_NOSG[J] - ZI.1.RET[J] - ZI.1.HTRET[J])
+		  MW[112] = Coeff_HH * ZI.1.TOTHH[J] + Coeff_OFF_EMP * ZI.1.OTHEMP[J] + Coeff_RET_EMP * (ZI.1.RETEMP[J]) + Coeff_OTH_EMP * (ZI.1.TOTEMP[J] - ZI.1.OTHEMP[J]  - ZI.1.RETEMP[J]) + Coeff_OTH_OFF_EMP * (ZI.1.TOTEMP[J] - ZI.1.RETEMP[J])
       
 		  ; Log (sizeTerm)
 		  IF(MW[112] > 0)   MW[113] = Ln(MW[112])  
@@ -1523,7 +1556,7 @@ ZONES = {Total ZONES}
     DEMAND = personTrips[I],
   	UTILITIESMW = 100,
   	ODEMANDMW = 118,
-  	DESTSPLIT= TOTAL All, INCLUDE=1-{Total ZONES},
+  	DESTSPLIT= TOTAL All, INCLUDE=1-{TOTAL_ZONES},
   	STARTMW = 119 
     
 ; Report coefficient values to summary file and debug file;
@@ -1597,7 +1630,7 @@ SeNHB = 0
 SeREC = 0
 
 JLOOP
-
+;change to an if statement to exclude rows/columns that don't exist i would need to set those values correctly to exclude them (its the column that matters)
   TAZ = ZI.1.TAZ
   SeHBW = SeHBW + exp(MW[100])
   SeHBO = SeHBO + exp(MW[200])
@@ -1616,6 +1649,24 @@ WRITE RECO = 1
 
 
 
+ENDRUN
+
+
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00H.S"
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=HIGHWAY
+FILEI NETI = "D:\PROJECTS\USTM_RESILIENCY\BASE\BY_2015.NET"
+FILEI TURNPENI = "D:\projects\ustm_resiliency\Base\TURNPENALTIES.TXT"
+FILEO MATO[1] = "D:\PROJECTS\USTM_RESILIENCY\BASE\ZONETEST.MAT"
+ENDRUN
+
+
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00J.S"
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=HIGHWAY
+FILEI NETI = "D:\PROJECTS\USTM_RESILIENCY\BASE\BY_2015.NET"
+FILEI TURNPENI = "D:\projects\ustm_resiliency\Base\TURNPENALTIES.TXT"
+FILEO MATO[1] = "D:\PROJECTS\USTM_RESILIENCY\BASE\ZONETEST.MAT"
 ENDRUN
 
 

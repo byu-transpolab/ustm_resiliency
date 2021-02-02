@@ -4,6 +4,12 @@ C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
 CHECKING EXECUTION ORDER
 CHECKING FILE EXISTENCE
 -------------------------
+APPLICATION GROUP: 'resiliency' (C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app)
+PROGRAM: MATRIX
+EXEC ORDER: 5
+THE 'Matrix File 1' EXISTS, BUT IS EMPTY
+C:\Users\mbarnes7\Documents\projects\ustm_resiliency\sample_calcs\Data\USTM-transit_skim1.csv
+
 -------------------------
 CHECKING APPLICATION GROUP 'MC Logsums'
 C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\MCLOGS00.APP
