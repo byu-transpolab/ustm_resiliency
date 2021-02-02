@@ -36,3 +36,9 @@ CUBE/01_TRIPS_IJ.MAT
 sample_calcs/Data/USTM-transit_skim1.csv
 
 sample_calcs/Data/USTM_transit_skim1.csv
+
+*.net
+
+Base/01_PROCESSED_SKIMS_45.MAT
+
+Base/01_PROCESSED_SKIMS_WHOLE.MAT

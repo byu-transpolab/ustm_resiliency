@@ -2,8 +2,8 @@
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=HIGHWAY MSG='Whole Network'
 FILEO MATO[1] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT",
-FILEI NETI = "{CATALOG_DIR}\Base\BY_2015.NET"
   MO = 1-2, DEC = D, NAME = TIME, DISTANCE
+FILEI NETI = "{CATALOG_DIR}\Base\BY_2015_45.net"
 
 PROCESS PHASE=LINKREAD
 ; Use this phase to obtain initial values from the input network (LI.varname) and compute 
@@ -14,7 +14,6 @@ PROCESS PHASE=LINKREAD
  T0=LI.AM_TIME
 
 ENDPROCESS
-
 
 PROCESS PHASE=ILOOP
 ; This phase performs a zonal loop (I=1,Zones).  This phase is required and must contain
@@ -27,10 +26,8 @@ PROCESS PHASE=ILOOP
   MW[2][I] = 0                ; Set Intrazonal Dist = 0
 
   ;# Total Impedance including terminal times
-
   MW[3] = MW[1]+MW[2]
-
+   
 ENDPROCESS
-
 
 ENDRUN
