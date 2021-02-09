@@ -1,15 +1,15 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBO_MCLS.PRN" MSG='HBO MCLS'
-FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
-FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
+FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
+FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
 FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBO_PROBABILITY.MAT",
   MO=31-33, DEC=D,NAME=HBOauto_prob,HBOnonmot_prob,HBOtransit_prob
 FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBO_UTILITY.MAT",
   MO=11-13, DEC=D,NAME=HBOauto_util,HBOnonmot_util,HBOtransit_util
-FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBO_LOGSUM.MAT",
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_LOGSUM.MAT",
   MO = 41,DEC=D, NAME=HBOlogsum
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP

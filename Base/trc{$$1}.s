@@ -1,10 +1,9 @@
-; Script for program MATRIX in file "D:\Projects\ustm_resiliency\Base\01_DCLS_COMBINE.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DCLS_COMBINE.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_DCLS_COMBINE.PRN" MSG='COMBINE DCLS'
-FILEI ZDATI[1] = "{SCENARIO_DIR}\HH_PROD.DBF"
+RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_DCLS_COMBINE.PRN" MSG='COMBINE UTILITIES'
 FILEO MATO[1] = "{SCENARIO_DIR}\01_DCLS_COMBINED.MAT",
-  MO = 1-5, DEC = D, NAME = HBWlogsum, HBOlogsum, NHBlogsum, HBClogsum, REClogsum
+  MO = 1-5, DEC = D, NAME = HBWDCUtility, HBODCUtility, NHBDCUtility, HBCDCUtility, RECDCUtility
 FILEI MATI[5] = "{SCENARIO_DIR}\01_DEST_REC.MAT"
 FILEI MATI[4] = "{SCENARIO_DIR}\01_DEST_HBC.MAT"
 FILEI MATI[3] = "{SCENARIO_DIR}\01_DEST_NHB.MAT"

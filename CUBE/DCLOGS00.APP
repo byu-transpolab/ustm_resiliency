@@ -1,9 +1,9 @@
 &PROJFIL
-EXP5 1 1Matrix File 1  {SCENARIO_DIR}\01_MCLS_COMBINED.MAT                         
-EXP5 2 1Matrix File 2  {SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT                         
-EXP5 221Zonal Data 1   {CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF                     
-EXP5 231Zonal Data 2   {SCENARIO_DIR}\HH_PROD.DBF                                  
-EXP5 421Lookup File 1  {SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF                    
+EXP5 1 1Matrix File 1  {SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT    
+EXP5 2 1Matrix File 2  {CATALOG_DIR}\Base\Output\01_HIGHWAY_SKIMS.MAT              
+EXP5 221Zonal Data 1   {CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF                   
+EXP5 231Zonal Data 2   {CATALOG_DIR}\Inputs\HH_PROD.DBF                            
+EXP5 421Lookup File 1  {CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF              
 EXP6 210Record File 1  {SCENARIO_DIR}\01_ROWSUMS.DBF                               
 11
 0
@@ -13,7 +13,7 @@ DC Logsums
 00
 
 
-Tue Feb 02 12:41:33 2021
+Mon Feb 08 16:56:15 2021
 
 C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
 C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\DCLOGS00.APP
@@ -9432,7 +9432,7 @@ Combined MCLS
 0
 0
 MAT
-{SCENARIO_DIR}\01_MCLS_COMBINED.MAT
+{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT
 0
 MAT
 MATI1 
@@ -9450,7 +9450,7 @@ Highway Skim
 0
 0
 MAT
-{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT
+{CATALOG_DIR}\Base\Output\01_HIGHWAY_SKIMS.MAT
 0
 MAT
 MATI2 
@@ -9810,7 +9810,7 @@ SE Data
 0
 0
 *
-{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF
+{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF
 0
 ZON
 ZDATI1
@@ -9828,7 +9828,7 @@ HH Production
 0
 0
 *
-{SCENARIO_DIR}\HH_PROD.DBF
+{CATALOG_DIR}\Inputs\HH_PROD.DBF
 0
 ZON
 ZDATI2
@@ -10170,7 +10170,7 @@ DC Params
 0
 0
 *
-{SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF
+{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF
 0
 LOK
 LOOKUPI1

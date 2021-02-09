@@ -1,11 +1,11 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_REC_MCLS.PRN" MSG='REC MCLS'
-FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
-FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
+FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
+FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
-FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_REC_LOGSUM.MAT",
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_REC_LOGSUM.MAT",
   MO = 41,DEC=D, NAME=REClogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_REC_UTILITY.MAT",
   MO=111-113, DEC=D,NAME=RECauto_util,RECnonmot_util,RECtransit_util

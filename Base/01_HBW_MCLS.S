@@ -1,10 +1,10 @@
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBW_MCLS.PRN" MSG='HBW MCLS'
 FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
-FILEI MATI[2] = "{CATALOG_DIR}\Base\USTM_transit_skim.MAT"
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
-FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
-FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBW_LOGSUM.MAT",
+FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
+FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_LOGSUM.MAT",
   MO = 41,DEC=D, NAME=HBWlogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBW_UTILITY.MAT",
    MO=111-113, DEC=D,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util

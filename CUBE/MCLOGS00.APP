@@ -1,14 +1,14 @@
 &PROJFIL
 EXP0 1 1Matrix File 1  {SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT                       
-EXP0 2 1Matrix File 2  {CATALOG_DIR}\Base\USTM_transit_skim.MAT                    
-EXP0 421Lookup File 1  {SCENARIO_DIR}\MC_Coefficients.csv                          
-EXP0 431Lookup File 2  {SCENARIO_DIR}\MC_Constants.csv                             
-EXP0 1 0Matrix File 1  {SCENARIO_DIR}\01_MC_HBW_LOGSUM.MAT                         
-EXP1 1 0Matrix File 1  {SCENARIO_DIR}\01_MC_HBO_LOGSUM.MAT                         
-EXP2 1 0Matrix File 1  {SCENARIO_DIR}\01_MC_NHB_LOGSUM.MAT                         
-EXP3 1 0Matrix File 1  {SCENARIO_DIR}\01_MC_HBC_LOGSUM.MAT                         
-EXP4 1 0Matrix File 1  {SCENARIO_DIR}\01_MC_REC_LOGSUM.MAT                         
-EXP5 1 0Matrix File 1  {SCENARIO_DIR}\01_MCLS_COMBINED.MAT                         
+EXP0 2 1Matrix File 2  {CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT          
+EXP0 421Lookup File 1  {CATALOG_DIR}\params\MC_Coefficients.csv                    
+EXP0 431Lookup File 2  {CATALOG_DIR}\params\MC_Constants.csv                       
+EXP0 1 0Matrix File 1  {SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_LOGSUM.MAT    
+EXP1 1 0Matrix File 1  {SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_LOGSUM.MAT    
+EXP2 1 0Matrix File 1  {SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_LOGSUM.MAT    
+EXP3 1 0Matrix File 1  {SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_LOGSUM.MAT    
+EXP4 1 0Matrix File 1  {SCENARIO_DIR}\intermediate_outputs\01_MC_REC_LOGSUM.MAT    
+EXP5 1 0Matrix File 1  {SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT    
 11
 0
 0
@@ -17,7 +17,7 @@ MC Logsums
 00
 
 
-Tue Feb 02 14:41:33 2021
+Mon Feb 08 16:51:05 2021
 
 C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\resili00.app
 C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\MCLOGS00.APP
@@ -89,7 +89,7 @@ PK Transit (Fixed)
 0
 0
 MAT
-{CATALOG_DIR}\Base\USTM_transit_skim.MAT
+{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT
 0
 MAT
 MATI2 
@@ -809,7 +809,7 @@ MC Coefficients
 0
 0
 *
-{SCENARIO_DIR}\MC_Coefficients.csv
+{CATALOG_DIR}\params\MC_Coefficients.csv
 0
 LOK
 LOOKUPI1
@@ -827,7 +827,7 @@ MC Constants
 0
 0
 *
-{SCENARIO_DIR}\MC_Constants.csv
+{CATALOG_DIR}\params\MC_Constants.csv
 0
 LOK
 LOOKUPI2
@@ -1185,7 +1185,7 @@ HBW MCLS
 0
 0
 MAT
-{SCENARIO_DIR}\01_MC_HBW_LOGSUM.MAT
+{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_LOGSUM.MAT
 0
 MAT
 MATO1 
@@ -1962,7 +1962,7 @@ PK Transit (Fixed)
 0
 0
 MAT
-{SCENARIO_DIR}\PK_Transit.MAT
+{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT
 0
 MAT
 MATI2 
@@ -2682,7 +2682,7 @@ MC Coefficients
 0
 0
 *
-{SCENARIO_DIR}\MC_Coefficients.csv
+{CATALOG_DIR}\params\MC_Coefficients.csv
 0
 LOK
 LOOKUPI1
@@ -2700,7 +2700,7 @@ MC Constants
 0
 0
 *
-{SCENARIO_DIR}\MC_Constants.csv
+{CATALOG_DIR}\params\MC_Constants.csv
 0
 LOK
 LOOKUPI2
@@ -3058,7 +3058,7 @@ HBO MCLS
 0
 0
 MAT
-{SCENARIO_DIR}\01_MC_HBO_LOGSUM.MAT
+{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_LOGSUM.MAT
 0
 MAT
 MATO1 
@@ -3835,7 +3835,7 @@ PK Transit (Fixed)
 0
 0
 MAT
-{SCENARIO_DIR}\PK_Transit.MAT
+{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT
 0
 MAT
 MATI2 
@@ -4555,7 +4555,7 @@ MC Coefficients
 0
 0
 *
-{SCENARIO_DIR}\MC_Coefficients.csv
+{CATALOG_DIR}\params\MC_Coefficients.csv
 0
 LOK
 LOOKUPI1
@@ -4573,7 +4573,7 @@ MC Constants
 0
 0
 *
-{SCENARIO_DIR}\MC_Constants.csv
+{CATALOG_DIR}\params\MC_Constants.csv
 0
 LOK
 LOOKUPI2
@@ -4931,7 +4931,7 @@ NHB MCLS
 0
 0
 MAT
-{SCENARIO_DIR}\01_MC_NHB_LOGSUM.MAT
+{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_LOGSUM.MAT
 0
 MAT
 MATO1 
@@ -5708,7 +5708,7 @@ PK Transit (Fixed)
 0
 0
 MAT
-{SCENARIO_DIR}\PK_Transit.MAT
+{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT
 0
 MAT
 MATI2 
@@ -6428,7 +6428,7 @@ MC Coefficients
 0
 0
 *
-{SCENARIO_DIR}\MC_Coefficients.csv
+{CATALOG_DIR}\params\MC_Coefficients.csv
 0
 LOK
 LOOKUPI1
@@ -6446,7 +6446,7 @@ MC Constants
 0
 0
 *
-{SCENARIO_DIR}\MC_Constants.csv
+{CATALOG_DIR}\params\MC_Constants.csv
 0
 LOK
 LOOKUPI2
@@ -6804,7 +6804,7 @@ HBC MCLS
 0
 0
 MAT
-{SCENARIO_DIR}\01_MC_HBC_LOGSUM.MAT
+{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_LOGSUM.MAT
 0
 MAT
 MATO1 
@@ -7581,7 +7581,7 @@ PK Transit (Fixed)
 0
 0
 MAT
-{SCENARIO_DIR}\PK_Transit.MAT
+{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT
 0
 MAT
 MATI2 
@@ -8301,7 +8301,7 @@ MC Coefficients
 0
 0
 *
-{SCENARIO_DIR}\MC_Coefficients.csv
+{CATALOG_DIR}\params\MC_Coefficients.csv
 0
 LOK
 LOOKUPI1
@@ -8319,7 +8319,7 @@ MC Constants
 0
 0
 *
-{SCENARIO_DIR}\MC_Constants.csv
+{CATALOG_DIR}\params\MC_Constants.csv
 0
 LOK
 LOOKUPI2
@@ -8677,7 +8677,7 @@ REC MCLS
 0
 0
 MAT
-{SCENARIO_DIR}\01_MC_REC_LOGSUM.MAT
+{SCENARIO_DIR}\intermediate_outputs\01_MC_REC_LOGSUM.MAT
 0
 MAT
 MATO1 
@@ -10550,7 +10550,7 @@ MCLS Combined
 0
 0
 MAT
-{SCENARIO_DIR}\01_MCLS_COMBINED.MAT
+{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT
 0
 MAT
 MATO1 

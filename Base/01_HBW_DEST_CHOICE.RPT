@@ -13,11 +13,11 @@ Selected Interchange for Tracing:       1- 159
  SizeTerm = Other Emp coefficient                          1.68 *          ?         ?         ?         ?
  SizeTerm = Retail Emp coefficient                         0.61 *          ?         ?
  Capped distance (this is a value)                70.00
- Logsum coefficient                                        0.58 *       0.40
- distance coefficient                                     -0.44 *      11.24
- distance square coeffficient                              0.01 *     126.34
- distance cube coefficient                                -0.00 *    1420.03
- distance log coefficient                                  0.71 *       2.42
+ Logsum coefficient                                        0.58 *     -13.43
+ distance coefficient                                     -0.44 *      70.00
+ distance square coeffficient                              0.01 *    4900.00
+ distance cube coefficient                                -0.00 *  343000.00
+ distance log coefficient                                  0.71 *       5.70
  Intrazonal constant                                       0.02 *          0
  distance calibration constant (0-1 Mile)                  0.11
  distance calibration constant (1-2 Mile)                  0.17
@@ -26,10 +26,10 @@ Selected Interchange for Tracing:       1- 159
  distance calibration constant (4-5 Mile)                     0
  distance calibration constant (5-6 Mile)                     0
  distance calibration constant (6-7 Mile)                     0
- Applied  calibration constant                             8.43
- Size Term                                              4576.31
- Ln(Size Term)                                             8.43
- Computed Utility                                          6.89
+ Applied  calibration constant                             1.82
+ Size Term                                                 6.18
+ Ln(Size Term)                                             1.82
+ Computed Utility                                        -34.05
  Total Productions in Origin                                  0
  Trip Attractions                                             0
  Intrazonal Sum                     0

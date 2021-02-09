@@ -14,10 +14,10 @@ Selected Interchange for Tracing:       1- 159
  SizeTerm = Retail Emp coefficient                         1.00 *          ?         ?
  Capped distance (this is a value)               200.00
  Logsum coefficient                                        0.76 *          0
- distance coefficient                                     -0.20 *      11.24
- distance square coeffficient                             -0.04 *     126.34
- distance cube coefficient                                -0.05 *    1420.03
- distance log coefficient                                 -0.04 *       2.42
+ distance coefficient                                     -0.20 *     200.00
+ distance square coeffficient                             -0.04 *   40000.00
+ distance cube coefficient                                -0.05 * 8000000.00
+ distance log coefficient                                 -0.04 *       5.70
  Intrazonal constant                                      -0.25 *          0
  distance calibration constant (0-1 Mile)                  0.05
  distance calibration constant (1-2 Mile)                  0.07
@@ -26,10 +26,10 @@ Selected Interchange for Tracing:       1- 159
  distance calibration constant (4-5 Mile)                     0
  distance calibration constant (5-6 Mile)                     0
  distance calibration constant (6-7 Mile)                     0
- Applied  calibration constant                             7.75
- Size Term                                              2324.35
- Ln(Size Term)                                             7.75
- Computed Utility                                        -68.22
+ Applied  calibration constant                             6.06
+ Size Term                                               427.14
+ Ln(Size Term)                                             6.06
+ Computed Utility                                    -391057.64
  Total Productions in Origin                                  0
  Trip Attractions                                             0
  Intrazonal Sum                     0
