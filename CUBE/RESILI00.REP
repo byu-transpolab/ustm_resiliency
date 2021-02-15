@@ -7,8 +7,14 @@ CHECKING FILE EXISTENCE
 APPLICATION GROUP: 'resiliency' (C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app)
 PROGRAM: MATRIX
 EXEC ORDER: 5
-THE 'Matrix File 1' EXISTS, BUT IS EMPTY
-C:\Users\mbarnes7\Documents\projects\ustm_resiliency\sample_calcs\Data\USTM-transit_skim1.csv
+THE 'Matrix File 1' DOES NOT EXIST
+C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\BASE\01_PROCESSED_SKIMS.MAT
+
+APPLICATION GROUP: 'resiliency' (C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app)
+PROGRAM: MATRIX
+EXEC ORDER: 5
+THE 'Matrix File 2' DOES NOT EXIST
+C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\BASE\01_PROCESSED_SKIMS.MAT
 
 -------------------------
 CHECKING APPLICATION GROUP 'MC Logsums'
