@@ -2,9 +2,9 @@
 ;;<<Default Template>><<HIGHWAY>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=HIGHWAY MSG='Whole Network'
-FILEO MATO[1] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT",
+FILEO MATO[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT",
   MO = 1-2, DEC = D, NAME = TIME, DISTANCE
-FILEI NETI = "{CATALOG_DIR}\Base\BY_2015.NET"
+FILEI NETI = "{SCENARIO_DIR}\BY_2015.NET"
 
 PROCESS PHASE=LINKREAD
 ; Use this phase to obtain initial values from the input network (LI.varname) and compute 
@@ -34,62 +34,18 @@ ENDPROCESS
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_PROCESSING.S"
-;;<<Default Template>><<MATRIX>><<Default>>;;
-; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX MSG='Process Skims'
-FILEO MATO[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT",
-  MO=1-4,DEC=D,NAME=TIME,DISTANCE,EX_TIME, EX_DIST
-FILEI MATI[1] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT"
-
-; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
-; where I is the origin zones.  All user statements in the module are processed once for each origin.
-; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
-; the values for all destination zones J are automatically computed.  The user can control the computations
-; at each J by using a JLOOP.
-
-FILLMW MW[1]=MI.1.1(2)                ; highway skims
-
-; Reset invalid values to zero
-  JLOOP
-      IF (MW[1] > 1000)
-          MW[1] = 0
-      ENDIF
-
-      IF (MW[2] > 1000)
-          MW[2] = 0
-      ENDIF
-
-
-      ENDJLOOP
-
- JLOOP
-  IF (I=1-27 && J=1-27) 
-      MW[3] = MW[1]
- ENDIF
- 
- IF (I=1-27 && J=1-27)
-    MW[4] = MW[2]
-
- ENDIF
-ENDJLOOP
-      
-      
-ENDRUN
-
-
 ; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\Base\01_HBW_MCLS.S"
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBW_MCLS.PRN" MSG='HBW MCLS'
-FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
-FILEI MATI[2] = "{CATALOG_DIR}\Base\USTM_transit_skim"
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
-FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
-FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBW_LOGSUM.MAT",
+FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
+FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_LOGSUM.MAT",
   MO = 41,DEC=D, NAME=HBWlogsum
-FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBW_UTILITY.MAT",
+FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_UTILITY.MAT",
    MO=111-113, DEC=D,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util
-FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBW_PROBABILITY.MAT",
+FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_PROBABILITY.MAT",
   MO=31-33, DEC=D, NAME=HBWauto_prob,HBWnonmot_prob,HBWtransit_prob
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -102,7 +58,7 @@ FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBW_PROBABILITY.MAT",
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
   MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
-  FILLMW MW[3]=MI.2.1     ;Walk bus time
+  FILLMW MW[3]=MI.2.1        ;Walk bus time
 
 
 ; Progress Bar update for evey 100 zones
@@ -190,45 +146,43 @@ MW[18] = MIN(MW[2],1)
       MW[13] = (K_TRN * MW[3])                                                  ;transit utility
       MW[113] = MW[13] * 100                                                    ;Printed transity utility
       
-      
-      ; Exponentiate Utilities
-      MW[21] = exp(MW[11])
-      MW[22] = exp(MW[12])
-      MW[23] = exp(MW[13])
+     ; Exponentiate Utilities and adjust for zones which do not exist
+        JLOOP
+      IF (MW[2] > 10000)
+        MW[21] = 0
+        MW[22] = 0
+      ELSE
+        MW[21] = exp(MW[11])
+        MW[22] = exp(MW[12]) 
+      ENDIF
+        ENDJLOOP
+        
+      JLOOP
+      IF (MW[3] = 0)
+          MW[23] = 0
+      ELSE
+        MW[23] = exp(MW[13])
+      ENDIF
+      ENDJLOOP
       
       ; Sum demonominator
       MW[30] = MW[21] + MW[22] + MW[23]
       
+      ; Adjust for areas with a denominator equal to 0
+      JLOOP     
+      IF(MW[30] = 0)
+      MW[30] = 1
+      ENDIF
+      ENDJLOOP
+      
       ; Probabilities
+
       MW[31] =  MW[21] / MW[30]       ;auto probability
       MW[32] =  MW[22] / MW[30]       ;non-motorized probability
       MW[33] =  MW[23] / MW[30]       ;transit probability
-      
-      JLOOP
-      IF (MW[33] >= 0.98)
-      MW[33] = -9999.99
-      ELSE
-      MW[33] = MW[33]
-      ENDIF
-      ENDJLOOP
-
-      
+    
       ; LOGSUM
-      MW[40] = ln(MW[30])
- 
-        
-         ;Process TAZ with no transit
-      ;JLOOP
-       ; Transit not available if no line-haul in-vehicle time on the transit path
-       ; Walk to bus or trolley
-       ;IF ((MW[3]) <= 0) 
-       ;MW[3]=-9999.99
-       ;ELSE
-       ;MW[3]=MW[3]
-       ;ENDIF
-      ;ENDJLOOP 
-         
-      
+      MW[40] = ln(MW[30])    
 
       ; Calculate logit average of the mode choice logsums
    JLOOP
@@ -246,15 +200,15 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBO_MCLS.PRN" MSG='HBO MCLS'
-FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
-FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
-FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBO_PROBABILITY.MAT",
+FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
+FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT",
   MO=31-33, DEC=D,NAME=HBOauto_prob,HBOnonmot_prob,HBOtransit_prob
-FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBO_UTILITY.MAT",
+FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_UTILITY.MAT",
   MO=11-13, DEC=D,NAME=HBOauto_util,HBOnonmot_util,HBOtransit_util
-FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBO_LOGSUM.MAT",
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_LOGSUM.MAT",
   MO = 41,DEC=D, NAME=HBOlogsum
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -339,30 +293,43 @@ ENDIF
       MW[13] = (K_TRN + COEFF_WALK + COEFF_SWAIT + (COEFF_LWAIT - COEFF_SWAIT) + COEFF_IVTT + COEFF_COST + COEFF_NXFER) * MW[3] ;transit utility
       ;MW[13] = (-0.3903 + -0.0625 + -0.05625 + (-0.025- -0.05625) + -0.0625 + -0.025 + -0.00158 + 0) * MW[3] ;transit utility
       
-      ; Exponentiate Utilities
-      MW[21] = exp(MW[11])
-      MW[22] = exp(MW[12])
-      MW[23] = exp(MW[13])
+      ; Exponentiate Utilities and adjust for zones which do not exist
+        JLOOP
+      IF (MW[2] > 10000)
+        MW[21] = 0
+        MW[22] = 0
+      ELSE
+        MW[21] = exp(MW[11])
+        MW[22] = exp(MW[12]) 
+      ENDIF
+        ENDJLOOP
+        
+      JLOOP
+      IF (MW[3] = 0)
+          MW[23] = 0
+      ELSE
+        MW[23] = exp(MW[13])
+      ENDIF
+      ENDJLOOP
       
       ; Sum demonominator
       MW[30] = MW[21] + MW[22] + MW[23]
       
-      ; Probabilities
-      MW[31] =  MW[21] / MW[30]       ;auto probability
-      MW[32] =  MW[22] / MW[30]       ;non-motorized probability
-      MW[33] =  MW[23] / MW[30]       ;transit probability
-      
-        JLOOP
-      IF (MW[33] >= 0.98)
-      MW[33] = -9999.99
-      ELSE
-      MW[33] = MW[33]
+      ; Adjust for areas with a denominator equal to 0
+      JLOOP     
+      IF(MW[30] = 0)
+      MW[30] = 1
       ENDIF
       ENDJLOOP
       
+      ; Probabilities
+
+      MW[31] =  MW[21] / MW[30]       ;auto probability
+      MW[32] =  MW[22] / MW[30]       ;non-motorized probability
+      MW[33] =  MW[23] / MW[30]       ;transit probability
+    
       ; LOGSUM
-      MW[40] = log(MW[30])
-      
+      MW[40] = ln(MW[30]) 
 
       ; Calculate logit average of the mode choice logsums
    JLOOP
@@ -383,15 +350,15 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_NHB_MCLS.PRN" MSG='NHB MCLS'
-FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
-FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
-FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_NHB_LOGSUM.MAT",
+FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
+FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_LOGSUM.MAT",
   MO = 41,DEC=D, NAME=NHBlogsum
-FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_NHB_UTILITY.MAT",
+FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_UTILITY.MAT",
   MO=111-113, DEC=D,NAME=NHBauto_util,NHBnonmot_util,NHBtransit_util
-FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_NHB_PROBABILITY.MAT",
+FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_PROBABILITY.MAT",
  MO=31-33, DEC=D,NAME=NHBauto_prob,NHBnonmot_prob,NHBtransit_prob
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -491,30 +458,43 @@ MW[18] = MIN(MW[2],1)
       MW[13] = (K_TRN * MW[3])                                                  ;transit utility
       MW[113] = MW[13] * 100                                                    ;Printed transity utility
           
-      ; Exponentiate Utilities
-      MW[21] = exp(MW[11])
-      MW[22] = exp(MW[12])
-      MW[23] = exp(MW[13])
+      ; Exponentiate Utilities and adjust for zones which do not exist
+        JLOOP
+      IF (MW[2] > 10000)
+        MW[21] = 0
+        MW[22] = 0
+      ELSE
+        MW[21] = exp(MW[11])
+        MW[22] = exp(MW[12]) 
+      ENDIF
+        ENDJLOOP
+        
+      JLOOP
+      IF (MW[3] = 0)
+          MW[23] = 0
+      ELSE
+        MW[23] = exp(MW[13])
+      ENDIF
+      ENDJLOOP
       
       ; Sum demonominator
       MW[30] = MW[21] + MW[22] + MW[23]
       
-      ; Probabilities
-      MW[31] =  MW[21] / MW[30]       ;auto probability
-      MW[32] =  MW[22] / MW[30]       ;non-motorized probability
-      MW[33] =  MW[23] / MW[30]       ;transit probability
-      
-        JLOOP
-      IF (MW[33] >= 0.98)
-      MW[33] = -9999.99
-      ELSE
-      MW[33] = MW[33]
+      ; Adjust for areas with a denominator equal to 0
+      JLOOP     
+      IF(MW[30] = 0)
+      MW[30] = 1
       ENDIF
       ENDJLOOP
       
+      ; Probabilities
+
+      MW[31] =  MW[21] / MW[30]       ;auto probability
+      MW[32] =  MW[22] / MW[30]       ;non-motorized probability
+      MW[33] =  MW[23] / MW[30]       ;transit probability
+    
       ; LOGSUM
-      MW[40] = ln(MW[30])
-      
+      MW[40] = ln(MW[30]) 
 
       ; Calculate logit average of the mode choice logsums
    JLOOP
@@ -532,15 +512,15 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBC_MCLS.PRN" MSG='HBC MCLS'
-FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
-FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
-FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_HBC_LOGSUM.MAT",
+FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
+FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_LOGSUM.MAT",
   MO = 41,DEC=D, NAME=HBClogsum
-FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBC_UTILTIY.MAT",
+FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_UTILTIY.MAT",
   MO=111-113, DEC=D,NAME=HBCauto_util,HBCnonmot_util,HBCtransit_util
-FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBC_PROBABILITY.MAT",
+FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_PROBABILITY.MAT",
  MO=31-33, DEC=D,NAME=HBCauto_prob,HBCnonmot_prob,HBCtransit_prob
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -640,29 +620,43 @@ MW[18] = MIN(MW[2],1)
       MW[13] = (K_TRN * MW[3])                                                  ;transit utility
       MW[113] = MW[13] * 100                                                    ;Printed transity utility
           
-      ; Exponentiate Utilities
-      MW[21] = exp(MW[11])
-      MW[22] = exp(MW[12])
-      MW[23] = exp(MW[13])
+        ; Exponentiate Utilities and adjust for zones which do not exist
+        JLOOP
+      IF (MW[2] > 10000)
+        MW[21] = 0
+        MW[22] = 0
+      ELSE
+        MW[21] = exp(MW[11])
+        MW[22] = exp(MW[12]) 
+      ENDIF
+        ENDJLOOP
+        
+      JLOOP
+      IF (MW[3] = 0)
+          MW[23] = 0
+      ELSE
+        MW[23] = exp(MW[13])
+      ENDIF
+      ENDJLOOP
       
       ; Sum demonominator
       MW[30] = MW[21] + MW[22] + MW[23]
       
-      ; Probabilities
-      MW[31] =  MW[21] / MW[30]       ;auto probability
-      MW[32] =  MW[22] / MW[30]       ;non-motorized probability
-      MW[33] =  MW[23] / MW[30]       ;transit probability
-      
-        JLOOP
-      IF (MW[33] >= 0.98)
-      MW[33] = -9999.99
-      ELSE
-      MW[33] = MW[33]
+      ; Adjust for areas with a denominator equal to 0
+      JLOOP     
+      IF(MW[30] = 0)
+      MW[30] = 1
       ENDIF
       ENDJLOOP
       
+      ; Probabilities
+
+      MW[31] =  MW[21] / MW[30]       ;auto probability
+      MW[32] =  MW[22] / MW[30]       ;non-motorized probability
+      MW[33] =  MW[23] / MW[30]       ;transit probability
+    
       ; LOGSUM
-      MW[40] = ln(MW[30])
+      MW[40] = ln(MW[30]) 
       
 
       ; Calculate logit average of the mode choice logsums
@@ -682,15 +676,15 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_REC_MCLS.PRN" MSG='REC MCLS'
-FILEI LOOKUPI[2] = "{SCENARIO_DIR}\MC_Constants.csv"
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\MC_Coefficients.csv"
-FILEI MATI[2] = "{SCENARIO_DIR}\PK_Transit.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
-FILEO MATO[1] = "{SCENARIO_DIR}\01_MC_REC_LOGSUM.MAT",
+FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
+FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_REC_LOGSUM.MAT",
   MO = 41,DEC=D, NAME=REClogsum
-FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_REC_UTILITY.MAT",
+FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_REC_UTILITY.MAT",
   MO=111-113, DEC=D,NAME=RECauto_util,RECnonmot_util,RECtransit_util
-FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_REC_PROBABILITY.MAT",
+FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_REC_PROBABILITY.MAT",
  MO=31-33, DEC=D,NAME=RECauto_prob,RECnonmot_prob,RECtransit_prob
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -790,30 +784,43 @@ MW[18] = MIN(MW[2],1)
       MW[13] = (K_TRN * MW[3])                                                  ;transit utility
       MW[113] = MW[13] * 100                                                    ;Printed transity utility
           
-      ; Exponentiate Utilities
-      MW[21] = exp(MW[11])
-      MW[22] = exp(MW[12])
-      MW[23] = exp(MW[13])
+      ; Exponentiate Utilities and adjust for zones which do not exist
+        JLOOP
+      IF (MW[2] > 10000)
+        MW[21] = 0
+        MW[22] = 0
+      ELSE
+        MW[21] = exp(MW[11])
+        MW[22] = exp(MW[12]) 
+      ENDIF
+        ENDJLOOP
+        
+      JLOOP
+      IF (MW[3] = 0)
+          MW[23] = 0
+      ELSE
+        MW[23] = exp(MW[13])
+      ENDIF
+      ENDJLOOP
       
       ; Sum demonominator
       MW[30] = MW[21] + MW[22] + MW[23]
       
-      ; Probabilities
-      MW[31] =  MW[21] / MW[30]       ;auto probability
-      MW[32] =  MW[22] / MW[30]       ;non-motorized probability
-      MW[33] =  MW[23] / MW[30]       ;transit probability
-      
-        JLOOP
-      IF (MW[33] >= 0.98)
-      MW[33] = -9999.99
-      ELSE
-      MW[33] = MW[33]
+      ; Adjust for areas with a denominator equal to 0
+      JLOOP     
+      IF(MW[30] = 0)
+      MW[30] = 1
       ENDIF
       ENDJLOOP
       
+      ; Probabilities
+
+      MW[31] =  MW[21] / MW[30]       ;auto probability
+      MW[32] =  MW[22] / MW[30]       ;non-motorized probability
+      MW[33] =  MW[23] / MW[30]       ;transit probability
+    
       ; LOGSUM
-      MW[40] = ln(MW[30])
-      
+      MW[40] = ln(MW[30]) 
 
       ; Calculate logit average of the mode choice logsums
    JLOOP
@@ -832,20 +839,13 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Combine All MCLS Calculations'
-FILEI MATI[10] = "{CATALOG_DIR}\Base\01_MC_REC_PROBABILITY.MAT"
-FILEI MATI[9] = "{CATALOG_DIR}\Base\01_MC_HBC_PROBABILITY.MAT"
-FILEI MATI[8] = "{CATALOG_DIR}\Base\01_MC_NHB_PROBABILITY.MAT"
-FILEI MATI[7] = "{CATALOG_DIR}\Base\01_MC_HBO_PROBABILITY.MAT"
-FILEI MATI[6] = "{CATALOG_DIR}\Base\01_MC_HBW_PROBABILITY.MAT"
-FILEO MATO[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED_PROBABILITY.MAT",
-  MO = 11-15, 21-25, 31-35 DEC = D, NAME = HBWauto_prob, HBOauto_prob, NHBauto_prob, HBCauto_prob, RECauto_prob, HBWnmot_prob, HBOnmot_prob, NHBnmot_prob, HBCnmot_prob, RECnmot_prob, HBWtransit_prob, HBOtransit_prob, NHBtransit_prob, HBCtransit_prob, RECtransit_prob
-FILEO MATO[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT",
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT",
   MO = 1-5, DEC = D, NAME = HBWlogsum, HBOlogsum, NHBlogsum, HBClogsum, REClogsum
-FILEI MATI[5] = "{SCENARIO_DIR}\01_MC_REC_LOGSUM.MAT"
-FILEI MATI[4] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MC_HBC_LOGSUM.MAT"
-FILEI MATI[3] = "{SCENARIO_DIR}\01_MC_NHB_LOGSUM.MAT"
-FILEI MATI[2] = "{SCENARIO_DIR}\01_MC_HBO_LOGSUM.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\01_MC_HBW_LOGSUM.MAT"
+FILEI MATI[5] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_REC_LOGSUM.MAT"
+FILEI MATI[4] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_LOGSUM.MAT"
+FILEI MATI[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_LOGSUM.MAT"
+FILEI MATI[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_LOGSUM.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_LOGSUM.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -888,16 +888,14 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBO DCLS'
-FILEO PRINTO[3] = "{SCENARIO_DIR}\01_HBO_ZONAL_TRIPS.CSV"
-FILEO PRINTO[2] = "{SCENARIO_DIR}\01_HBO_DEST_CHOICE_DEBUG.TXT"
-FILEO PRINTO[1] = "{SCENARIO_DIR}\01_HBO_DEST_CHOICE.RPT"
-FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_HBO.MAT",
+FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBO_DEST_CHOICE.RPT"
+FILEI ZDATI[2] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBO.MAT",
   MO = 112, 100 DEC = D, NAME = HBOSizeTerm, HBOUtil
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
-FILEI MATI[2] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
+FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -1037,16 +1035,14 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='NHB DCLS'
-FILEO PRINTO[3] = "{SCENARIO_DIR}\01_NHB_ZONAL_TRIPS.CSV"
-FILEO PRINTO[2] = "{SCENARIO_DIR}\01_NHB_DEST_CHOICE_DEBUG.TXT"
-FILEO PRINTO[1] = "{SCENARIO_DIR}\01_NHB_DEST_CHOICE.RPT"
-FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEO MATO[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DEST_NHB.MAT",
+FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_NHB_DEST_CHOICE.RPT"
+FILEI ZDATI[2] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_NHB.MAT",
   MO = 112, 100 DEC = D, NAME=HBWSizeTerm, HBWUtil
-FILEI LOOKUPI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
-FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
+FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
 
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -1188,16 +1184,15 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBC DCLS'
-FILEO PRINTO[3] = "{SCENARIO_DIR}\01_HBC_ZONAL_TRIPS.CSV"
-FILEO PRINTO[2] = "{SCENARIO_DIR}\01_HBC_DEST_CHOICE_DEBUG.TXT"
-FILEO PRINTO[1] = "{SCENARIO_DIR}\01_HBC_DEST_CHOICE.RPT"
-FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEO MATO[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DEST_HBC.MAT",
-FILEI LOOKUPI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
-FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
-  MO = 112, 100 DEC = D, NAME = HBCSizeTerm, HBCUtil
+FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBC_DEST_CHOICE.RPT"
+FILEI ZDATI[2] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBC.MAT",
+MO = 112, 100 DEC = D, NAME = HBCSizeTerm, HBCUtil
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
+FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
+
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -1337,16 +1332,14 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='REC DCLS'
-FILEO PRINTO[3] = "{SCENARIO_DIR}\01_REC_ZONAL_TRIPS.CSV"
-FILEO PRINTO[2] = "{SCENARIO_DIR}\01_REC_DEST_CHOICE_DEBUG.TXT"
-FILEO PRINTO[1] = "{SCENARIO_DIR}\01_REC_DEST_CHOICE.RPT"
-FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_REC.MAT",
+FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_REC_DEST_CHOICE.RPT"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_REC.MAT",
   MO = 112, 100 DEC = D, NAME = RECSizeTerm, RECUtil
-FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEI LOOKUPI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
-FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
+FILEI ZDATI[2] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
+FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -1485,14 +1478,14 @@ ENDRUN
 ; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DCLS_COMBINE.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_DCLS_COMBINE.PRN" MSG='COMBINE UTILITIES'
-FILEO MATO[1] = "{SCENARIO_DIR}\01_DCLS_COMBINED.MAT",
+RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\intermediate_outputs\01_DCLS_COMBINE.PRN" MSG='COMBINE UTILITIES'
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DCLS_COMBINED.MAT",
   MO = 1-5, DEC = D, NAME = HBWDCUtility, HBODCUtility, NHBDCUtility, HBCDCUtility, RECDCUtility
-FILEI MATI[5] = "{SCENARIO_DIR}\01_DEST_REC.MAT"
-FILEI MATI[4] = "{SCENARIO_DIR}\01_DEST_HBC.MAT"
-FILEI MATI[3] = "{SCENARIO_DIR}\01_DEST_NHB.MAT"
-FILEI MATI[2] = "{SCENARIO_DIR}\01_DEST_HBO.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\01_DEST_HBW.MAT"
+FILEI MATI[5] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_REC.MAT"
+FILEI MATI[4] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBC.MAT"
+FILEI MATI[3] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_NHB.MAT"
+FILEI MATI[2] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBO.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBW.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -1513,16 +1506,14 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBW DCLS'
-FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEO PRINTO[3] = "{SCENARIO_DIR}\01_HBW_ZONAL_TRIPS.CSV"
-FILEO PRINTO[2] = "{SCENARIO_DIR}\01_HBW_DEST_CHOICE_DEBUG.TXT"
-FILEO PRINTO[1] = "{SCENARIO_DIR}\01_HBW_DEST_CHOICE.RPT"
-FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_HBW.MAT",
+FILEI ZDATI[2] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
+FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBW_DEST_CHOICE.RPT"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBW.MAT",
   MO = 112, 100 DEC = D, NAME = HBWSizeTerm, HBWUtil
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
-FILEI MATI[2] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
+FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
 
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -1662,11 +1653,11 @@ ENDRUN
 ; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_DCLS_ROWSUM.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_DCLS_ROWSUM.PRN"
-FILEI ZDATI[1] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEO RECO[1] = "{SCENARIO_DIR}\01_ROWSUMS.DBF",
+RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\intermediate_outputs\01_DCLS_ROWSUM.PRN"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
+FILEO RECO[1] = "{SCENARIO_DIR}\Output\01_ROWSUMS.DBF",
   FIELDS = TAZ, lnHBW, lnHBO, lnNHB, lnHBC, lnREC
-FILEI MATI[1] = "{SCENARIO_DIR}\01_DCLS_COMBINED.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DCLS_COMBINED.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -1709,12 +1700,33 @@ WRITE RECO = 1
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00H.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_BUILD_PEAK_TRANSIT.S"
+;;<<GENERATED SCRIPT>><<MATRIX>><<Matrix>><<Conversion>>;;
+;>>>
+;>>>
+;Input Matrix File 1:{CATALOG_DIR}\Inputs\USTM_transit_skim1.csv
+;Output Matrix File:{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT
+;Maximum Zone number:8775
+;**********************************************************************
+;THIS SCRIPT READS A CSV MATRIX FILE, CREATE A MATRIX WITH THE RESULT *  
+;**********************************************************************
+; BY CITILABS
+;
+;;<<End Parameters>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=HIGHWAY
-FILEI NETI = "D:\PROJECTS\USTM_RESILIENCY\BASE\BY_2015.NET"
-FILEI TURNPENI = "D:\projects\ustm_resiliency\Base\TURNPENALTIES.TXT"
-FILEO MATO[1] = "D:\PROJECTS\USTM_RESILIENCY\BASE\ZONETEST.MAT"
+RUN PGM=MATRIX MSG='Build Pk Transit Matrix'
+
+FILEI MATI[1] = "{CATALOG_DIR}\Inputs\USTM_transit_skim1.csv",
+    PATTERN=IJM:V FIELDS=#1,2,3,4
+
+FILEO MATO[1] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT",
+ MO=1 NAME=TRANSIT_TIME
+
+ZONES={TOTAL_ZONES}
+
+MW[1]=MI.1.1
+
+
 ENDRUN
 
 

@@ -1,16 +1,14 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBO DCLS'
-FILEO PRINTO[3] = "{SCENARIO_DIR}\01_HBO_ZONAL_TRIPS.CSV"
-FILEO PRINTO[2] = "{SCENARIO_DIR}\01_HBO_DEST_CHOICE_DEBUG.TXT"
-FILEO PRINTO[1] = "{SCENARIO_DIR}\01_HBO_DEST_CHOICE.RPT"
-FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_HBO.MAT",
+FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBO_DEST_CHOICE.RPT"
+FILEI ZDATI[2] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBO.MAT",
   MO = 112, 100 DEC = D, NAME = HBOSizeTerm, HBOUtil
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
-FILEI MATI[2] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
+FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.

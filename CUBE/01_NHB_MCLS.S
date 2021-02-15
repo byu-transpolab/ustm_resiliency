@@ -4,12 +4,12 @@ RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_NHB_MCLS.PRN" MSG='NHB MCLS'
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_LOGSUM.MAT",
   MO = 41,DEC=D, NAME=NHBlogsum
-FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_NHB_UTILITY.MAT",
+FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_UTILITY.MAT",
   MO=111-113, DEC=D,NAME=NHBauto_util,NHBnonmot_util,NHBtransit_util
-FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_NHB_PROBABILITY.MAT",
+FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_PROBABILITY.MAT",
  MO=31-33, DEC=D,NAME=NHBauto_prob,NHBnonmot_prob,NHBtransit_prob
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -109,30 +109,43 @@ MW[18] = MIN(MW[2],1)
       MW[13] = (K_TRN * MW[3])                                                  ;transit utility
       MW[113] = MW[13] * 100                                                    ;Printed transity utility
           
-      ; Exponentiate Utilities
-      MW[21] = exp(MW[11])
-      MW[22] = exp(MW[12])
-      MW[23] = exp(MW[13])
+      ; Exponentiate Utilities and adjust for zones which do not exist
+        JLOOP
+      IF (MW[2] > 10000)
+        MW[21] = 0
+        MW[22] = 0
+      ELSE
+        MW[21] = exp(MW[11])
+        MW[22] = exp(MW[12]) 
+      ENDIF
+        ENDJLOOP
+        
+      JLOOP
+      IF (MW[3] = 0)
+          MW[23] = 0
+      ELSE
+        MW[23] = exp(MW[13])
+      ENDIF
+      ENDJLOOP
       
       ; Sum demonominator
       MW[30] = MW[21] + MW[22] + MW[23]
       
-      ; Probabilities
-      MW[31] =  MW[21] / MW[30]       ;auto probability
-      MW[32] =  MW[22] / MW[30]       ;non-motorized probability
-      MW[33] =  MW[23] / MW[30]       ;transit probability
-      
-        JLOOP
-      IF (MW[33] >= 0.98)
-      MW[33] = -9999.99
-      ELSE
-      MW[33] = MW[33]
+      ; Adjust for areas with a denominator equal to 0
+      JLOOP     
+      IF(MW[30] = 0)
+      MW[30] = 1
       ENDIF
       ENDJLOOP
       
+      ; Probabilities
+
+      MW[31] =  MW[21] / MW[30]       ;auto probability
+      MW[32] =  MW[22] / MW[30]       ;non-motorized probability
+      MW[33] =  MW[23] / MW[30]       ;transit probability
+    
       ; LOGSUM
-      MW[40] = ln(MW[30])
-      
+      MW[40] = ln(MW[30]) 
 
       ; Calculate logit average of the mode choice logsums
    JLOOP

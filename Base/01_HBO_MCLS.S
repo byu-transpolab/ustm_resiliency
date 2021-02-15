@@ -4,10 +4,10 @@ RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBO_MCLS.PRN" MSG='HBO MCLS'
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
-FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBO_PROBABILITY.MAT",
+FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT",
   MO=31-33, DEC=D,NAME=HBOauto_prob,HBOnonmot_prob,HBOtransit_prob
-FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBO_UTILITY.MAT",
+FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_UTILITY.MAT",
   MO=11-13, DEC=D,NAME=HBOauto_util,HBOnonmot_util,HBOtransit_util
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_LOGSUM.MAT",
   MO = 41,DEC=D, NAME=HBOlogsum
@@ -94,30 +94,43 @@ ENDIF
       MW[13] = (K_TRN + COEFF_WALK + COEFF_SWAIT + (COEFF_LWAIT - COEFF_SWAIT) + COEFF_IVTT + COEFF_COST + COEFF_NXFER) * MW[3] ;transit utility
       ;MW[13] = (-0.3903 + -0.0625 + -0.05625 + (-0.025- -0.05625) + -0.0625 + -0.025 + -0.00158 + 0) * MW[3] ;transit utility
       
-      ; Exponentiate Utilities
-      MW[21] = exp(MW[11])
-      MW[22] = exp(MW[12])
-      MW[23] = exp(MW[13])
+      ; Exponentiate Utilities and adjust for zones which do not exist
+        JLOOP
+      IF (MW[2] > 10000)
+        MW[21] = 0
+        MW[22] = 0
+      ELSE
+        MW[21] = exp(MW[11])
+        MW[22] = exp(MW[12]) 
+      ENDIF
+        ENDJLOOP
+        
+      JLOOP
+      IF (MW[3] = 0)
+          MW[23] = 0
+      ELSE
+        MW[23] = exp(MW[13])
+      ENDIF
+      ENDJLOOP
       
       ; Sum demonominator
       MW[30] = MW[21] + MW[22] + MW[23]
       
-      ; Probabilities
-      MW[31] =  MW[21] / MW[30]       ;auto probability
-      MW[32] =  MW[22] / MW[30]       ;non-motorized probability
-      MW[33] =  MW[23] / MW[30]       ;transit probability
-      
-        JLOOP
-      IF (MW[33] >= 0.98)
-      MW[33] = -9999.99
-      ELSE
-      MW[33] = MW[33]
+      ; Adjust for areas with a denominator equal to 0
+      JLOOP     
+      IF(MW[30] = 0)
+      MW[30] = 1
       ENDIF
       ENDJLOOP
       
+      ; Probabilities
+
+      MW[31] =  MW[21] / MW[30]       ;auto probability
+      MW[32] =  MW[22] / MW[30]       ;non-motorized probability
+      MW[33] =  MW[23] / MW[30]       ;transit probability
+    
       ; LOGSUM
-      MW[40] = log(MW[30])
-      
+      MW[40] = ln(MW[30]) 
 
       ; Calculate logit average of the mode choice logsums
    JLOOP

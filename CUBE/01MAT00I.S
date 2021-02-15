@@ -1,10 +1,13 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX
-FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJ.MAT",MO = 10,20,30,40,50,100,200,300,400,500,98,99 DEC = D, NAME = HBWDCProbability, HBODCProbability, NHBDCProbability, HBCDCProbability, RECDCProbability, HBWTrips,HBOTrips,NHBTrips,HBCTrips,RECTrips,CheckRowsum, CheckProd
-FILEI ZDATI[2] = "{SCENARIO_DIR}\Output\01_ROWSUMS.DBF"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
-FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DCLS_COMBINED.MAT"
+RUN PGM=MATRIX MSG='Calculate Trips_ij'
+FILEI MATI[2] = "C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\BASE\01_PROCESSED_SKIMS.MAT"
+FILEO RECO[1] = "C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\BASE\01_TLFD.DBF"
+FILEI ZDATI[2] = "{CATALOG_DIR}\BASE\01_ROWSUMS.DBF"
+FILEI ZDATI[1] = "{CATALOG_DIR}\BASE\HH_PROD.DBF"
+FILEI MATI[1] = "C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\BASE\01_PROCESSED_SKIMS.MAT"
+FILEO MATO[1] = "{CATALOG_DIR}\CUBE\01_TRIPS_IJ.MAT",
+  MO = 10,20,30,40,50,100,200,300,400,500,98,99 DEC = D, NAME = HBWDCProbability, HBODCProbability, NHBDCProbability, HBCDCProbability, RECDCProbability, HBWTrips,HBOTrips,NHBTrips,HBCTrips,RECTrips,CheckRowsum, CheckProd
 
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -17,7 +20,7 @@ FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DCLS_COMBINED.MAT"
 
 
 ZONES = {TOTAL_ZONES}
-		ARRAY personTrips = TOTAL_ZONES
+		ARRAY personTrips = ZONES
     
     	;Fill DC Utility into matrices
 		MW[1] = MI.1.1 ;HBW
@@ -55,10 +58,10 @@ ZONES = {TOTAL_ZONES}
     MW[40] = ((exp(MW[4]))/(exp(ZI.2.LNHBC[J])))*1000 ;HBC
     MW[50] = ((exp(MW[5]))/(exp(ZI.2.LNREC[J])))*1000 ;REC
     
-    MW[100] = MW[10] * ZI.1.HBWP[J] /1000
-    MW[200] = MW[20] * ZI.1.HBOP[J] /1000
-    MW[300] = MW[30] * ZI.1.NHBP[J] /1000
-    MW[400] = MW[40] * ZI.1.HBSCP[J] /1000
-    MW[500] = MW[50] * ZI.1.RECP[J] /1000
+    MW[100] = MW[10] * ZI.1.HBWP[J] *1000
+    MW[200] = MW[20] * ZI.1.HBOP[J] *1000
+    MW[300] = MW[30] * ZI.1.NHBP[J] *1000
+    MW[400] = MW[40] * ZI.1.HBSCP[J] *1000
+    MW[500] = MW[50] * ZI.1.RECP[J] *1000
 
 ENDRUN

@@ -1,14 +1,14 @@
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBW_MCLS.PRN" MSG='HBW MCLS'
-FILEI MATI[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_LOGSUM.MAT",
   MO = 41,DEC=D, NAME=HBWlogsum
-FILEO MATO[2] = "{SCENARIO_DIR}\01_MC_HBW_UTILITY.MAT",
+FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_UTILITY.MAT",
    MO=111-113, DEC=D,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util
-FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBW_PROBABILITY.MAT",
+FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_PROBABILITY.MAT",
   MO=31-33, DEC=D, NAME=HBWauto_prob,HBWnonmot_prob,HBWtransit_prob
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -21,7 +21,7 @@ FILEO MATO[3] = "{SCENARIO_DIR}\01_MC_HBW_PROBABILITY.MAT",
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
   MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
-  FILLMW MW[3]=MI.2.1     ;Walk bus time
+  FILLMW MW[3]=MI.2.1        ;Walk bus time
 
 
 ; Progress Bar update for evey 100 zones
@@ -109,13 +109,20 @@ MW[18] = MIN(MW[2],1)
       MW[13] = (K_TRN * MW[3])                                                  ;transit utility
       MW[113] = MW[13] * 100                                                    ;Printed transity utility
       
-        ; Exponentiate Utilities
-      MW[21] = exp(MW[11])
-      MW[22] = exp(MW[12])   
-      
+     ; Exponentiate Utilities and adjust for zones which do not exist
+        JLOOP
+      IF (MW[2] > 10000)
+        MW[21] = 0
+        MW[22] = 0
+      ELSE
+        MW[21] = exp(MW[11])
+        MW[22] = exp(MW[12]) 
+      ENDIF
+        ENDJLOOP
+        
       JLOOP
       IF (MW[3] = 0)
-        MW[23] = 0
+          MW[23] = 0
       ELSE
         MW[23] = exp(MW[13])
       ENDIF
@@ -124,36 +131,21 @@ MW[18] = MIN(MW[2],1)
       ; Sum demonominator
       MW[30] = MW[21] + MW[22] + MW[23]
       
+      ; Adjust for areas with a denominator equal to 0
+      JLOOP     
+      IF(MW[30] = 0)
+      MW[30] = 1
+      ENDIF
+      ENDJLOOP
+      
       ; Probabilities
+
       MW[31] =  MW[21] / MW[30]       ;auto probability
       MW[32] =  MW[22] / MW[30]       ;non-motorized probability
       MW[33] =  MW[23] / MW[30]       ;transit probability
-      
-      ;JLOOP
-      ;IF (MW[33] >= 0.98)
-     ; MW[33] = -9999.99
-     ; ELSE
-      ;MW[33] = MW[33]
-     ; ENDIF
-      ;ENDJLOOP
-
-      
+    
       ; LOGSUM
-      MW[40] = ln(MW[30])
- 
-        
-         ;Process TAZ with no transit
-      ;JLOOP
-       ; Transit not available if no line-haul in-vehicle time on the transit path
-       ; Walk to bus or trolley
-       ;IF ((MW[3]) <= 0) 
-       ;MW[3]=-9999.99
-       ;ELSE
-       ;MW[3]=MW[3]
-       ;ENDIF
-      ;ENDJLOOP 
-         
-      
+      MW[40] = ln(MW[30])    
 
       ; Calculate logit average of the mode choice logsums
    JLOOP

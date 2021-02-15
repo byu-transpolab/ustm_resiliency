@@ -1,7 +1,7 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Process Skims'
-FILEO MATO[1] = "{SCENARIO_DIR}\01_PROCESSED_SKIMS.MAT",
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_PROCESSED_SKIMS.MAT",
   MO=1-4,DEC=D,NAME=TIME,DISTANCE,EX_TIME, EX_DIST
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 

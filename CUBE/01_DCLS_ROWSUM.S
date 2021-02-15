@@ -1,10 +1,10 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_DCLS_ROWSUM.PRN"
-FILEI ZDATI[1] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEO RECO[1] = "{SCENARIO_DIR}\01_ROWSUMS.DBF",
+RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\intermediate_outputs\01_DCLS_ROWSUM.PRN"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
+FILEO RECO[1] = "{SCENARIO_DIR}\Output\01_ROWSUMS.DBF",
   FIELDS = TAZ, lnHBW, lnHBO, lnNHB, lnHBC, lnREC
-FILEI MATI[1] = "{SCENARIO_DIR}\01_DCLS_COMBINED.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DCLS_COMBINED.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
