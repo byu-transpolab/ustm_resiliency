@@ -56,3 +56,19 @@ Inputs/USTM_transit_skim1.csv
 Inputs/SE_USTM_BASE2015.DBF
 
 Inputs/HH_PROD.DBF
+
+Base/intermediate_outputs/01_TLFD.CSV
+
+Base/intermediate_outputs/01_TLFD.DBF
+
+Base/intermediate_outputs/01_TLFD_HBW.DBF
+
+CUBE/\{RECO2.Q\}
+
+CUBE/trc\{$$8\}.s
+
+CUBE/\{RECO3.Q\}
+
+CUBE/\{RECO4.Q\}
+
+CUBE/\{RECO5.Q\}

@@ -1,83 +1,90 @@
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_TRIPS_IJK.S"
-;;<<Default Template>><<MATRIX>><<Default>>;;
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_TLFD.S"
+;Input Matrix File: {mati2,filename,"Enter Input Cost Matrix",x,"{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT","Cost Matrix (*.mat)|*.mat"}
+;Output DFB File: {reco1,filename,"Enter Output DBF File",x,"{SCENARIO_DIR}\intermediate_outputs\01_TLFD_HBW.DBF","DBase File (*.dbf)|*.dbf"}
+;Output Print Data File: {printo1,filename,"Enter Output PRINTO Data File 1",x,"C:\USERS\MBARNES7\DOCUMENTS\PROJECTS\USTM_RESILIENCY\BASE\01_TLFD.PRN","PRINTO File (*.prn)|*.prn"}
+;Max val group:{MVG,editbox,"Maximum Number of Groups",N,"10"}
+;Time interval in Min:{intv,editbox,"time interval in min",N,"5"}
+;;<<End Parameters>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX
-FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJK.MAT",
- MO = 40-47,100, 200,300,400,110,210,310,410,510,120,220,320,420,520 DEC = D, NAME = HBWTrips,HBOTrips,NHBTrips,HBCTrips,RECTrips,autoTrips,nmotTrips,transitTrips,HBWauto,HBOauto,NHBauto,HBCauto,RECauto,HBWnmot,HBOnmot,NHBnmot,HBCnmot,RECnmot,HBWtransit,HBOtransit,NHBtransit,HBCtransit,RECtransit
-FILEI MATI[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED_PROBABILITY.MAT"
+RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\intermediate_outputs\01_TLFD.PRN" MSG='Create TLFD'
+FILEO PRINTO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_TLFD.CSV"
+FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TLFD.PRN"
 FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJ.MAT"
+FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEO RECO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TLFD.DBF",
+   FIELDS= DISTANCE, HBW, HBO, NHB, HBC, REC
 
-; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
-; where I is the origin zones.  All user statements in the module are processed once for each origin.
-; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
-; the values for all destination zones J are automatically computed.  The user can control the computations
-; at each J by using a JLOOP.
-	
+MW[1]=MI.1.6 ;HBW
+MW[2]=MI.2.2 ;Distance
+MW[3]=MI.1.7 ;HBO
+MW[4]=MI.1.8 ;NHB
+MW[5]=MI.1.9 ;HBC
+MW[6]=MI.1.10 ;REC
 
- ;Fill Trips into matrices
-		MW[1] = MI.1.6 ;HBW
-		MW[2] = MI.1.7 ;HBO
-    MW[3] = MI.1.8 ;NHB
-    MW[4] = MI.1.9 ;HBC
-	  MW[5] = MI.1.10 ;REC
-    
- ;Fill MC auto_prob into matrices
-    MW[11] = MI.2.1 ;HBW
-		MW[12] = MI.2.2 ;HBO
-    MW[13] = MI.2.3 ;NHB
-    MW[14] = MI.2.4 ;HBC
-	  MW[15] = MI.2.5 ;REC
-    
-  ;Fill MC nmot_prob into matrices
-    MW[21] = MI.2.6 ;HBW
-		MW[22] = MI.2.7 ;HBO
-    MW[23] = MI.2.8 ;NHB
-    MW[24] = MI.2.9 ;HBC
-	  MW[25] = MI.2.10 ;REC
-  
-  ;Fill MC transit_prob into matrices
-    MW[31] = MI.2.11 ;HBW
-		MW[32] = MI.2.12 ;HBO
-    MW[33] = MI.2.13 ;NHB
-    MW[34] = MI.2.14 ;HBC
-	  MW[35] = MI.2.15 ;REC   
-    
-    ;JLOOP
-    ;Compute trips by mode choice and purpose
-    MW[100] = MW[1] * MW[11] ;HBWauto
-    MW[200] = MW[2] * MW[12] ;HBOauto
-    MW[300] = MW[3] * MW[13] ;NHBauto
-    MW[400] = MW[4] * MW[14] ;HBCauto
-    MW[500] = MW[5] * MW[15] ;RECauto
-    MW[110] = MW[1] * MW[21] ;HBWnmot
-    MW[210] = MW[2] * MW[22] ;HBOnmot
-    MW[310] = MW[3] * MW[23] ;NHBnmot
-    MW[410] = MW[4] * MW[24] ;HBCnmot
-    MW[510] = MW[5] * MW[25] ;RECnmot
-    MW[120] = MW[1] * MW[31] ;HBWtransit
-    MW[220] = MW[2] * MW[32] ;HBOtransit
-    MW[320] = MW[3] * MW[33] ;NHBtransit
-    MW[420] = MW[4] * MW[34] ;HBCtransit
-    MW[520] = MW[5] * MW[35] ;RECtransit
-    ;ENDJLOOP
-    
-    ;JLOOP
-    ;Compute trips by trip purpose
-    MW[40] = MW[100] + MW[110] + MW[120] ;HBW
-    MW[41] = MW[200] + MW[210] + MW[220] ;HBO
-    MW[42] = MW[300] + MW[310] + MW[320] ;NHB
-    MW[43] = MW[400] + MW[410] + MW[420] ;HBC
-    MW[44] = MW[500] + MW[510] + MW[520] ;REC
-    ;ENDJLOOP
-    
-    ;JLOOP
-    ;Compute total trips by mode choice
-    MW[45] = MW[100] + MW[200] + MW[300] + MW[400] + MW[500] ;auto
-    MW[46] = MW[110] + MW[210] + MW[310] + MW[410] + MW[510] ;nmot
-    MW[47] = MW[120] + MW[220] + MW[320] + MW[420] + MW[520] ;transit
-   
-    ;ENDJLOOP
-    
+gps=25-1
+
+array tll=25
+array tl2=25
+array tl3=25
+array tl4=25
+array tl5=25
+
+zones = 8775
+
+;first group
+JLOOP
+;group = min(max(round(mw[2]),1),25)
+group = min(INT(mw[2]/5),gps) + 1
+group1 = min(INT(mw[2]/5),gps) + 1
+group2 = min(INT(mw[2]/5),gps) + 1
+group3 = min(INT(mw[2]/5),gps) + 1
+group4 = min(INT(mw[2]/5),gps) + 1
+
+tll[group]=tll[group]+mw[1]
+tl2[group]=tl2[group]+mw[3]
+tl3[group]=tl3[group]+mw[4]
+tl4[group]=tl4[group]+mw[5]
+tl5[group]=tl5[group]+mw[6]
+
+ENDJLOOP
+
+IF (i= zones)
+  LOOP group=1,100
+   ro.DISTANCE=group
+   ro.HBW=tll[group];+MW[1]
+   ro.HBO=tl2[group];+MW[3]
+   ro.NHB=tl3[group];+MW[4]
+   ro.HBC=tl4[group];+MW[5]
+   ro.REC=tl5[group];+MW[6]
+   write reco=1
+   print printo=1 list=ro.DISTANCE(6.0), ro.HBW(16.8), ro.HBO(16.8), ro.NHB(16.8), ro.HBC(16.8). ro.REC(16.8)
+  ENDLOOP
+ENDIF
+
+FREQUENCY BASEMW=2 VALUEMW=1 RANGE=0-100-5   
+
+DISTANCE=ro.DISTANCE
+HBW=ro.HBW
+HBO=ro.HBO
+NHB=ro.NHB
+HBC=ro.HBC
+REC=ro.REC
+
+;write a header file for tlfd counts
+IF (I=1) 
+print CSV=T,list='Distance','HBW','HBO','NHB','HBC','REC' printo=2
+
+;write out counts
+print CSV=T list=DISTANCE(6.0),HBW(16.8),HBO(16.8),NHB(16.8),HBC(16.8),REC(16.8), printo=2
+
+ENDIF
+
+;PRINT CSV = T LIST=ro.DISTANCE(1), ro.REC(16.8), tl2(16.8), tl3(16.8), tl4(16.8), tl5(16.8), printo=2
+
+;PRINT FORM = 10.10, CSV = T, LIST = Z, P[6], p1v0, p1v1, p1v2, p1v3, p2v0,
+  ;p2v1, p2v2, p2v3, p3v0, p3v1, p3v2, p3v3, p4v0, p4v1, p4v2, p4v3, all,
+  ;PRINTO = 1
+
 ENDRUN
 
 
