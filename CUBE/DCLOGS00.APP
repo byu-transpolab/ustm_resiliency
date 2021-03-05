@@ -2,7 +2,6 @@
 EXP5 1 1Matrix File 1  {SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT    
 EXP5 2 1Matrix File 2  {SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT                  
 EXP5 221Zonal Data 1   {CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF                   
-EXP5 231Zonal Data 2   {CATALOG_DIR}\Inputs\HH_PROD.DBF                            
 EXP5 421Lookup File 1  {CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF              
 EXP6 210Record File 1  {SCENARIO_DIR}\Output\01_ROWSUMS.DBF                        
 11
@@ -13,7 +12,7 @@ DC Logsums
 00
 
 
-Mon Feb 15 12:25:35 2021
+Fri Mar 05 13:27:37 2021
 
 C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
 C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\DCLOGS00.APP
@@ -55,9 +54,9 @@ MAT
 ISCR1 
 999999
 479
--774
+-805
 803
--832
+-863
 -1
 -1
 0
@@ -73,9 +72,9 @@ MAT
 MATI1 
 999999
 479
--836
+-867
 803
--894
+-925
 -1
 -1
 0
@@ -91,9 +90,9 @@ MAT
 MATI2 
 999999
 479
--898
+-929
 803
--956
+-987
 -1
 -1
 0
@@ -451,9 +450,9 @@ ZON
 ZDATI1
 999999
 479
--960
+-991
 803
--1018
+-1049
 -1
 -1
 0
@@ -463,7 +462,7 @@ HH Production
 0
 0
 *
-{CATALOG_DIR}\Inputs\HH_PROD.DBF
+*.*
 0
 ZON
 ZDATI2
@@ -811,9 +810,9 @@ LOK
 LOOKUPI1
 999999
 479
--1084
+-1053
 803
--1142
+-1111
 -1
 -1
 0
@@ -1928,9 +1927,9 @@ MAT
 ISCR1 
 999999
 1494
--212
+-243
 1818
--270
+-301
 -1
 -1
 0
@@ -1946,9 +1945,9 @@ MAT
 MATI1 
 999999
 1494
--274
+-305
 1818
--332
+-363
 -1
 -1
 0
@@ -1964,9 +1963,9 @@ MAT
 MATI2 
 999999
 1494
--336
+-367
 1818
--394
+-425
 -1
 -1
 0
@@ -2324,9 +2323,9 @@ ZON
 ZDATI1
 999999
 1494
--398
+-429
 1818
--456
+-487
 -1
 -1
 0
@@ -2336,7 +2335,7 @@ HH Production
 0
 0
 *
-{CATALOG_DIR}\Inputs\HH_PROD.DBF
+*.*
 0
 ZON
 ZDATI2
@@ -2684,9 +2683,9 @@ LOK
 LOOKUPI1
 999999
 1494
--522
+-491
 1818
--580
+-549
 -1
 -1
 0
@@ -3801,9 +3800,9 @@ MAT
 ISCR1 
 999999
 1494
--774
+-805
 1818
--832
+-863
 -1
 -1
 0
@@ -3819,9 +3818,9 @@ MAT
 MATI1 
 999999
 1494
--836
+-867
 1818
--894
+-925
 -1
 -1
 0
@@ -3837,9 +3836,9 @@ MAT
 MATI2 
 999999
 1494
--898
+-929
 1818
--956
+-987
 -1
 -1
 0
@@ -4197,9 +4196,9 @@ ZON
 ZDATI1
 999999
 1494
--960
+-991
 1818
--1018
+-1049
 -1
 -1
 0
@@ -4209,7 +4208,7 @@ HH Production
 0
 0
 *
-{CATALOG_DIR}\Inputs\HH_PROD.DBF
+*.*
 0
 ZON
 ZDATI2
@@ -4557,9 +4556,9 @@ LOK
 LOOKUPI1
 999999
 1494
--1084
+-1053
 1818
--1142
+-1111
 -1
 -1
 0
@@ -5674,9 +5673,9 @@ MAT
 ISCR1 
 999999
 2508
--212
+-243
 2832
--270
+-301
 -1
 -1
 0
@@ -5692,9 +5691,9 @@ MAT
 MATI1 
 999999
 2508
--274
+-305
 2832
--332
+-363
 -1
 -1
 0
@@ -5710,9 +5709,9 @@ MAT
 MATI2 
 999999
 2508
--336
+-367
 2832
--394
+-425
 -1
 -1
 0
@@ -6070,9 +6069,9 @@ ZON
 ZDATI1
 999999
 2508
--398
+-429
 2832
--456
+-487
 -1
 -1
 0
@@ -6082,7 +6081,7 @@ HH Production
 0
 0
 *
-{CATALOG_DIR}\Inputs\HH_PROD.DBF
+*.*
 0
 ZON
 ZDATI2
@@ -6430,9 +6429,9 @@ LOK
 LOOKUPI1
 999999
 2508
--522
+-491
 2832
--580
+-549
 -1
 -1
 0
@@ -9420,9 +9419,9 @@ MAT
 ISCR1 
 999999
 479
--212
+-243
 803
--270
+-301
 -1
 -1
 0
@@ -9438,9 +9437,9 @@ MAT
 MATI1 
 999999
 479
--274
+-305
 803
--332
+-363
 -1
 -19
 1
@@ -9456,9 +9455,9 @@ MAT
 MATI2 
 999999
 479
--336
+-367
 803
--394
+-425
 -1
 -9
 1
@@ -9816,9 +9815,9 @@ ZON
 ZDATI1
 999999
 479
--398
+-429
 803
--456
+-487
 -1
 -9
 1
@@ -9828,7 +9827,7 @@ HH Production
 0
 0
 *
-{CATALOG_DIR}\Inputs\HH_PROD.DBF
+*.*
 0
 ZON
 ZDATI2
@@ -9838,8 +9837,8 @@ ZDATI2
 803
 -518
 -1
--9
-1
+-1
+0
 #INFIL24
 Zonal Data 3
 
@@ -10176,9 +10175,9 @@ LOK
 LOOKUPI1
 999999
 479
--522
+-491
 803
--580
+-549
 -1
 -9
 1

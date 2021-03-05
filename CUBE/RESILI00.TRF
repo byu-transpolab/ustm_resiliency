@@ -12,10 +12,10 @@ C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resiliency.PRN
 2:DC Logsums,00,C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\DCLOGS00.APP
 #END
 1
-C:\Users\mbarnes7\AppData\Local\Temp\CitCF5B.tmp
+C:\Users\mbarnes7\AppData\Local\Temp\Cit6142.tmp
 1
 Base
-#GROUP=resiliency, 00:5:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
+#GROUP=resiliency, 00:8:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
 #PROGRAM
 #PROGNAME=HIGHWAY<0:13;1
 #EXEC=1
@@ -27,7 +27,7 @@ Base
 #OUTPUT
 {SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT
 #END
-#GROUP=resiliency, 00:5:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
+#GROUP=resiliency, 00:8:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
 #PROGRAM
 #PROGNAME=StartOfGroup<0:7;0
 #EXEC=2
@@ -104,7 +104,7 @@ Base
 {SCENARIO_DIR}\intermediate_outputs\01_MC_REC_PROBABILITY.MAT
 #END
 #PROGRAM
-#PROGNAME=MATRIX<0:13;1
+#PROGNAME=MATRIX<0:13;2
 #EXEC=6
 #INCLUSTER=0
 #PROGARGS=C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_MCLS_COMBINE.S
@@ -113,13 +113,14 @@ Base
 #END
 #OUTPUT
 {SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT
+{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED_PROBABILITY.MAT
 #END
-#GROUP=resiliency, 00:5:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
+#GROUP=resiliency, 00:8:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
 #PROGRAM
 #PROGNAME=EndOfGroup<0:8;0
 #EXEC=2
 #INCLUSTER=0
-#GROUP=resiliency, 00:5:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
+#GROUP=resiliency, 00:8:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
 #PROGRAM
 #PROGNAME=StartOfGroup<0:7;0
 #EXEC=3
@@ -209,7 +210,7 @@ Base
 {SCENARIO_DIR}\intermediate_outputs\01_DCLS_ROWSUM.PRN
 {SCENARIO_DIR}\Output\01_ROWSUMS.DBF
 #END
-#GROUP=resiliency, 00:5:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
+#GROUP=resiliency, 00:8:C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\resili00.app
 #PROGRAM
 #PROGNAME=EndOfGroup<0:8;0
 #EXEC=3
@@ -229,12 +230,45 @@ Base
 #PROGNAME=MATRIX<0:13;1
 #EXEC=5
 #INCLUSTER=0
-#PROGARGS=C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00J.S
+#PROGARGS=C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_TRIPS_IJ.S
 
 0
 #END
 #OUTPUT
-C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\BASE\01_TLFD.DBF
+{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJ.MAT
+#END
+#PROGRAM
+#PROGNAME=MATRIX<0:13;1
+#EXEC=6
+#INCLUSTER=0
+#PROGARGS=C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_TRIPS_IJK.S
+
+0
+#END
+#OUTPUT
+{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJK.MAT
+#END
+#PROGRAM
+#PROGNAME=MATRIX<0:13;1
+#EXEC=7
+#INCLUSTER=0
+#PROGARGS=C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_MODESPLIT.S
+
+0
+#END
+#OUTPUT
+{SCENARIO_DIR}\Output\01_MODESPLIT.DBF
+#END
+#PROGRAM
+#PROGNAME=MATRIX<0:13;1
+#EXEC=8
+#INCLUSTER=0
+#PROGARGS=C:\USERS\MBARNES7\DOCUMENTS\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00R.S
+
+0
+#END
+#OUTPUT
+{CATALOG_DIR}\Inputs\HH_PROD_1.DBF
 #END
 #ENDOFPROGS
 1

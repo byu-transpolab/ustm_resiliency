@@ -147,26 +147,25 @@ MW[18] = MIN(MW[2],1)
       MW[113] = MW[13] * 100                                                    ;Printed transity utility
       
      ; Exponentiate Utilities and adjust for zones which do not exist
+     MW[21] = exp(MW[11]) ;Exponentiated auto utility
         JLOOP
-      IF (MW[2] > 10000)
-        MW[21] = 0
-        MW[22] = 0
+      IF (MW[2] > 50) ;limit length of nonmot trips
+        MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
-        MW[21] = exp(MW[11])
-        MW[22] = exp(MW[12]) 
+        MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
       ENDIF
         ENDJLOOP
         
       JLOOP
-      IF (MW[3] = 0)
-          MW[23] = 0
+      IF (MW[3] = 0) ;transit walk time
+          MW[23] = 0 ;transit walk time equals zero if it equals zero
       ELSE
-        MW[23] = exp(MW[13])
+        MW[23] = exp(MW[13]) ;exponentiated transit utilty
       ENDIF
       ENDJLOOP
       
       ; Sum demonominator
-      MW[30] = MW[21] + MW[22] + MW[23]
+      MW[30] = MW[21] + MW[22] + MW[23] ;create denominator for probability calculation
       
       ; Adjust for areas with a denominator equal to 0
       JLOOP     
@@ -282,38 +281,37 @@ ENDIF
 
 ;;;;;;Begin HBW MCLS Calculation;;;;;
       
-      ; calculate travel time of non-motorized modes
+            ; calculate travel time of non-motorized modes
       MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
  
-      ; Calculate Utilities
-      MW[11] = 0 + COEFF_IVTT + COEFF_TERML + COEFF_COST * AUTOCOST * MW[1]    ;auto utility
-      ;MW[11] = 0 + -0.025 + -0.0625 + -0.00158 * 13.6 * MW[1]    ;auto utility
-      MW[12] = K_NMOT + COEFF_WALK1 * 20 + COEFF_WALK2 * 20 * MW[4] ;non-motorized utility
-      ;MW[12] = (-1.2258 + -0.0625 * 20 + -0.09375 * 20) * MW[4] ;non-motorized utility
-      MW[13] = (K_TRN + COEFF_WALK + COEFF_SWAIT + (COEFF_LWAIT - COEFF_SWAIT) + COEFF_IVTT + COEFF_COST + COEFF_NXFER) * MW[3] ;transit utility
-      ;MW[13] = (-0.3903 + -0.0625 + -0.05625 + (-0.025- -0.05625) + -0.0625 + -0.025 + -0.00158 + 0) * MW[3] ;transit utility
+      ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
+      MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])          ;Drive alone auto utility
+      MW[111] = MW[11] * 100                                                    ;Printed auto utility
+      MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
+      MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
+      MW[13] = (K_TRN * MW[3])                                                  ;transit utility
+      MW[113] = MW[13] * 100                                                    ;Printed transity utility
       
-      ; Exponentiate Utilities and adjust for zones which do not exist
+     ; Exponentiate Utilities and adjust for zones which do not exist
+     MW[21] = exp(MW[11]) ;Exponentiated auto utility
         JLOOP
-      IF (MW[2] > 10000)
-        MW[21] = 0
-        MW[22] = 0
+      IF (MW[2] > 50) ;limit length of nonmot trips
+        MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
-        MW[21] = exp(MW[11])
-        MW[22] = exp(MW[12]) 
+        MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
       ENDIF
         ENDJLOOP
         
       JLOOP
-      IF (MW[3] = 0)
-          MW[23] = 0
+      IF (MW[3] = 0) ;transit walk time
+          MW[23] = 0 ;transit walk time equals zero if it equals zero
       ELSE
-        MW[23] = exp(MW[13])
+        MW[23] = exp(MW[13]) ;exponentiated transit utilty
       ENDIF
       ENDJLOOP
       
       ; Sum demonominator
-      MW[30] = MW[21] + MW[22] + MW[23]
+      MW[30] = MW[21] + MW[22] + MW[23] ;create denominator for probability calculation
       
       ; Adjust for areas with a denominator equal to 0
       JLOOP     
@@ -447,7 +445,7 @@ MW[18] = MIN(MW[2],1)
 
 ;;;;;;Begin NHB MCLS Calculation;;;;;
       
-      ; calculate travel time of non-motorized modes
+            ; calculate travel time of non-motorized modes
       MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
  
       ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
@@ -457,28 +455,27 @@ MW[18] = MIN(MW[2],1)
       MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
       MW[13] = (K_TRN * MW[3])                                                  ;transit utility
       MW[113] = MW[13] * 100                                                    ;Printed transity utility
-          
-      ; Exponentiate Utilities and adjust for zones which do not exist
+      
+     ; Exponentiate Utilities and adjust for zones which do not exist
+     MW[21] = exp(MW[11]) ;Exponentiated auto utility
         JLOOP
-      IF (MW[2] > 10000)
-        MW[21] = 0
-        MW[22] = 0
+      IF (MW[2] > 50) ;limit length of nonmot trips
+        MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
-        MW[21] = exp(MW[11])
-        MW[22] = exp(MW[12]) 
+        MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
       ENDIF
         ENDJLOOP
         
       JLOOP
-      IF (MW[3] = 0)
-          MW[23] = 0
+      IF (MW[3] = 0) ;transit walk time
+          MW[23] = 0 ;transit walk time equals zero if it equals zero
       ELSE
-        MW[23] = exp(MW[13])
+        MW[23] = exp(MW[13]) ;exponentiated transit utilty
       ENDIF
       ENDJLOOP
       
       ; Sum demonominator
-      MW[30] = MW[21] + MW[22] + MW[23]
+      MW[30] = MW[21] + MW[22] + MW[23] ;create denominator for probability calculation
       
       ; Adjust for areas with a denominator equal to 0
       JLOOP     
@@ -511,7 +508,7 @@ ENDRUN
 ; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_HBC_MCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBC_MCLS.PRN" MSG='HBC MCLS'
+RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBC_MCLS.PRN" MSG='Freight MCLS'
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
@@ -607,7 +604,7 @@ MW[18] = MIN(MW[2],1)
   
   ;TODO: get minimum transit time, but include out-of-vehicle time as separate matrix
 
-;;;;;;Begin HBW MCLS Calculation;;;;;
+;;;;;;Begin Fregiht MCLS Calculation;;;;;
       
       ; calculate travel time of non-motorized modes
       MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
@@ -621,23 +618,11 @@ MW[18] = MIN(MW[2],1)
       MW[113] = MW[13] * 100                                                    ;Printed transity utility
           
         ; Exponentiate Utilities and adjust for zones which do not exist
-        JLOOP
-      IF (MW[2] > 10000)
-        MW[21] = 0
-        MW[22] = 0
-      ELSE
+        ; Need to account for these zones that don't exist in DCLS so they don't get chosen
+      
         MW[21] = exp(MW[11])
-        MW[22] = exp(MW[12]) 
-      ENDIF
-        ENDJLOOP
-        
-      JLOOP
-      IF (MW[3] = 0)
-          MW[23] = 0
-      ELSE
-        MW[23] = exp(MW[13])
-      ENDIF
-      ENDJLOOP
+        MW[22] = 0 ;exponentiated utility is zero because freight must take auto mode
+        MW[23] = 0 ;exponentiated utility is zero because freight must take auto mode
       
       ; Sum demonominator
       MW[30] = MW[21] + MW[22] + MW[23]
@@ -650,7 +635,6 @@ MW[18] = MIN(MW[2],1)
       ENDJLOOP
       
       ; Probabilities
-
       MW[31] =  MW[21] / MW[30]       ;auto probability
       MW[32] =  MW[22] / MW[30]       ;non-motorized probability
       MW[33] =  MW[23] / MW[30]       ;transit probability
@@ -771,9 +755,9 @@ MW[18] = MIN(MW[2],1)
   
   ;TODO: get minimum transit time, but include out-of-vehicle time as separate matrix
 
-;;;;;;Begin HBW MCLS Calculation;;;;;
+;;;;;;Begin REC MCLS Calculation;;;;;
       
-      ; calculate travel time of non-motorized modes
+            ; calculate travel time of non-motorized modes
       MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
  
       ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
@@ -783,28 +767,27 @@ MW[18] = MIN(MW[2],1)
       MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
       MW[13] = (K_TRN * MW[3])                                                  ;transit utility
       MW[113] = MW[13] * 100                                                    ;Printed transity utility
-          
-      ; Exponentiate Utilities and adjust for zones which do not exist
+      
+     ; Exponentiate Utilities and adjust for zones which do not exist
+     MW[21] = exp(MW[11]) ;Exponentiated auto utility
         JLOOP
-      IF (MW[2] > 10000)
-        MW[21] = 0
-        MW[22] = 0
+      IF (MW[2] > 50) ;limit length of nonmot trips
+        MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
-        MW[21] = exp(MW[11])
-        MW[22] = exp(MW[12]) 
+        MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
       ENDIF
         ENDJLOOP
         
       JLOOP
-      IF (MW[3] = 0)
-          MW[23] = 0
+      IF (MW[3] = 0) ;transit walk time
+          MW[23] = 0 ;transit walk time equals zero if it equals zero
       ELSE
-        MW[23] = exp(MW[13])
+        MW[23] = exp(MW[13]) ;exponentiated transit utilty
       ENDIF
       ENDJLOOP
       
       ; Sum demonominator
-      MW[30] = MW[21] + MW[22] + MW[23]
+      MW[30] = MW[21] + MW[22] + MW[23] ;create denominator for probability calculation
       
       ; Adjust for areas with a denominator equal to 0
       JLOOP     
@@ -839,8 +822,15 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Combine All MCLS Calculations'
+FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED_PROBABILITY.MAT",
+  MO = 11-15, 21-25, 31-35 DEC = D, NAME = HBWauto_prob, HBOauto_prob, NHBauto_prob, HBCauto_prob, RECauto_prob, HBWnmot_prob, HBOnmot_prob, NHBnmot_prob, HBCnmot_prob, RECnmot_prob, HBWtran_prob, HBOtran_prob, NHBtran_prob, HBCtran_prob, RECtran_prob
+FILEI MATI[10] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_REC_PROBABILITY.MAT"
+FILEI MATI[9] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_PROBABILITY.MAT"
+FILEI MATI[8] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_PROBABILITY.MAT"
+FILEI MATI[7] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT"
+FILEI MATI[6] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_PROBABILITY.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT",
-  MO = 1-5, DEC = D, NAME = HBWlogsum, HBOlogsum, NHBlogsum, HBClogsum, REClogsum
+  MO = 1-5  DEC = D, NAME = HBWlogsum, HBOlogsum, NHBlogsum, HBClogsum, REClogsum
 FILEI MATI[5] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_REC_LOGSUM.MAT"
 FILEI MATI[4] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_LOGSUM.MAT"
 FILEI MATI[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_LOGSUM.MAT"
@@ -889,7 +879,6 @@ ENDRUN
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBO DCLS'
 FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBO_DEST_CHOICE.RPT"
-FILEI ZDATI[2] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBO.MAT",
   MO = 112, 100 DEC = D, NAME = HBOSizeTerm, HBOUtil
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
@@ -1036,7 +1025,6 @@ ENDRUN
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='NHB DCLS'
 FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_NHB_DEST_CHOICE.RPT"
-FILEI ZDATI[2] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_NHB.MAT",
   MO = 112, 100 DEC = D, NAME=HBWSizeTerm, HBWUtil
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
@@ -1185,7 +1173,6 @@ ENDRUN
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBC DCLS'
 FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBC_DEST_CHOICE.RPT"
-FILEI ZDATI[2] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBC.MAT",
 MO = 112, 100 DEC = D, NAME = HBCSizeTerm, HBCUtil
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
@@ -1335,7 +1322,6 @@ RUN PGM=MATRIX MSG='REC DCLS'
 FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_REC_DEST_CHOICE.RPT"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_REC.MAT",
   MO = 112, 100 DEC = D, NAME = RECSizeTerm, RECUtil
-FILEI ZDATI[2] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
 FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
 FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
@@ -1506,7 +1492,6 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBW DCLS'
-FILEI ZDATI[2] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBW_DEST_CHOICE.RPT"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBW.MAT",
   MO = 112, 100 DEC = D, NAME = HBWSizeTerm, HBWUtil
@@ -1730,12 +1715,290 @@ MW[1]=MI.1.1
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00J.S"
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_TRIPS_IJ.S"
+;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=HIGHWAY
-FILEI NETI = "D:\PROJECTS\USTM_RESILIENCY\BASE\BY_2015.NET"
-FILEI TURNPENI = "D:\projects\ustm_resiliency\Base\TURNPENALTIES.TXT"
-FILEO MATO[1] = "D:\PROJECTS\USTM_RESILIENCY\BASE\ZONETEST.MAT"
+RUN PGM=MATRIX MSG='Build Trips_IJ'
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJ.MAT",
+MO = 10,20,30,40,50,100,200,300,400,500,98,99 DEC = D, NAME = HBWDCProbability, HBODCProbability, NHBDCProbability, HBCDCProbability, RECDCProbability, HBWTrips,HBOTrips,NHBTrips,HBCTrips,RECTrips,CheckRowsum, CheckProd
+FILEI ZDATI[2] = "{SCENARIO_DIR}\Output\01_ROWSUMS.DBF"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD_1.DBF"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DCLS_COMBINED.MAT"
+
+
+; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
+; where I is the origin zones.  All user statements in the module are processed once for each origin.
+; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
+; the values for all destination zones J are automatically computed.  The user can control the computations
+; at each J by using a JLOOP.
+
+;equation here is probability = (e^u)/rowsum(e^u)
+
+
+ZONES = {TOTAL_ZONES}
+		ARRAY personTrips = TOTAL_ZONES
+    
+    	;Fill DC Utility into matrices
+		MW[1] = MI.1.1 ;HBW
+		MW[2] = MI.1.2 ;HBO
+    MW[3] = MI.1.3 ;NHB
+    MW[4] = MI.1.4 ;HBC
+	  MW[5] = MI.1.5 ;REC
+
+    
+    JLOOP
+    ;Compute probability
+    MW[10] = ((exp(MW[1]))/(exp(ZI.2.LNHBW[J]))) ;HBW
+    MW[20] = ((exp(MW[2]))/(exp(ZI.2.LNHBO[J]))) ;HBO
+    MW[30] = ((exp(MW[3]))/(exp(ZI.2.LNNHB[J]))) ;NHB
+    MW[40] = ((exp(MW[4]))/(exp(ZI.2.LNHBC[J]))) ;HBC
+    MW[50] = ((exp(MW[5]))/(exp(ZI.2.LNREC[J]))) ;REC
+    ENDJLOOP
+    
+    
+    JLOOP
+	  ; Compute Trips
+    MW[98] = ZI.2.LNHBW[J]
+    MW[99] = ZI.1.HBWP[J]
+		MW[100] = MW[10] * ZI.1.HBWP[J] 
+    MW[200] = MW[20] * ZI.1.HBOP[J] 
+    MW[300] = MW[30] * ZI.1.NHBP[J] 
+    MW[400] = MW[40] * ZI.1.HBSCP[J] 
+    MW[500] = MW[50] * ZI.1.RECP[J] 
+       
+    ENDJLOOP
+    ;Print Probability Values * 1000 to check accuracy
+    MW[10] = ((exp(MW[1]))/(exp(ZI.2.LNHBW[J])))*1000 ;HBW
+    MW[20] = ((exp(MW[2]))/(exp(ZI.2.LNHBO[J])))*1000 ;HBO
+    MW[30] = ((exp(MW[3]))/(exp(ZI.2.LNNHB[J])))*1000 ;NHB
+    MW[40] = ((exp(MW[4]))/(exp(ZI.2.LNHBC[J])))*1000 ;HBC
+    MW[50] = ((exp(MW[5]))/(exp(ZI.2.LNREC[J])))*1000 ;REC
+    
+    MW[100] = MW[10] * ZI.1.HBWP[J] /1000
+    MW[200] = MW[20] * ZI.1.HBOP[J] /1000
+    MW[300] = MW[30] * ZI.1.NHBP[J] /1000
+    MW[400] = MW[40] * ZI.1.HBSCP[J] /1000
+    MW[500] = MW[50] * ZI.1.RECP[J] /1000
+
+ENDRUN
+
+
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_TRIPS_IJK.S"
+;;<<Default Template>><<MATRIX>><<Default>>;;
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=MATRIX MSG='Build Trips_IJK'
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJK.MAT",
+ MO = 40-47,100,200,300,400,500,110,210,310,410,510,120,220,320,420,520 DEC = D, NAME = HBWTrips,HBOTrips,NHBTrips,HBCTrips,RECTrips,autoTrips,nmotTrips,transitTrips,HBWauto,HBOauto,NHBauto,HBCauto,RECauto,HBWnmot,HBOnmot,NHBnmot,HBCnmot,RECnmot,HBWtransit,HBOtransit,NHBtransit,HBCtransit,RECtransit
+FILEI MATI[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED_PROBABILITY.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJ.MAT"
+
+; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
+; where I is the origin zones.  All user statements in the module are processed once for each origin.
+; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
+; the values for all destination zones J are automatically computed.  The user can control the computations
+; at each J by using a JLOOP.
+	
+
+ ;Fill Trips into matrices
+		MW[1] = MI.1.6 ;HBW
+		MW[2] = MI.1.7 ;HBO
+    MW[3] = MI.1.8 ;NHB
+    MW[4] = MI.1.9 ;HBC
+	  MW[5] = MI.1.10 ;REC
+    
+ ;Fill MC auto_prob into matrices
+    MW[11] = MI.2.1 ;HBW
+		MW[12] = MI.2.2 ;HBO
+    MW[13] = MI.2.3 ;NHB
+    MW[14] = MI.2.4 ;HBC
+	  MW[15] = MI.2.5 ;REC
+    
+  ;Fill MC nmot_prob into matrices
+    MW[21] = MI.2.6 ;HBW
+		MW[22] = MI.2.7 ;HBO
+    MW[23] = MI.2.8 ;NHB
+    MW[24] = MI.2.9 ;HBC
+	  MW[25] = MI.2.10 ;REC
+  
+  ;Fill MC transit_prob into matrices
+    MW[31] = MI.2.11 ;HBW
+		MW[32] = MI.2.12 ;HBO
+    MW[33] = MI.2.13 ;NHB
+    MW[34] = MI.2.14 ;HBC
+	  MW[35] = MI.2.15 ;REC   
+    
+    ;JLOOP
+    ;Compute trips by mode choice and purpose
+    MW[100] = MW[1] * MW[11] ;HBWauto
+    MW[200] = MW[2] * MW[12] ;HBOauto
+    MW[300] = MW[3] * MW[13] ;NHBauto
+    MW[400] = MW[4] * MW[14] ;HBCauto
+    MW[500] = MW[5] * MW[15] ;RECauto
+    MW[110] = MW[1] * MW[21] ;HBWnmot
+    MW[210] = MW[2] * MW[22] ;HBOnmot
+    MW[310] = MW[3] * MW[23] ;NHBnmot
+    MW[410] = MW[4] * MW[24] ;HBCnmot
+    MW[510] = MW[5] * MW[25] ;RECnmot
+    MW[120] = MW[1] * MW[31] ;HBWtransit
+    MW[220] = MW[2] * MW[32] ;HBOtransit
+    MW[320] = MW[3] * MW[33] ;NHBtransit
+    MW[420] = MW[4] * MW[34] ;HBCtransit
+    MW[520] = MW[5] * MW[35] ;RECtransit
+    ;ENDJLOOP
+    
+    ;JLOOP
+    ;Compute trips by trip purpose
+    MW[40] = MW[100] + MW[110] + MW[120] ;HBW
+    MW[41] = MW[200] + MW[210] + MW[220] ;HBO
+    MW[42] = MW[300] + MW[310] + MW[320] ;NHB
+    MW[43] = MW[400] + MW[410] + MW[420] ;HBC
+    MW[44] = MW[500] + MW[510] + MW[520] ;REC
+    ;ENDJLOOP
+    
+    ;JLOOP
+    ;Compute total trips by mode choice
+    MW[45] = MW[100] + MW[200] + MW[300] + MW[400] + MW[500] ;auto
+    MW[46] = MW[110] + MW[210] + MW[310] + MW[410] + MW[510] ;nmot
+    MW[47] = MW[120] + MW[220] + MW[320] + MW[420] + MW[520] ;transit
+   
+    ;ENDJLOOP
+    
+    
+ENDRUN
+
+
+; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_MODESPLIT.S"
+;;<<Default Template>><<MATRIX>><<Default>>;;
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=MATRIX MSG='Create Mode Split Columns'
+FILEI MATI[2] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
+FILEO RECO[1] = "{SCENARIO_DIR}\Output\01_MODESPLIT.DBF",
+  FIELDS = TAZ, HBWAUTO, HBWNMOT, HBWTRANSIT, HBOATUO, HBONMOT, HBOTRANSIT, NHBAUTO, NHBNMOT, NHBTRANSIT, FREIGHTAUTO, FREIGHTNMOT, FREIGHTRANSIT, RECAUTO, RECNMOT, RECTRANSIT
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJK.MAT"
+
+; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
+; where I is the origin zones.  All user statements in the module are processed once for each origin.
+; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
+; the values for all destination zones J are automatically computed.  The user can control the computations
+; at each J by using a JLOOP.
+
+FILLMW MW[100] = MI.1.9
+FILLMW MW[110] = MI.1.14
+FILLMW MW[120] = MI.1.19
+FILLMW MW[200] = MI.1.10
+FILLMW MW[210] = MI.1.15
+FILLMW MW[220] = MI.1.20
+FILLMW MW[300] = MI.1.11
+FILLMW MW[310] = MI.1.16
+FILLMW MW[320] = MI.1.21
+;FILLMW MW[400] = MI.1.12
+;FILLMW MW[410] = MI.1.17
+;FILLMW MW[420] = MI.1.22
+FILLMW MW[500] = MI.1.13
+FILLMW MW[510] = MI.1.18
+FILLMW MW[520] = MI.1.23
+FILLMW MW[600] = MI.2.13
+
+
+
+HBWAUTO = 0
+HBWNMOT = 0
+HBWTRANSIT = 0
+HBOAUTO = 0
+HBONMOT = 0
+HBOTRANSIT   = 0
+NHBAUTO = 0
+NHBNMOT = 0
+NHBTRANSIT = 0
+FREIGHTAUTO = 0
+FREIGHTNMOT = 0
+FREIGHTTRANSIT = 0
+RECAUTO = 0
+RECNMOT = 0
+RECTRANSIT = 0
+
+JLOOP
+;change to an if statement to exclude rows/columns that don't exist i would need to set those values correctly to exclude them (its the column that matters)
+  TAZ = ZI.1.TAZ
+  HBWAUTO = HBWAUTO + MW[100]
+  HBWNMOT = HBWNMOT + MW[110]
+  HBWTRANSIT = HBWTRANSIT + MW[120]
+  HBOAUTO = HBOAUTO + MW[200]
+  HBONMOT = HBONMOT + MW[210]
+  HBOTRANSIT = HBOTRANSIT + MW[220]
+  NHBAUTO = NHBAUTO + MW[300]
+  NHBNMOT = NHBNMOT + MW[310]
+  NHBTRANSIT = NHBTRANSIT + MW[320]
+  FREIGHTAUTO = FREIGHTAUTO + MW[600]
+  ;FREIGHTNMOT = FREIGHTNMOT + MW[410]
+  ;FREIGHTTRANSIT = FREIGHTTRANSIT + MW[420]
+  RECAUTO = RECAUTO + MW[500]
+  RECNMOT = RECNMOT + MW[510]
+  RECTRANSIT = RECTRANSIT + MW[520]
+  
+ENDJLOOP
+  Ro.TAZ = TAZ
+  Ro.HBWAUTO = HBWAUTO
+  Ro.HBWNMOT = HBWNMOT
+  Ro.HBWTRANSIT = HBWTRANSIT
+  Ro.HBOAUTO = HBOAUTO
+  Ro.HBONMOT = HBONMOT
+  Ro.HBOTRANSIT = HBOTRANSIT
+  Ro.NHBAUTO = NHBAUTO
+  Ro.NHBNMOT = NHBNMOT
+  Ro.NHBTRANSIT = NHBTRANSIT
+  Ro.FREIGHTAUTO = FREIGHTAUTO
+  ;Ro.FREIGHTNMOT = FREIGHTNMOT
+  ;Ro.FREIGHTTRANSIT = FREIGHTTRANSIT
+  Ro.RECAUTO = RECAUTO
+  Ro.RECNMOT = RECNMOT
+  Ro.RECTRANSIT = RECTRANSIT
+
+WRITE RECO = 1
+
+
+
+
+ENDRUN
+
+
+; Script for program MATRIX in file "C:\USERS\MBARNES7\DOCUMENTS\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00R.S"
+;;<<Default Template>><<MATRIX>><<Default>>;;
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=MATRIX MSG='Get whole Productions file'
+FILEO RECO[1] = "{CATALOG_DIR}\Inputs\HH_PROD_1.DBF",
+  FIELDS = HBWP, HBOP, NHBP, RECP
+FILEI MATI[1] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
+
+; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
+; where I is the origin zones.  All user statements in the module are processed once for each origin.
+; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
+; the values for all destination zones J are automatically computed.  The user can control the computations
+; at each J by using a JLOOP.
+
+	FILLMW MW[1] = MI.1.13 ;Freight Trips
+
+  FREIGHTAUTO = 0
+  
+  JLOOP
+    TAZ = ZI.1.TAZ
+    HBWP = ZI.1.HBW_P
+    HBOP = ZI.1.HBO_P + ZI.1.HBSC_PR_P + ZI.1.HBSC_SC_P + ZI.1.HBSHP_P
+    NHBP =  ZI.1.NHBW_P + ZI.1.NHBNW_P
+    RECP = ZI.1.REC_P
+  ENDJLOOP
+  
+    Ro.HBWP = HBWP
+    Ro.HBOP = HBOP
+    Ro.NHBP = NHBP
+    Ro.RECP = RECP
+    
+  
+WRITE RECO = 1
+
+  
 ENDRUN
 
 
