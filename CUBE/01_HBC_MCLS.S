@@ -1,6 +1,6 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBC_MCLS.PRN" MSG='HBC MCLS'
+RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBC_MCLS.PRN" MSG='Freight MCLS'
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
@@ -96,7 +96,7 @@ MW[18] = MIN(MW[2],1)
   
   ;TODO: get minimum transit time, but include out-of-vehicle time as separate matrix
 
-;;;;;;Begin HBW MCLS Calculation;;;;;
+;;;;;;Begin Fregiht MCLS Calculation;;;;;
       
       ; calculate travel time of non-motorized modes
       MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
@@ -110,23 +110,11 @@ MW[18] = MIN(MW[2],1)
       MW[113] = MW[13] * 100                                                    ;Printed transity utility
           
         ; Exponentiate Utilities and adjust for zones which do not exist
-        JLOOP
-      IF (MW[2] > 10000)
-        MW[21] = 0
-        MW[22] = 0
-      ELSE
+        ; Need to account for these zones that don't exist in DCLS so they don't get chosen
+      
         MW[21] = exp(MW[11])
-        MW[22] = exp(MW[12]) 
-      ENDIF
-        ENDJLOOP
-        
-      JLOOP
-      IF (MW[3] = 0)
-          MW[23] = 0
-      ELSE
-        MW[23] = exp(MW[13])
-      ENDIF
-      ENDJLOOP
+        MW[22] = 0 ;exponentiated utility is zero because freight must take auto mode
+        MW[23] = 0 ;exponentiated utility is zero because freight must take auto mode
       
       ; Sum demonominator
       MW[30] = MW[21] + MW[22] + MW[23]
@@ -139,7 +127,6 @@ MW[18] = MIN(MW[2],1)
       ENDJLOOP
       
       ; Probabilities
-
       MW[31] =  MW[21] / MW[30]       ;auto probability
       MW[32] =  MW[22] / MW[30]       ;non-motorized probability
       MW[33] =  MW[23] / MW[30]       ;transit probability

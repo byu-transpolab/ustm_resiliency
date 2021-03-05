@@ -2,7 +2,7 @@
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Build Trips_IJK'
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJK.MAT",
- MO = 40-47,100, 200,300,400,110,210,310,410,510,120,220,320,420,520 DEC = D, NAME = HBWTrips,HBOTrips,NHBTrips,HBCTrips,RECTrips,autoTrips,nmotTrips,transitTrips,HBWauto,HBOauto,NHBauto,HBCauto,RECauto,HBWnmot,HBOnmot,NHBnmot,HBCnmot,RECnmot,HBWtransit,HBOtransit,NHBtransit,HBCtransit,RECtransit
+ MO = 40-47,100,200,300,400,500,110,210,310,410,510,120,220,320,420,520 DEC = D, NAME = HBWTrips,HBOTrips,NHBTrips,HBCTrips,RECTrips,autoTrips,nmotTrips,transitTrips,HBWauto,HBOauto,NHBauto,HBCauto,RECauto,HBWnmot,HBOnmot,NHBnmot,HBCnmot,RECnmot,HBWtransit,HBOtransit,NHBtransit,HBCtransit,RECtransit
 FILEI MATI[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED_PROBABILITY.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJ.MAT"
 
@@ -76,5 +76,6 @@ FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJ.MAT"
     MW[47] = MW[120] + MW[220] + MW[320] + MW[420] + MW[520] ;transit
    
     ;ENDJLOOP
+    
     
 ENDRUN

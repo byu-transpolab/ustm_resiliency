@@ -1,4 +1,3 @@
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_MODESPLIT.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Create Mode Split Columns'
@@ -92,5 +91,3 @@ WRITE RECO = 1
 
 
 ENDRUN
-
-

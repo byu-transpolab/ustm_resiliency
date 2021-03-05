@@ -7,12 +7,11 @@
 ;;<<End Parameters>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\intermediate_outputs\01_TLFD.PRN" MSG='Create TLFD'
+FILEO RECO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TLFD.DBF"
 FILEO PRINTO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_TLFD.CSV"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TLFD.PRN"
 FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJ.MAT"
 FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
-FILEO RECO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TLFD.DBF",
-   FIELDS= DISTANCE, HBW, HBO, NHB, HBC, REC
 
 MW[1]=MI.1.6 ;HBW
 MW[2]=MI.2.2 ;Distance
@@ -30,6 +29,11 @@ array tl4=25
 array tl5=25
 
 zones = 8775
+
+;write a header file for tlfd counts
+;IF (I=1) 
+  ;print CSV=T,list='Distance','HBW','HBO','NHB','HBC','REC' printo=2
+;ENDIF
 
 ;first group
 JLOOP
@@ -57,33 +61,18 @@ IF (i= zones)
    ro.HBC=tl4[group];+MW[5]
    ro.REC=tl5[group];+MW[6]
    write reco=1
-   print printo=1 list=ro.DISTANCE(6.0), ro.HBW(16.8), ro.HBO(16.8), ro.NHB(16.8), ro.HBC(16.8). ro.REC(16.8)
+   print printo=1 list=ro.DISTANCE(6.0), ro.HBW(16.8), ro.HBO(16.8), ro.NHB(16.8), ro.HBC(16.8), ro.REC(16.8)
+   
+   ;write out counts
+   ;WRITE printo=2
+    ;print printo=2 CSV=T list=ro.DISTANCE(6.0),ro.HBW(16.8),ro.HBO(16.8),ro.NHB(16.8),ro.HBC(16.8),ro.REC(16.8)
   ENDLOOP
 ENDIF
 
 FREQUENCY BASEMW=2 VALUEMW=1 RANGE=0-100-5   
 
-DISTANCE=ro.DISTANCE
-HBW=ro.HBW
-HBO=ro.HBO
-NHB=ro.NHB
-HBC=ro.HBC
-REC=ro.REC
 
-;write a header file for tlfd counts
-IF (I=1) 
-print CSV=T,list='Distance','HBW','HBO','NHB','HBC','REC' printo=2
-
-;write out counts
-print CSV=T list=DISTANCE(6.0),HBW(16.8),HBO(16.8),NHB(16.8),HBC(16.8),REC(16.8), printo=2
-
-ENDIF
-
-;PRINT CSV = T LIST=ro.DISTANCE(1), ro.REC(16.8), tl2(16.8), tl3(16.8), tl4(16.8), tl5(16.8), printo=2
-
-;PRINT FORM = 10.10, CSV = T, LIST = Z, P[6], p1v0, p1v1, p1v2, p1v3, p2v0,
-  ;p2v1, p2v2, p2v3, p3v0, p3v1, p3v2, p3v3, p4v0, p4v1, p4v2, p4v3, all,
-  ;PRINTO = 1
+;PRINT CSV = T LIST=tll[group],tl2[group],tl3[group],tl4[group],tl5[group], printo=2
 
 ENDRUN
 

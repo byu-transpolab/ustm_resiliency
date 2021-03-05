@@ -2,7 +2,6 @@
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBC DCLS'
 FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBC_DEST_CHOICE.RPT"
-FILEI ZDATI[2] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBC.MAT",
 MO = 112, 100 DEC = D, NAME = HBCSizeTerm, HBCUtil
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"

@@ -96,9 +96,9 @@ MW[18] = MIN(MW[2],1)
   
   ;TODO: get minimum transit time, but include out-of-vehicle time as separate matrix
 
-;;;;;;Begin HBW MCLS Calculation;;;;;
+;;;;;;Begin REC MCLS Calculation;;;;;
       
-      ; calculate travel time of non-motorized modes
+            ; calculate travel time of non-motorized modes
       MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
  
       ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
@@ -108,28 +108,27 @@ MW[18] = MIN(MW[2],1)
       MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
       MW[13] = (K_TRN * MW[3])                                                  ;transit utility
       MW[113] = MW[13] * 100                                                    ;Printed transity utility
-          
-      ; Exponentiate Utilities and adjust for zones which do not exist
+      
+     ; Exponentiate Utilities and adjust for zones which do not exist
+     MW[21] = exp(MW[11]) ;Exponentiated auto utility
         JLOOP
-      IF (MW[2] > 10000)
-        MW[21] = 0
-        MW[22] = 0
+      IF (MW[2] > 50) ;limit length of nonmot trips
+        MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
-        MW[21] = exp(MW[11])
-        MW[22] = exp(MW[12]) 
+        MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
       ENDIF
         ENDJLOOP
         
       JLOOP
-      IF (MW[3] = 0)
-          MW[23] = 0
+      IF (MW[3] = 0) ;transit walk time
+          MW[23] = 0 ;transit walk time equals zero if it equals zero
       ELSE
-        MW[23] = exp(MW[13])
+        MW[23] = exp(MW[13]) ;exponentiated transit utilty
       ENDIF
       ENDJLOOP
       
       ; Sum demonominator
-      MW[30] = MW[21] + MW[22] + MW[23]
+      MW[30] = MW[21] + MW[22] + MW[23] ;create denominator for probability calculation
       
       ; Adjust for areas with a denominator equal to 0
       JLOOP     

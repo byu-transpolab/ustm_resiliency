@@ -83,38 +83,37 @@ ENDIF
 
 ;;;;;;Begin HBW MCLS Calculation;;;;;
       
-      ; calculate travel time of non-motorized modes
+            ; calculate travel time of non-motorized modes
       MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
  
-      ; Calculate Utilities
-      MW[11] = 0 + COEFF_IVTT + COEFF_TERML + COEFF_COST * AUTOCOST * MW[1]    ;auto utility
-      ;MW[11] = 0 + -0.025 + -0.0625 + -0.00158 * 13.6 * MW[1]    ;auto utility
-      MW[12] = K_NMOT + COEFF_WALK1 * 20 + COEFF_WALK2 * 20 * MW[4] ;non-motorized utility
-      ;MW[12] = (-1.2258 + -0.0625 * 20 + -0.09375 * 20) * MW[4] ;non-motorized utility
-      MW[13] = (K_TRN + COEFF_WALK + COEFF_SWAIT + (COEFF_LWAIT - COEFF_SWAIT) + COEFF_IVTT + COEFF_COST + COEFF_NXFER) * MW[3] ;transit utility
-      ;MW[13] = (-0.3903 + -0.0625 + -0.05625 + (-0.025- -0.05625) + -0.0625 + -0.025 + -0.00158 + 0) * MW[3] ;transit utility
+      ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
+      MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])          ;Drive alone auto utility
+      MW[111] = MW[11] * 100                                                    ;Printed auto utility
+      MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
+      MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
+      MW[13] = (K_TRN * MW[3])                                                  ;transit utility
+      MW[113] = MW[13] * 100                                                    ;Printed transity utility
       
-      ; Exponentiate Utilities and adjust for zones which do not exist
+     ; Exponentiate Utilities and adjust for zones which do not exist
+     MW[21] = exp(MW[11]) ;Exponentiated auto utility
         JLOOP
-      IF (MW[2] > 10000)
-        MW[21] = 0
-        MW[22] = 0
+      IF (MW[2] > 50) ;limit length of nonmot trips
+        MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
-        MW[21] = exp(MW[11])
-        MW[22] = exp(MW[12]) 
+        MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
       ENDIF
         ENDJLOOP
         
       JLOOP
-      IF (MW[3] = 0)
-          MW[23] = 0
+      IF (MW[3] = 0) ;transit walk time
+          MW[23] = 0 ;transit walk time equals zero if it equals zero
       ELSE
-        MW[23] = exp(MW[13])
+        MW[23] = exp(MW[13]) ;exponentiated transit utilty
       ENDIF
       ENDJLOOP
       
       ; Sum demonominator
-      MW[30] = MW[21] + MW[22] + MW[23]
+      MW[30] = MW[21] + MW[22] + MW[23] ;create denominator for probability calculation
       
       ; Adjust for areas with a denominator equal to 0
       JLOOP     
