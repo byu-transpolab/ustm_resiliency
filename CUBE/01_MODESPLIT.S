@@ -13,31 +13,31 @@ FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJK.MAT"
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-FILLMW MW[100] = MI.1.9
-FILLMW MW[110] = MI.1.14
-FILLMW MW[120] = MI.1.19
-FILLMW MW[200] = MI.1.10
-FILLMW MW[210] = MI.1.15
-FILLMW MW[220] = MI.1.20
-FILLMW MW[300] = MI.1.11
-FILLMW MW[310] = MI.1.16
-FILLMW MW[320] = MI.1.21
-;FILLMW MW[400] = MI.1.12
-;FILLMW MW[410] = MI.1.17
-;FILLMW MW[420] = MI.1.22
-FILLMW MW[500] = MI.1.13
-FILLMW MW[510] = MI.1.18
-FILLMW MW[520] = MI.1.23
-FILLMW MW[600] = MI.2.13
+;Fill matrices to condense into rows
+FILLMW MW[100] = MI.1.9       ;HBW Auto matrix
+FILLMW MW[110] = MI.1.14      ;HBW NMOT matrix
+FILLMW MW[120] = MI.1.19      ;HBW Transit matrix
+FILLMW MW[200] = MI.1.10      ;HBO Auto matrix
+FILLMW MW[210] = MI.1.15      ;HBO NMOT matrix
+FILLMW MW[220] = MI.1.20      ;HBO Transit matrix
+FILLMW MW[300] = MI.1.11      ;NHB Auto matrix
+FILLMW MW[310] = MI.1.16      ;NHB NMOT matrix
+FILLMW MW[320] = MI.1.21      ;NHB Transit matrix
+;FILLMW MW[400] = MI.1.12     ;HBC Auto matrix
+;FILLMW MW[410] = MI.1.17     ;HBC NMOT matrix
+;FILLMW MW[420] = MI.1.22     ;HBC Transit matrix
+FILLMW MW[500] = MI.1.13      ;REC Auto matrix
+FILLMW MW[510] = MI.1.18      ;REC NMOT matrix
+FILLMW MW[520] = MI.1.23      ;REC Transit matrix
+FILLMW MW[600] = MI.2.13      ;Freight matrix
 
-
-
+;Making columns filled with zeros
 HBWAUTO = 0
 HBWNMOT = 0
 HBWTRANSIT = 0
 HBOAUTO = 0
 HBONMOT = 0
-HBOTRANSIT   = 0
+HBOTRANSIT = 0
 NHBAUTO = 0
 NHBNMOT = 0
 NHBTRANSIT = 0
@@ -49,6 +49,7 @@ RECNMOT = 0
 RECTRANSIT = 0
 
 JLOOP
+;filling columns with data from the above matrices
 ;change to an if statement to exclude rows/columns that don't exist i would need to set those values correctly to exclude them (its the column that matters)
   TAZ = ZI.1.TAZ
   HBWAUTO = HBWAUTO + MW[100]
@@ -86,8 +87,5 @@ ENDJLOOP
   Ro.RECTRANSIT = RECTRANSIT
 
 WRITE RECO = 1
-
-
-
 
 ENDRUN

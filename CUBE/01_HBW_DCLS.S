@@ -9,7 +9,6 @@ FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
 FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
 FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 
-
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
 ; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
@@ -51,12 +50,10 @@ ZONES = {TOTAL_ZONES}
     ; Distance calibration
     MW[113] = 0
     
-    
 ;;;;;BEGIN HBW DCLS;;;;;
 
 		JLOOP
 		  ; Compute size term
-        ;MW[112] = Coeff_HH + Coeff_OFF_EMP + Coeff_OTH_EMP + Coeff_OTH_OFF_EMP
 		  MW[112] = Coeff_HH * ZI.1.TOTHH[J] + Coeff_OFF_EMP * ZI.1.OTHEMP[J] + Coeff_RET_EMP * (ZI.1.RETEMP[J]) + Coeff_OTH_EMP * (ZI.1.TOTEMP[J] - ZI.1.OTHEMP[J]  - ZI.1.RETEMP[J]) + Coeff_OTH_OFF_EMP * (ZI.1.TOTEMP[J] - ZI.1.RETEMP[J])
       
 		  ; Log (sizeTerm)
@@ -100,6 +97,19 @@ ZONES = {TOTAL_ZONES}
   	ODEMANDMW = 118,
   	DESTSPLIT= TOTAL All, INCLUDE=1-{TOTAL_ZONES},
   	STARTMW = 119 
+    
+    
+    MW[89] = Coeff_HH * ZI.1.TOTHH[I] + Coeff_OFF_EMP * ZI.1.OTHEMP[I] + Coeff_RET_EMP * (ZI.1.RETEMP[I]) + Coeff_OTH_EMP * (ZI.1.TOTEMP[I] - ZI.1.OTHEMP[I]  - ZI.1.RETEMP[I]) +                Coeff_OTH_OFF_EMP * (ZI.1.TOTEMP[I] - ZI.1.RETEMP[I])
+    SIZETERM = 0
+    JLOOP
+    TAZ = ZI.1.Z
+    SIZETERM = SIZETERM + MW[89]
+    ENDJLOOP
+    Ro.TAZ = TAZ
+    Ro.SIZETERM = SIZETERM
+
+WRITE RECO = 1
+    
     
 ; Report coefficient values to summary file and debug file;
     JLOOP

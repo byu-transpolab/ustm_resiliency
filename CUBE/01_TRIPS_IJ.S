@@ -33,7 +33,7 @@ ZONES = {TOTAL_ZONES}
     MW[10] = ((exp(MW[1]))/(exp(ZI.2.LNHBW[J]))) ;HBW
     MW[20] = ((exp(MW[2]))/(exp(ZI.2.LNHBO[J]))) ;HBO
     MW[30] = ((exp(MW[3]))/(exp(ZI.2.LNNHB[J]))) ;NHB
-    MW[40] = ((exp(MW[4]))/(exp(ZI.2.LNHBC[J]))) ;HBC
+    ;MW[40] = ((exp(MW[4]))/(exp(ZI.2.LNHBC[J]))) ;HBC
     MW[50] = ((exp(MW[5]))/(exp(ZI.2.LNREC[J]))) ;REC
     ENDJLOOP
     
@@ -49,17 +49,5 @@ ZONES = {TOTAL_ZONES}
     MW[500] = MW[50] * ZI.1.RECP[J] 
        
     ENDJLOOP
-    ;Print Probability Values
-    MW[10] = ((exp(MW[1]))/(exp(ZI.2.LNHBW[J]))) ;HBW
-    MW[20] = ((exp(MW[2]))/(exp(ZI.2.LNHBO[J]))) ;HBO
-    MW[30] = ((exp(MW[3]))/(exp(ZI.2.LNNHB[J]))) ;NHB
-    ;MW[40] = ((exp(MW[4]))/(exp(ZI.2.LNHBC[J]))) ;HBC
-    MW[50] = ((exp(MW[5]))/(exp(ZI.2.LNREC[J]))) ;REC
-    
-    MW[100] = MW[10] * ZI.1.HBWP[J]
-    MW[200] = MW[20] * ZI.1.HBOP[J]
-    MW[300] = MW[30] * ZI.1.NHBP[J]
-    ;MW[400] = MW[40] * ZI.1.HBSCP[J]
-    MW[500] = MW[50] * ZI.1.RECP[J]
 
 ENDRUN
