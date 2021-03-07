@@ -6,6 +6,8 @@
 *.BAK
 *.MAT
 *.RPT
+*.REP
+*.TRF
 
 
 # script files created automatically by CUBE on running should be ignored
