@@ -1,5 +1,6 @@
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBW_MCLS.PRN" MSG='HBW MCLS'
+RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\logs\01_HBW_MCLS.PRN" MSG='HBW MCLS'
+FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\hbw_modechoice_trace.txt"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
@@ -51,8 +52,8 @@ IF (i=FirstZone)
                                         
 ; Nesting coefficients
    NC_1        = COEFF(1,14)               ; Level 1 - auto, trn, non-mot
-   NC_2        = COEFF(1,15)               ; Level 2 - transit sub mode choice
-   NC_3        = COEFF(1,16)               ; Level 3 - not used
+   ;NC_2        = COEFF(1,15)               ; Level 2 - transit sub mode choice
+   ;NC_3        = COEFF(1,16)               ; Level 3 - not used
    ;NCP = NC_1 * NC_2
 
    ; Level of Service Coefficients
@@ -106,13 +107,14 @@ MW[18] = MIN(MW[2],1)
       MW[111] = MW[11] * 100                                                    ;Printed auto utility
       MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
       MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
-      MW[13] = (K_TRN * MW[3])                                                  ;transit utility
+      MW[13] = K_TRN + (COEFF_IVTT * MW[3])  + (COEFF_SWAIT * MW[3] * 0.1)       ;transit utility, assume 10% of the time is waiting
       MW[113] = MW[13] * 100                                                    ;Printed transity utility
       
-     ; Exponentiate Utilities and adjust for zones which do not exist
-     MW[21] = exp(MW[11]) ;Exponentiated auto utility
-        JLOOP
-      IF (MW[2] > 50) ;limit length of nonmot trips
+      ; Exponentiate Utilities and adjust for zones which do not exist
+      MW[21] = exp(MW[11]) ;Exponentiated auto utility
+      
+      JLOOP
+      IF (MW[2] > 50) ;limit length of nonmot trips to fifty miles
         MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
         MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
@@ -155,4 +157,42 @@ MW[18] = MIN(MW[2],1)
         MW[41] = 0
      ENDIF
    ENDJLOOP
+   
+   
+   ; Report coefficient values to summary file and debug file;
+    JLOOP
+		 ;Debug Mode choice
+     
+	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest}) 
+      PRINT PRINTO=1 CSV=F LIST ='MODE CHOICE TRACE HBW','\n\n'
+	  	PRINT PRINTO=1 CSV=F LIST =' Mode choice Model Trace \n\nSelected Interchange for Tracing:    ',{SelOrigin}(4.0),'-',{SelDest}(4.0),'\n'
+	  	PRINT PRINTO=1 CSV=F LIST ='\n PURPOSE -  @PURP@  '
+      PRINT PRINTO=1 CSV=F LIST ="\n Auto IVTT                                           ", MW[1]
+      PRINT PRINTO=1 CSV=F LIST ="\n Auto Distance                                       ", MW[2]
+      PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Equation                               ", COEFF_IVTT, ' * ', MW[1], ' + ', COEFF_COST, ' * ', AUTOCOST, ' * ', MW[2]
+      PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Value                                  ", MW[11],
+      PRINT PRINTO=1 CSV=F LIST ="\n Auto Exponentiated Utility Value                    ", MW[21],
+      PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
+      PRINT PRINTO=1 CSV=F LIST ="\n Walk Distance                                       ", MW[2]
+      PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Equation                               ", K_NMOT, ' + ', COEFF_WALK1, ' * 20 * ', MW[18], ' + ', COEFF_WALK2, ' * 20 * ', MW[19])
+      PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Value                                  ", MW[12],
+      PRINT PRINTO=1 CSV=F LIST ="\n WAlk Exponentiated Utility Value (0 if impossible)  ", MW[22],
+      PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           " 
+      PRINT PRINTO=1 CSV=F LIST ="\n Transit Travel Time Value                           ", MW[3],
+      PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Equation                            ", K_TRN, ' + ', COEFF_IVTT, ' * ', MW[3],  ' + ', COEFF_SWAIT, ' * ', 0.1 * MW[3]
+      PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Values                              ", MW[13]
+      PRINT PRINTO=1 CSV=F LIST ="\n Transit Exonentiated Utility Value (0 if impossible)", MW[23]
+      
+      PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "    
+		  PRINT PRINTO=1 CSV=F LIST ='\n Sum of exp(U)                                       ', MW[30]
+      PRINT PRINTO=1 CSV=F LIST ='\n P(auto)                                             ', MW[31]
+      PRINT PRINTO=1 CSV=F LIST ='\n P(walk)                                             ', MW[32]
+      PRINT PRINTO=1 CSV=F LIST ='\n P(transit)                                          ', MW[33]
+      PRINT PRINTO=1 CSV=F LIST ='\n Ln(sum)                                             ', MW[40]     
+           		  
+   ENDIF
+
+ ENDJLOOP
+   
+   
 ENDRUN
