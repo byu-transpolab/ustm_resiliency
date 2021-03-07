@@ -45,9 +45,6 @@ Base/01_PROCESSED_SKIMS_WHOLE.MAT
 
 *.MAT
 
-params/MC_Constants.csv
-
-params/
 
 *.RPT
 
