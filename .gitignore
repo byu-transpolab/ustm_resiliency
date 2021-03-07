@@ -5,30 +5,23 @@ Base/Output/*
 *.PRN
 *.BAK
 *.[0-9][0-9][0-9]
+trc{*}.s
 TPPL.PRJ
 TPPL.VAR
-*{$$0}.s
 *.DS_Store
 .Rproj.user
 
+Base/logs
+
 Base/01_TLFD.DBF
-
 Base/01_DCLS_LOGUTILITY.MAT
-
 Base/01_MCLS_COMBINED_PROBABILITY.MAT
-
 Base/01_TRIPS_IJK.MAT
-
 Base/Auto_Skim.mtx
-
 Base/USTM_transit_skim.MAT
-
 Base/USTM_new_transit_skim_do_not_open.csv
-
 Base/01_USTM_TRANSIT_SKIM.MAT
-
 Base/USTM_transit_skim
-
 Base/01_TLFD_HBW.DBF
 
 CUBE/01_TRIPS_IJ.MAT
@@ -62,7 +55,6 @@ Base/intermediate_outputs/01_TLFD_HBW.DBF
 
 CUBE/\{RECO2.Q\}
 
-CUBE/trc\{$$8\}.s
 
 CUBE/\{RECO3.Q\}
 
