@@ -1,17 +1,14 @@
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_HBO_DCLS.S"
+; Script for program MATRIX in file "C:\Projects\ustm_resiliency\CUBE\01_HBO_DCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBO DCLS'
-FILEO PRINTO[3] = "{SCENARIO_DIR}\01_HBO_ZONAL_TRIPS.CSV"
-FILEO PRINTO[2] = "{SCENARIO_DIR}\01_HBO_DEST_CHOICE_DEBUG.TXT"
-FILEO PRINTO[1] = "{SCENARIO_DIR}\01_HBO_DEST_CHOICE.RPT"
-FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_HBO.MAT",
+FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBO_DEST_CHOICE.RPT"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBO.MAT",
   MO = 112, 100 DEC = D, NAME = HBOSizeTerm, HBOUtil
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
-FILEI MATI[2] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
+FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -147,20 +144,17 @@ ZONES = {TOTAL_ZONES}
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_NHB_DCLS.S"
+; Script for program MATRIX in file "C:\Projects\ustm_resiliency\CUBE\01_NHB_DCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='NHB DCLS'
-FILEO PRINTO[3] = "{SCENARIO_DIR}\01_NHB_ZONAL_TRIPS.CSV"
-FILEO PRINTO[2] = "{SCENARIO_DIR}\01_NHB_DEST_CHOICE_DEBUG.TXT"
-FILEO PRINTO[1] = "{SCENARIO_DIR}\01_NHB_DEST_CHOICE.RPT"
-FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEO MATO[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DEST_NHB.MAT",
+FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_NHB_DEST_CHOICE.RPT"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_NHB.MAT",
   MO = 112, 100 DEC = D, NAME=HBWSizeTerm, HBWUtil
-FILEI LOOKUPI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
-FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
+FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
 
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -298,20 +292,17 @@ ZONES = {TOTAL_ZONES}
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_HBC_DCLS.S"
+; Script for program MATRIX in file "C:\Projects\ustm_resiliency\CUBE\01_HBC_DCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBC DCLS'
-FILEO PRINTO[3] = "{SCENARIO_DIR}\01_HBC_ZONAL_TRIPS.CSV"
-FILEO PRINTO[2] = "{SCENARIO_DIR}\01_HBC_DEST_CHOICE_DEBUG.TXT"
-FILEO PRINTO[1] = "{SCENARIO_DIR}\01_HBC_DEST_CHOICE.RPT"
-FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEO MATO[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DEST_HBC.MAT",
+FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBC_DEST_CHOICE.RPT"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBC.MAT",
 MO = 112, 100 DEC = D, NAME = HBCSizeTerm, HBCUtil
-FILEI LOOKUPI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
-FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
+FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
 
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -448,20 +439,17 @@ ZONES = {TOTAL_ZONES}
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_REC_DCLS.S"
+; Script for program MATRIX in file "C:\Projects\ustm_resiliency\CUBE\01_REC_DCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='REC DCLS'
-FILEO PRINTO[3] = "{SCENARIO_DIR}\01_REC_ZONAL_TRIPS.CSV"
-FILEO PRINTO[2] = "{SCENARIO_DIR}\01_REC_DEST_CHOICE_DEBUG.TXT"
-FILEO PRINTO[1] = "{SCENARIO_DIR}\01_REC_DEST_CHOICE.RPT"
-FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_REC.MAT",
+FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_REC_DEST_CHOICE.RPT"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_REC.MAT",
   MO = 112, 100 DEC = D, NAME = RECSizeTerm, RECUtil
-FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEI LOOKUPI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
-FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_MCLS_COMBINED.MAT"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
+FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -597,17 +585,9 @@ ZONES = {TOTAL_ZONES}
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DCLS_COMBINE.S"
+; Script for program MATRIX in file "C:\projects\ustm_resiliency\CUBE\01_DCLS_COMBINE.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
-; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_DCLS_COMBINE.PRN" MSG='COMBINE UTILITIES'
-FILEO MATO[1] = "{SCENARIO_DIR}\01_DCLS_COMBINED.MAT",
-  MO = 1-5, DEC = D, NAME = HBWDCUtility, HBODCUtility, NHBDCUtility, HBCDCUtility, RECDCUtility
-FILEI MATI[5] = "{SCENARIO_DIR}\01_DEST_REC.MAT"
-FILEI MATI[4] = "{SCENARIO_DIR}\01_DEST_HBC.MAT"
-FILEI MATI[3] = "{SCENARIO_DIR}\01_DEST_NHB.MAT"
-FILEI MATI[2] = "{SCENARIO_DIR}\01_DEST_HBO.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\01_DEST_HBW.MAT"
+RUN PGM=MATRIX
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -615,29 +595,22 @@ FILEI MATI[1] = "{SCENARIO_DIR}\01_DEST_HBW.MAT"
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-  FILLMW MW[1]=MI.1.2 ;HBW 
-  FILLMW MW[2]=MI.2.2 ;HBO 
-  FILLMW MW[3]=MI.3.2 ;NHB 
-  FILLMW MW[4]=MI.4.2 ;HBC 
-  FILLMW MW[5]=MI.5.2 ;REC 
-
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_HBW_DCLS.S"
+
+
+; Script for program MATRIX in file "C:\Projects\ustm_resiliency\CUBE\01_HBW_DCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBW DCLS'
-FILEI ZDATI[2] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEO PRINTO[3] = "{SCENARIO_DIR}\01_HBW_ZONAL_TRIPS.CSV"
-FILEO PRINTO[2] = "{SCENARIO_DIR}\01_HBW_DEST_CHOICE_DEBUG.TXT"
-FILEO PRINTO[1] = "{SCENARIO_DIR}\01_HBW_DEST_CHOICE.RPT"
-FILEO MATO[1] = "{SCENARIO_DIR}\01_DEST_HBW.MAT",
+FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBW_DEST_CHOICE.RPT"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBW.MAT",
   MO = 112, 100 DEC = D, NAME = HBWSizeTerm, HBWUtil
-FILEI LOOKUPI[1] = "{SCENARIO_DIR}\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Base\SE_USTM_BASE2015.DBF"
-FILEI MATI[2] = "{SCENARIO_DIR}\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\01_MCLS_COMBINED.MAT"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
+FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
 
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -774,14 +747,14 @@ ZONES = {TOTAL_ZONES}
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_DCLS_ROWSUM.S"
+; Script for program MATRIX in file "C:\projects\ustm_resiliency\CUBE\01_DCLS_ROWSUM.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_DCLS_ROWSUM.PRN"
-FILEI ZDATI[1] = "{SCENARIO_DIR}\HH_PROD.DBF"
-FILEO RECO[1] = "{SCENARIO_DIR}\01_ROWSUMS.DBF",
+RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\intermediate_outputs\01_DCLS_ROWSUM.PRN"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
+FILEO RECO[1] = "{SCENARIO_DIR}\Output\01_ROWSUMS.DBF",
   FIELDS = TAZ, lnHBW, lnHBO, lnNHB, lnHBC, lnREC
-FILEI MATI[1] = "{SCENARIO_DIR}\01_DCLS_COMBINED.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DCLS_COMBINED.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
