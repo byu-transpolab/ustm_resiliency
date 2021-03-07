@@ -6,6 +6,19 @@ considering the change in mode and destination choice
 logsums resulting from a break in the highway network.
 
 
+## Setup
+This model runs using the CUBE travel demand modeling software. The
+`ustm_resiliency.cat` Cube catalog will open an application manager in Cube
+with the model. The other folders are as follows:
+
+  - `Base/` Base scenario directory. Child scenarios will be created in this folder.
+  - `Inputs/` Global inputs directory; contains transit, freight, and other files that do
+    not change between scenarios. **It is necessary to download one file from Box**. Follow
+    instructions for this in `Inputs/README.md`
+  - `CUBE/` Model script and application files
+  - `params/` Model parameters
+  - `Reports/` Calibration and fit report files for Cube.
+
 ## Background
 In 2017, AEM completed a risk and resilience analysis for the I-15 corridor on behalf of the Utah Department of Transportation (UDOT). This analysis quantified risk as the probability of threats (earthquakes, floods, fires, etc.) multiplied by the criticality of the asset to the overall system were such threats to materialize. The criticality index consisted of the following elements:
 
