@@ -7,7 +7,7 @@ MO = 112, 100 DEC = D, NAME = HBCSizeTerm, HBCUtil
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
 FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
 FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_MCLS_COMBINED.MAT"
 
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP

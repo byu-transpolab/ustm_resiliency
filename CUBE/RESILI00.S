@@ -1,10 +1,10 @@
-; Script for program HIGHWAY in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_HIGHWAY.S"
+; Script for program HIGHWAY in file "C:\projects\ustm_resiliency\CUBE\01_HIGHWAY.S"
 ;;<<Default Template>><<HIGHWAY>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=HIGHWAY MSG='Whole Network'
 FILEO MATO[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT",
   MO = 1-2, DEC = D, NAME = TIME, DISTANCE
-FILEI NETI = "{SCENARIO_DIR}\BY_2015.NET"
+FILEI NETI = "{SCENARIO_DIR}\scenario_network.net"
 
 PROCESS PHASE=LINKREAD
 ; Use this phase to obtain initial values from the input network (LI.varname) and compute 
@@ -34,19 +34,21 @@ ENDPROCESS
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\Base\01_HBW_MCLS.S"
+; Script for program MATRIX in file "C:\projects\ustm_resiliency\CUBE\01_HBW_MCLS.S"
+;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBW_MCLS.PRN" MSG='HBW MCLS'
+RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\logs\01_HBW_MCLS.PRN" MSG='HBW MCLS'
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
+FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_LOGSUM.MAT",
   MO = 41,DEC=D, NAME=HBWlogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_UTILITY.MAT",
-   MO=111-113, DEC=D,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util
+  MO=111-113, DEC=D,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util
 FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_PROBABILITY.MAT",
-  MO=31-33, DEC=D, NAME=HBWauto_prob,HBWnonmot_prob,HBWtransit_prob
+ MO=31-33, DEC=D,NAME=HBWauto_prob,HBWnonmot_prob, HBWtransit_prob
+FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\hbw_modechoice_trace.txt"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -54,161 +56,182 @@ FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_PROBABILITY.MAT",
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-  
+
+
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
   MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
-  FILLMW MW[3]=MI.2.1        ;Walk bus time
+  FILLMW MW[3]=MI.2.1     ;Walk bus time
 
 
-; Progress Bar update for evey 100 zones
-zonemsg=50
-    
-; Declare arrays to hold alternative specific constants
-;        ARRAY PARK=2578
- ARRAY TYPE=F K_AUT=1, K_SR=1, K_TRN=1, K_NMOT=1 
- ARRAY TYPE=C30 MARKET_NAME=1
-    
-; Read alternative specific Constants
-LOOKUP, NAME=CONSTANTS, LOOKUP[1]=1, RESULT=3, INTERPOLATE=N, , LIST=Y, LOOKUPI=2
-    
-; Read mode choice coefficients
-LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=3, INTERPOLATE=N, LIST=Y, LOOKUPI=1 
+  ; Progress Bar update for evey 100 zones
+  zonemsg=100
 
-IF (i=FirstZone)
+  ; Declare arrays to hold alternative specific constants
+  ARRAY TYPE=F K_AUT=1, K_SR=1, K_TRN=1, K_NMOT=1
+  ARRAY TYPE=C30 MARKET_NAME=1
 
-  ; constants
-   K_AUT  = CONSTANTS(1,1)                 ; auto 
+  ; Read alternative specific Constants
+  LOOKUP, NAME=CONSTANTS, LOOKUP[1]=1, RESULT=5, INTERPOLATE=N, , LIST=Y, LOOKUPI=2
+
+  ; Read mode choice coefficients
+  LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=5, INTERPOLATE=N, LIST=Y, LOOKUPI=1
+
+  IF (i=FirstZone)
+
+   ; constants
+   K_AUT  = CONSTANTS(1,1)                 ; auto
    K_SR  = CONSTANTS(1,1)                  ; shared-ride 2 & 3+
    K_TRN  = CONSTANTS(1,2)                 ; transit
    K_NMOT = CONSTANTS(1,3)                 ; non-motorized (walk & bike)
-     
-; Mode-specific constants 
+
+   ; Mode-specific constants
    K_PREM = CONSTANTS(1,4)                 ; premium transit
-                                        
-; Nesting coefficients
+
+   ; Nesting coefficients
    NC_1        = COEFF(1,14)               ; Level 1 - auto, trn, non-mot
    NC_2        = COEFF(1,15)               ; Level 2 - transit sub mode choice
    NC_3        = COEFF(1,16)               ; Level 3 - not used
-   ;NCP = NC_1 * NC_2
 
    ; Level of Service Coefficients
-  COEFF_IVTT   = COEFF(1,1)                ; In-vehicle travel time coefficient
-  COEFF_SWAIT  = COEFF(1,2)                ; Short wait(<5 minutes)
-  COEFF_LWAIT  = COEFF(1,3)                ; Long wait (>5 minutes)
-  COEFF_XWAIT  = COEFF(1,4)                ; Xfer wait
-  COEFF_DRIVE  = COEFF(1,6)                ; Drive access
-  COEFF_TERML  = COEFF(1,7)                ; Terminal time
-  COEFF_WALK   = COEFF(1,8)                ; Walk access
-  COEFF_WALK1  = COEFF(1,9)                ; Walk time < 1
-  COEFF_WALK2  = COEFF(1,10)               ; Walk time > 1
-  COEFF_BIKE1  = COEFF(1,11)               ; Bike time < 1
-  COEFF_BIKE2  = COEFF(1,12)               ; Bike time > 1
-  DWalkBIKE    = COEFF(1,13)               ; Walk and Bike threshold
-  AUTOCOST     = COEFF(1,19)               ; Auto Operating Costs in Cents
-  OCC          = COEFF(1,20)               ; Cost Sharing Factor for Shared Ride
+   COEFF_IVTT   = COEFF(1,1)                ; In-vehicle travel time coefficient
+   COEFF_SWAIT  = COEFF(1,2)                ; Short wait(<5 minutes)
+   COEFF_LWAIT  = COEFF(1,3)                ; Long wait (>5 minutes)
+   COEFF_XWAIT  = COEFF(1,4)                ; Xfer wait
+   COEFF_DRIVE  = COEFF(1,6)                ; Drive access
+   COEFF_TERML  = COEFF(1,7)                ; Terminal time
+   COEFF_WALK   = COEFF(1,8)                ; Walk access
+   COEFF_WALK1  = COEFF(1,9)                ; Walk time < 1
+   COEFF_WALK2  = COEFF(1,10)               ; Walk time > 1
+   COEFF_BIKE1  = COEFF(1,11)               ; Bike time < 1
+   COEFF_BIKE2  = COEFF(1,12)               ; Bike time > 1
+   DWalkBIKE    = COEFF(1,13)               ; Walk and Bike threshold
+   AUTOCOST     = COEFF(1,19)               ; Auto Operating Costs in Cents
+   OCC          = COEFF(1,20)               ; Cost Sharing Factor for Shared Ride
 
-; Cost coefficients
-  COEFF_COST  = COEFF(1,5)                 ; Cost 
-  
-; Calibration specific
-COEFF_NXFER   = COEFF(1,18)                ; number of xfers 
+   ; Cost coefficients
+   COEFF_COST  = COEFF(1,5)                 ; Cost
+
+   ; Calibration specific
+   COEFF_NXFER   = COEFF(1,18)                ; number of xfers
 
 ENDIF
 
-      ; Non motorized
-; distance portion that is 1 mile or less
-MW[18] = MIN(MW[2],1)
-  
-; Distance portion that is longer than 1 mile
+  ; Non motorized
+  ; distance portion that is 1 mile or less
+  MW[18] = MIN(MW[2],1)
+
+  ; Distance portion that is longer than 1 mile
   JLOOP
-      IF (MW[2][J] > 1)
-          MW[19] = MW[2][J] - 1
-      ELSE
-          MW[19] = 0
-      ENDIF
-
+    IF (MW[2][J] > 1)
+        MW[19] = MW[2][J] - 1
+    ELSE
+        MW[19] = 0
+    ENDIF
   ENDJLOOP
-  
-  ;TODO: get minimum transit time, but include out-of-vehicle time as separate matrix
-   
 
-;;;;;;Begin HBW MCLS Calculation;;;;;
-      
-      ; calculate travel time of non-motorized modes
-      MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
- 
-      ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
-      MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])          ;Drive alone auto utility
-      MW[111] = MW[11] * 100                                                    ;Printed auto utility
-      MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
-      MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
-      MW[13] = (K_TRN * MW[3])                                                  ;transit utility
-      MW[113] = MW[13] * 100                                                    ;Printed transity utility
-      
-     ; Exponentiate Utilities and adjust for zones which do not exist
-     MW[21] = exp(MW[11]) ;Exponentiated auto utility
-        JLOOP
+
+  ; calculate travel time of non-motorized modes
+  MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
+
+  ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
+  MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])          ;Drive alone auto utility
+  MW[111] = MW[11] * 100                                                    ;Printed auto utility
+  MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
+  MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
+  MW[13] = K_TRN + (COEFF_IVTT * MW[3]) + (COEFF_SWAIT * MW[3] * 0.1)       ;transit utility, assume 10% is waiting
+  MW[113] = MW[13] * 100                                                    ;Printed transity utility
+
+  ; Exponentiate Utilities and adjust for zones which do not exist
+  MW[21] = exp(MW[11]) ;Exponentiated auto utility
+
+  JLOOP
       IF (MW[2] > 50) ;limit length of nonmot trips
         MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
         MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
       ENDIF
-        ENDJLOOP
-        
-      JLOOP
+
+      ; Transit path reasonableness
       IF (MW[3] = 0) ;transit walk time
-          MW[23] = 0 ;transit walk time equals zero if it equals zero
+          MW[23] = 0 ;exponentiated U is zero if impossible
       ELSE
         MW[23] = exp(MW[13]) ;exponentiated transit utilty
       ENDIF
-      ENDJLOOP
-      
+
+  ENDJLOOP
+
       ; Sum demonominator
       MW[30] = MW[21] + MW[22] + MW[23] ;create denominator for probability calculation
-      
+
       ; Adjust for areas with a denominator equal to 0
-      JLOOP     
+      JLOOP
       IF(MW[30] = 0)
       MW[30] = 1
       ENDIF
       ENDJLOOP
-      
+
       ; Probabilities
 
       MW[31] =  MW[21] / MW[30]       ;auto probability
       MW[32] =  MW[22] / MW[30]       ;non-motorized probability
       MW[33] =  MW[23] / MW[30]       ;transit probability
-    
-      ; LOGSUM
-      MW[40] = ln(MW[30])    
 
-      ; Calculate logit average of the mode choice logsums
-   JLOOP
-     MW[41] = MW[41] + EXP(MW[40])
-      IF (MW[41]> 0) 
-        MW[41] = Ln(MW[41])
-      ELSE 
-        MW[41] = 0
-     ENDIF
-   ENDJLOOP
+      ; LOGSUM
+      MW[40] = ln(MW[30])
+
+      ; Report coefficient values to summary file and debug file;
+         JLOOP
+     		 ;Debug Mode choice
+
+     	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest})
+          PRINT PRINTO=1 CSV=F LIST ='MODE CHOICE TRACE HBW','\n\n'
+     	  	PRINT PRINTO=1 CSV=F LIST =' Mode choice Model Trace \n\nSelected Interchange for Tracing:    ',{SelOrigin}(4.0),'-',{SelDest}(4.0),'\n'
+     	  	PRINT PRINTO=1 CSV=F LIST ='\n PURPOSE -  @PURP@  '
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto IVTT                                           ", MW[1]
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Distance                                       ", MW[2]
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Equation                               ", COEFF_IVTT, ' * ', MW[1], ' + ', COEFF_COST, ' * ', AUTOCOST, ' * ', MW[2]
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Value                                  ", MW[11],
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Exponentiated Utility Value                    ", MW[21],
+          PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Distance                                       ", MW[2]
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Equation                               ", K_NMOT, ' + ', COEFF_WALK1, ' * 20 * ', MW[18], ' + ', COEFF_WALK2, ' * 20 * ', MW[19])
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Value                                  ", MW[12],
+          PRINT PRINTO=1 CSV=F LIST ="\n WAlk Exponentiated Utility Value (0 if impossible)  ", MW[22],
+          PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Travel Time Value                           ", MW[3],
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Equation                            ", K_TRN, ' + ', COEFF_IVTT, ' * ', MW[3],  ' + ', COEFF_SWAIT, ' * ', 0.1 * MW[3]
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Values                              ", MW[13]
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Exonentiated Utility Value (0 if impossible)", MW[23]
+
+          PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
+     		  PRINT PRINTO=1 CSV=F LIST ='\n Sum of exp(U)                                       ', MW[30]
+          PRINT PRINTO=1 CSV=F LIST ='\n P(auto)                                             ', MW[31]
+          PRINT PRINTO=1 CSV=F LIST ='\n P(walk)                                             ', MW[32]
+          PRINT PRINTO=1 CSV=F LIST ='\n P(transit)                                          ', MW[33]
+          PRINT PRINTO=1 CSV=F LIST ='\n Ln(sum)                                             ', MW[40]
+                		  
+        ENDIF
+        ENDJLOOP
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\Base\01_HBO_MCLS.S"
+; Script for program MATRIX in file "C:\projects\ustm_resiliency\CUBE\01_HBO_MCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBO_MCLS.PRN" MSG='HBO MCLS'
-FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
-FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
-FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
+FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\hbo_modechoice_trace.txt"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
-FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT",
-  MO=31-33, DEC=D,NAME=HBOauto_prob,HBOnonmot_prob,HBOtransit_prob
-FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_UTILITY.MAT",
-  MO=11-13, DEC=D,NAME=HBOauto_util,HBOnonmot_util,HBOtransit_util
+FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
+FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_LOGSUM.MAT",
   MO = 41,DEC=D, NAME=HBOlogsum
+FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_UTILITY.MAT",
+ MO=31-33, DEC=D,NAME=HBOauto_util,HBOnonmot_util, HBOtransit_util
+
+FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT",
+ MO=31-33, DEC=D,NAME=HBOauto_prob,HBOnonmot_prob, HBOtransit_prob
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -216,141 +239,174 @@ FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_LOGSUM.MAT",
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-  FILLMW MW[1]=MI.1.TIME ;AM highway time
+
+
+
+  FILLMW MW[1]=MI.1.TIME     ;AM highway time
+  MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
-  FILLMW MW[3]=MI.2.1 ;Walk bus time
-  
+  FILLMW MW[3]=MI.2.1     ;Walk bus time
 
-; Progress Bar update for evey 100 zones
-zonemsg=50
-    
-; Declare arrays to hold alternative specific constants
-;        ARRAY PARK=2578
- ARRAY TYPE=F K_AUT=1, K_SR=1, K_TRN=1, K_NMOT=1 
- ARRAY TYPE=C30 MARKET_NAME=1
-    
-; Read alternative specific Constants
-LOOKUP, NAME=CONSTANTS, LOOKUP[1]=1, RESULT=4, INTERPOLATE=N, , LIST=Y, LOOKUPI=2
-    
-; Read mode choice coefficients
-LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=4, INTERPOLATE=N, LIST=Y, LOOKUPI=1 
 
-IF (i=FirstZone)
+  ; Progress Bar update for evey 100 zones
+  zonemsg=100
 
-  ; constants
-   K_AUT  = CONSTANTS(1,1)           ; auto 
-   K_SR  = CONSTANTS(1,1)             ; shared-ride 2 & 3+
-   K_TRN  = CONSTANTS(1,2)            ; transit
-   K_NMOT = CONSTANTS(1,3)            ; non-motorized (walk & bike)
-     
-; Mode-specific constants 
-   K_PREM = CONSTANTS(1,4)                        ; premium transit
-                                        
-; Nesting coefficients
-   NC_1        = COEFF(1,14)                          ; Level 1 - auto, trn, non-mot
-   NC_2        = COEFF(1,15)                          ; Level 2 - transit sub mode choice
-   NC_3        = COEFF(1,16)                          ; Level 3 - not used
-   ;NCP = NC_1 * NC_2
+  ; Declare arrays to hold alternative specific constants
+  ARRAY TYPE=F K_AUT=1, K_SR=1, K_TRN=1, K_NMOT=1
+  ARRAY TYPE=C30 MARKET_NAME=1
+
+  ; Read alternative specific Constants
+  LOOKUP, NAME=CONSTANTS, LOOKUP[1]=1, RESULT=5, INTERPOLATE=N, , LIST=Y, LOOKUPI=2
+
+  ; Read mode choice coefficients
+  LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=5, INTERPOLATE=N, LIST=Y, LOOKUPI=1
+
+  IF (i=FirstZone)
+
+   ; constants
+   K_AUT  = CONSTANTS(1,1)                 ; auto
+   K_SR  = CONSTANTS(1,1)                  ; shared-ride 2 & 3+
+   K_TRN  = CONSTANTS(1,2)                 ; transit
+   K_NMOT = CONSTANTS(1,3)                 ; non-motorized (walk & bike)
+
+   ; Mode-specific constants
+   K_PREM = CONSTANTS(1,4)                 ; premium transit
+
+   ; Nesting coefficients
+   NC_1        = COEFF(1,14)               ; Level 1 - auto, trn, non-mot
+   NC_2        = COEFF(1,15)               ; Level 2 - transit sub mode choice
+   NC_3        = COEFF(1,16)               ; Level 3 - not used
 
    ; Level of Service Coefficients
-  COEFF_IVTT   = COEFF(1,1)                ; In-vehicle travel time coefficient
-  COEFF_SWAIT  = COEFF(1,2)                ; Short wait(<5 minutes)
-  COEFF_LWAIT  = COEFF(1,3)                ; Long wait (>5 minutes)
-  COEFF_XWAIT  = COEFF(1,4)                ; Xfer wait
-  COEFF_DRIVE  = COEFF(1,6)                ; Drive access
-  COEFF_TERML  = COEFF(1,7)                ; Terminal time
-  COEFF_WALK   = COEFF(1,8)                ; Walk access
-  COEFF_WALK1  = COEFF(1,9)                ; Walk time < 1
-  COEFF_WALK2  = COEFF(1,10)               ; Walk time > 1
-  COEFF_BIKE1  = COEFF(1,11)               ; Bike time < 1
-  COEFF_BIKE2  = COEFF(1,12)               ; Bike time > 1
-  DWalkBIKE    = COEFF(1,13)               ; Walk and Bike threshold
-  AUTOCOST     = COEFF(1,19)               ; Auto Operating Costs in Cents
-  OCC          = COEFF(1,20)               ; Cost Sharing Factor for Shared Ride
+   COEFF_IVTT   = COEFF(1,1)                ; In-vehicle travel time coefficient
+   COEFF_SWAIT  = COEFF(1,2)                ; Short wait(<5 minutes)
+   COEFF_LWAIT  = COEFF(1,3)                ; Long wait (>5 minutes)
+   COEFF_XWAIT  = COEFF(1,4)                ; Xfer wait
+   COEFF_DRIVE  = COEFF(1,6)                ; Drive access
+   COEFF_TERML  = COEFF(1,7)                ; Terminal time
+   COEFF_WALK   = COEFF(1,8)                ; Walk access
+   COEFF_WALK1  = COEFF(1,9)                ; Walk time < 1
+   COEFF_WALK2  = COEFF(1,10)               ; Walk time > 1
+   COEFF_BIKE1  = COEFF(1,11)               ; Bike time < 1
+   COEFF_BIKE2  = COEFF(1,12)               ; Bike time > 1
+   DWalkBIKE    = COEFF(1,13)               ; Walk and Bike threshold
+   AUTOCOST     = COEFF(1,19)               ; Auto Operating Costs in Cents
+   OCC          = COEFF(1,20)               ; Cost Sharing Factor for Shared Ride
 
-; Cost coefficients
-  COEFF_COST  = COEFF(1,5)                ; Cost 
-  
-; Calibration specific
-COEFF_NXFER   = COEFF(1,18)              ; number of xfers 
+   ; Cost coefficients
+   COEFF_COST  = COEFF(1,5)                 ; Cost
+
+   ; Calibration specific
+   COEFF_NXFER   = COEFF(1,18)                ; number of xfers
 
 ENDIF
-  
-  
-  ;TODO: get minimum transit time, but include out-of-vehicle time as separate matrix
 
-;;;;;;Begin HBW MCLS Calculation;;;;;
-      
-            ; calculate travel time of non-motorized modes
-      MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
- 
-      ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
-      MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])          ;Drive alone auto utility
-      MW[111] = MW[11] * 100                                                    ;Printed auto utility
-      MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
-      MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
-      MW[13] = (K_TRN * MW[3])                                                  ;transit utility
-      MW[113] = MW[13] * 100                                                    ;Printed transity utility
-      
-     ; Exponentiate Utilities and adjust for zones which do not exist
-     MW[21] = exp(MW[11]) ;Exponentiated auto utility
-        JLOOP
+  ; Non motorized
+  ; distance portion that is 1 mile or less
+  MW[18] = MIN(MW[2],1)
+
+  ; Distance portion that is longer than 1 mile
+  JLOOP
+    IF (MW[2][J] > 1)
+        MW[19] = MW[2][J] - 1
+    ELSE
+        MW[19] = 0
+    ENDIF
+  ENDJLOOP
+
+
+  ; calculate travel time of non-motorized modes
+  MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
+
+  ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
+  MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])          ;Drive alone auto utility
+  MW[111] = MW[11] * 100                                                    ;Printed auto utility
+  MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
+  MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
+  MW[13] = K_TRN + (COEFF_IVTT * MW[3]) + (COEFF_SWAIT * MW[3] * 0.1)       ;transit utility, assume 10% is waiting
+  MW[113] = MW[13] * 100                                                    ;Printed transity utility
+
+  ; Exponentiate Utilities and adjust for zones which do not exist
+  MW[21] = exp(MW[11]) ;Exponentiated auto utility
+
+  JLOOP
       IF (MW[2] > 50) ;limit length of nonmot trips
         MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
         MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
       ENDIF
-        ENDJLOOP
-        
-      JLOOP
+
+      ; Transit path reasonableness
       IF (MW[3] = 0) ;transit walk time
-          MW[23] = 0 ;transit walk time equals zero if it equals zero
+          MW[23] = 0 ;exponentiated U is zero if impossible
       ELSE
         MW[23] = exp(MW[13]) ;exponentiated transit utilty
       ENDIF
-      ENDJLOOP
-      
+
+  ENDJLOOP
+
       ; Sum demonominator
       MW[30] = MW[21] + MW[22] + MW[23] ;create denominator for probability calculation
-      
+
       ; Adjust for areas with a denominator equal to 0
-      JLOOP     
+      JLOOP
       IF(MW[30] = 0)
       MW[30] = 1
       ENDIF
       ENDJLOOP
-      
+
       ; Probabilities
 
       MW[31] =  MW[21] / MW[30]       ;auto probability
       MW[32] =  MW[22] / MW[30]       ;non-motorized probability
       MW[33] =  MW[23] / MW[30]       ;transit probability
-    
+
       ; LOGSUM
-      MW[40] = ln(MW[30]) 
+      MW[40] = ln(MW[30])
 
-      ; Calculate logit average of the mode choice logsums
-   JLOOP
-     MW[41] = MW[41] + EXP(MW[40])
-      IF (MW[41]> 0) 
-        MW[41] = Ln(MW[41])
-      ELSE 
-        MW[41] = 0
-     ENDIF
-   ENDJLOOP
+      ; Report coefficient values to summary file and debug file;
+         JLOOP
+     		 ;Debug Mode choice
 
+     	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest})
+          PRINT PRINTO=1 CSV=F LIST ='MODE CHOICE TRACE HBO','\n\n'
+     	  	PRINT PRINTO=1 CSV=F LIST =' Mode choice Model Trace \n\nSelected Interchange for Tracing:    ',{SelOrigin}(4.0),'-',{SelDest}(4.0),'\n'
+     	  	PRINT PRINTO=1 CSV=F LIST ='\n PURPOSE -  @PURP@  '
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto IVTT                                           ", MW[1]
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Distance                                       ", MW[2]
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Equation                               ", COEFF_IVTT, ' * ', MW[1], ' + ', COEFF_COST, ' * ', AUTOCOST, ' * ', MW[2]
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Value                                  ", MW[11],
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Exponentiated Utility Value                    ", MW[21],
+          PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Distance                                       ", MW[2]
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Equation                               ", K_NMOT, ' + ', COEFF_WALK1, ' * 20 * ', MW[18], ' + ', COEFF_WALK2, ' * 20 * ', MW[19])
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Value                                  ", MW[12],
+          PRINT PRINTO=1 CSV=F LIST ="\n WAlk Exponentiated Utility Value (0 if impossible)  ", MW[22],
+          PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Travel Time Value                           ", MW[3],
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Equation                            ", K_TRN, ' + ', COEFF_IVTT, ' * ', MW[3],  ' + ', COEFF_SWAIT, ' * ', 0.1 * MW[3]
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Values                              ", MW[13]
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Exonentiated Utility Value (0 if impossible)", MW[23]
 
+          PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
+     		  PRINT PRINTO=1 CSV=F LIST ='\n Sum of exp(U)                                       ', MW[30]
+          PRINT PRINTO=1 CSV=F LIST ='\n P(auto)                                             ', MW[31]
+          PRINT PRINTO=1 CSV=F LIST ='\n P(walk)                                             ', MW[32]
+          PRINT PRINTO=1 CSV=F LIST ='\n P(transit)                                          ', MW[33]
+          PRINT PRINTO=1 CSV=F LIST ='\n Ln(sum)                                             ', MW[40]
 
+        ENDIF
+        ENDJLOOP
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_NHB_MCLS.S"
+; Script for program MATRIX in file "C:\projects\ustm_resiliency\CUBE\01_NHB_MCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_NHB_MCLS.PRN" MSG='NHB MCLS'
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
-FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
+FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_LOGSUM.MAT",
   MO = 41,DEC=D, NAME=NHBlogsum
@@ -505,13 +561,13 @@ MW[18] = MIN(MW[2],1)
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_HBC_MCLS.S"
+; Script for program MATRIX in file "C:\projects\ustm_resiliency\CUBE\01_HBC_MCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBC_MCLS.PRN" MSG='Freight MCLS'
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
-FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
+FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_LOGSUM.MAT",
   MO = 41,DEC=D, NAME=HBClogsum
@@ -656,13 +712,13 @@ MW[18] = MIN(MW[2],1)
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_REC_MCLS.S"
+; Script for program MATRIX in file "C:\projects\ustm_resiliency\CUBE\01_REC_MCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_REC_MCLS.PRN" MSG='REC MCLS'
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
-FILEI MATI[2] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT"
+FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_REC_LOGSUM.MAT",
   MO = 41,DEC=D, NAME=REClogsum
@@ -818,7 +874,7 @@ MW[18] = MIN(MW[2],1)
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_MCLS_COMBINE.S"
+; Script for program MATRIX in file "C:\projects\ustm_resiliency\CUBE\01_MCLS_COMBINE.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Combine All MCLS Calculations'
@@ -829,7 +885,7 @@ FILEI MATI[9] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_PROBABILITY.MAT"
 FILEI MATI[8] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_PROBABILITY.MAT"
 FILEI MATI[7] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT"
 FILEI MATI[6] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_PROBABILITY.MAT"
-FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT",
+FILEO MATO[1] = "{SCENARIO_DIR}\Outputs\01_MCLS_COMBINED.MAT",
   MO = 1-5  DEC = D, NAME = HBWlogsum, HBOlogsum, NHBlogsum, HBClogsum, REClogsum
 FILEI MATI[5] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_REC_LOGSUM.MAT"
 FILEI MATI[4] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_LOGSUM.MAT"
@@ -874,7 +930,154 @@ FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_LOGSUM.MAT"
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_HBO_DCLS.S"
+; Script for program MATRIX in file "C:\Projects\ustm_resiliency\CUBE\01_HBW_DCLS.S"
+;;<<Default Template>><<MATRIX>><<Default>>;;
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=MATRIX MSG='HBW DCLS'
+FILEI MATI[1] = "{SCENARIO_DIR}\Outputs\01_MCLS_COMBINED.MAT"
+FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBW_DEST_CHOICE.RPT"
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBW.MAT",
+  MO = 112, 100 DEC = D, NAME = HBWSizeTerm, HBWUtil
+FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
+FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+
+
+; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
+; where I is the origin zones.  All user statements in the module are processed once for each origin.
+; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
+; the values for all destination zones J are automatically computed.  The user can control the computations
+; at each J by using a JLOOP.
+
+ZONES = {TOTAL_ZONES}
+		ARRAY personTrips = ZONES
+
+		; READ IN MODEL PARAMETERS
+		LOOKUP, NAME=COEFF, LOOKUP[1]=NVAR, RESULT=HBW, INTERPOLATE=N, LIST=Y, LOOKUPI=1
+    
+		Coeff_HH = COEFF(1,1)              ; SizeTerm = household coefficient
+		Coeff_OTH_OFF_EMP = COEFF(1,2)     ; SizeTerm = Other + Office Emp coefficient
+		Coeff_OFF_EMP = COEFF(1,3)         ; SizeTerm = Office Emp coefficient
+		Coeff_OTH_EMP = COEFF(1,4)         ; SizeTerm = Other Emp coefficient
+		Coeff_RET_EMP = COEFF(1,5)         ; SizeTerm = Retail Emp coefficient
+		DISTCAP       = COEFF(1,6)         ; Capped distance (this is a value, not coefficient) ?
+		CLSUM         = COEFF(1,7)         ; Logsum coefficient
+		CDIST         = COEFF(1,8)         ; distance coefficient 
+		CDISTSQ       = COEFF(1,9)         ; distance square coeffficient
+		CDISTCUB      = COEFF(1,10)        ; distance cube coefficient
+		CDISTLN       = COEFF(1,11)        ; distance log coefficient		
+		KINTRAZ       = COEFF(1,12)        ; Intrazonal constant
+		KDIST01       = COEFF(1,13)        ; distance calibration constant (0-1 Mile)
+		KDIST12       = COEFF(1,14)        ; distance calibration constant (1-2 Mile)
+		KDIST23       = COEFF(1,15)        ; distance calibration constant (2-3 Mile)
+		KDIST34       = COEFF(1,16)        ; distance calibration cOnstant (3-4 Mile)
+		KDIST45       = COEFF(1,17)        ; distance calibration constant (4-5 Mile)
+		KDIST56       = COEFF(1,18)        ; distance calibration constant (5-6 Mile)
+		KDIST67       = COEFF(1,19)        ; distance calibration constant (6-7 Mile)
+
+		; Mode choice logsums
+		MW[101] = MI.1.1 ;HBW logsum
+
+		; Hwy distance skim
+		MW[2] = DISTCAP
+    
+    ; Distance calibration
+    MW[113] = 0
+    
+    
+;;;;;BEGIN HBW DCLS;;;;;
+
+		JLOOP
+		  ; Compute size term
+        ;MW[112] = Coeff_HH + Coeff_OFF_EMP + Coeff_OTH_EMP + Coeff_OTH_OFF_EMP
+		  MW[112] = Coeff_HH * ZI.1.TOTHH[J] + Coeff_OFF_EMP * ZI.1.OTHEMP[J] + Coeff_RET_EMP * (ZI.1.RETEMP[J]) + Coeff_OTH_EMP * (ZI.1.TOTEMP[J] - ZI.1.OTHEMP[J]  - ZI.1.RETEMP[J]) + Coeff_OTH_OFF_EMP * (ZI.1.TOTEMP[J] - ZI.1.RETEMP[J])
+      
+		  ; Log (sizeTerm)
+		  IF(MW[112] > 0)   MW[113] = Ln(MW[112])  
+		
+		  ; Intrazonal boolean
+		  IF(J == I) MW[111] = 1
+		
+		  ; Hwy distance
+		  IF (MI.2.Distance < DISTCAP)  MW[2] = MI.2.Distance  
+		  IF (MI.2.Distance > 0)  MW[114] = Ln(MI.2.Distance) 
+		  		
+		  ; Distance calibration constants          
+		  IF(MW[2] > 0 && MW[2] <=1) MW[115] = KDIST01    ; Calibration constant for distance 0-1 bin
+		  IF(MW[2] > 1 && MW[2] <=2) MW[115] = KDIST12    ; Calibration constant for distance 1-2 bin
+		  IF(MW[2] > 2 && MW[2] <=3) MW[115] = KDIST23    ; Calibration constant for distance 2-5 bin
+		  IF(MW[2] > 3 && MW[2] <=4) MW[115] = KDIST34    ; Calibration constant for distance 2-5 bin
+		  IF(MW[2] > 4 && MW[2] <=5) MW[115] = KDIST45    ; Calibration constant for distance 2-5 bin
+		  IF(MW[2] > 5 && MW[2] <=6) MW[115] = KDIST56    ; Calibration constant for distance 2-5 bin
+		  IF(MW[2] > 6 && MW[2] <=7) MW[115] = KDIST67    ; Calibration constant for distance 2-5 bin
+		  
+
+      
+		  ; Utility expression--has the MCLS in the expression already
+		  MW[100] =  CLSUM * MW[101] +                ; modechoice logsum
+		             CDIST * MW[2] +                ; distance
+		             CDISTSQ * (POW(MW[2],2)) +     ; distance sq
+		             CDISTCUB * (POW(MW[2],3)) +    ; distance cube
+		             CDISTLN * MW[114] + 						; log(distance)  
+		             MW[113] + 											; log(sizeterm)  
+		             KINTRAZ * MW[111] +            ; intrazonal        
+		             MW[115] +                      ; calibration distance  
+		             MW[116]                        ; Shadow Price 
+		ENDJLOOP
+
+  	; Destination choice model 
+  	XCHOICE,  
+  	ALTERNATIVES = All, 
+    DEMAND = personTrips[I],
+  	UTILITIESMW = 100,
+  	ODEMANDMW = 118,
+  	DESTSPLIT= TOTAL All, INCLUDE=1-{TOTAL_ZONES},
+  	STARTMW = 119 
+    
+; Report coefficient values to summary file and debug file;
+    JLOOP
+		 ;Debug destination choice
+	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest}) 
+      PRINT PRINTO=1 CSV=F LIST ='DESTINTION CHOICE TRACE @PURP@','\n\n'
+	  	PRINT PRINTO=1 CSV=F LIST =' Destination Choice Model Trace \n\nSelected Interchange for Tracing:    ',{SelOrigin}(4.0),'-',{SelDest}(4.0),'\n'
+	  	PRINT PRINTO=1 CSV=F LIST ='\n PURPOSE -                   @PURP@  '
+	  	PRINT PRINTO=1 CSV=F LIST ='\n Size Term is computed on the Destination '	  	      
+	  	PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = household coefficient                    ', Coeff_HH          , ' * ' , ZI.2.HH[J]  
+		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Other + Office Emp coefficient           ', Coeff_OTH_OFF_EMP , ' * ' , ZI.2.EMP[J], ZI.2.RET[J] ,ZI.2.HTRET[J]   
+		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Office Emp coefficient                   ', Coeff_OFF_EMP     , ' * ' , ZI.2.OFF[J] 
+		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Other Emp coefficient                    ', Coeff_OTH_EMP     , ' * ' , ZI.2.EMP[J],  ZI.2.OFF[J], ZI.2.RET[J], ZI.2.HTRET[J] 
+		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Retail Emp coefficient                   ', Coeff_RET_EMP     , ' * ' , ZI.2.RET[J] , ZI.2.HTRET[J]
+		  PRINT PRINTO=1 CSV=F LIST ='\n Capped distance (this is a value)  								 ', DISTCAP             
+		  PRINT PRINTO=1 CSV=F LIST ='\n Logsum coefficient                                  ', CLSUM             , ' * ' , MW[101]   
+		  PRINT PRINTO=1 CSV=F LIST ='\n distance coefficient                                ', CDIST             , ' * ' , MW[2]  
+		  PRINT PRINTO=1 CSV=F LIST ='\n distance square coeffficient                        ', CDISTSQ           , ' * ' , POW(MW[2],2)    
+		  PRINT PRINTO=1 CSV=F LIST ='\n distance cube coefficient                           ', CDISTCUB          , ' * ' , POW(MW[2],3)   
+		  PRINT PRINTO=1 CSV=F LIST ='\n distance log coefficient                            ', CDISTLN           , ' * ' , MW[114] 		  
+		  PRINT PRINTO=1 CSV=F LIST ='\n Intrazonal constant                                 ', KINTRAZ           , ' * ' , MW[111]  
+		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (0-1 Mile)            ', KDIST01           
+		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (1-2 Mile)            ', KDIST12            
+		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (2-3 Mile)            ', KDIST23            
+		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (3-4 Mile)            ', KDIST34            
+		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (4-5 Mile)            ', KDIST45            
+		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (5-6 Mile)            ', KDIST56            
+		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (6-7 Mile)            ', KDIST67            
+		  PRINT PRINTO=1 CSV=F LIST ='\n Applied  calibration constant                       ', MW[113]
+      PRINT PRINTO=1 CSV=F LIST ='\n Size Term                                           ', MW[112] 
+      PRINT PRINTO=1 CSV=F LIST ='\n Ln(Size Term)                                       ', MW[113]     
+		  PRINT PRINTO=1 CSV=F LIST ='\n Computed Utility                                    ', MW[100]            	  
+		  PRINT PRINTO=1 CSV=F LIST ='\n Total Productions in Origin                         ', personTrips[I]     			  
+		  PRINT PRINTO=1 CSV=F LIST ='\n Trip Attractions                                    ', MW[119]            		  
+   ENDIF
+    
+   ; Report total intrazonals 
+    IF(I = J)  INTRAZONAL_sum = INTRAZONAL_sum + MW[119]
+    IF (I = ZONES && J = ZONES) PRINT PRINTO=1 CSV=F LIST ='\n Intrazonal Sum            ', INTRAZONAL_sum 
+ ENDJLOOP
+
+ENDRUN
+
+
+; Script for program MATRIX in file "C:\Projects\ustm_resiliency\CUBE\01_HBO_DCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBO DCLS'
@@ -1020,7 +1223,7 @@ ZONES = {TOTAL_ZONES}
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_NHB_DCLS.S"
+; Script for program MATRIX in file "C:\Projects\ustm_resiliency\CUBE\01_NHB_DCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='NHB DCLS'
@@ -1168,7 +1371,7 @@ ZONES = {TOTAL_ZONES}
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_HBC_DCLS.S"
+; Script for program MATRIX in file "C:\Projects\ustm_resiliency\CUBE\01_HBC_DCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBC DCLS'
@@ -1315,7 +1518,7 @@ ZONES = {TOTAL_ZONES}
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_REC_DCLS.S"
+; Script for program MATRIX in file "C:\Projects\ustm_resiliency\CUBE\01_REC_DCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='REC DCLS'
@@ -1461,17 +1664,17 @@ ZONES = {TOTAL_ZONES}
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\01_DCLS_COMBINE.S"
+; Script for program MATRIX in file "C:\projects\ustm_resiliency\CUBE\01_DCLS_COMBINE.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\intermediate_outputs\01_DCLS_COMBINE.PRN" MSG='COMBINE UTILITIES'
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBW.MAT"
+FILEI MATI[2] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBO.MAT"
+FILEI MATI[3] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_NHB.MAT"
+FILEI MATI[4] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBC.MAT"
+FILEI MATI[5] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_REC.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DCLS_COMBINED.MAT",
   MO = 1-5, DEC = D, NAME = HBWDCUtility, HBODCUtility, NHBDCUtility, HBCDCUtility, RECDCUtility
-FILEI MATI[5] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_REC.MAT"
-FILEI MATI[4] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBC.MAT"
-FILEI MATI[3] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_NHB.MAT"
-FILEI MATI[2] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBO.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBW.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -1479,163 +1682,16 @@ FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBW.MAT"
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-  FILLMW MW[1]=MI.1.2 ;HBW 
-  FILLMW MW[2]=MI.2.2 ;HBO 
-  FILLMW MW[3]=MI.3.2 ;NHB 
-  FILLMW MW[4]=MI.4.2 ;HBC 
-  FILLMW MW[5]=MI.5.2 ;REC 
+  FILLMW MW[1]=MI.1.2 ;HBW
+  FILLMW MW[2]=MI.2.2 ;HBO
+  FILLMW MW[3]=MI.3.2 ;NHB
+  FILLMW MW[4]=MI.4.2 ;HBC
+  FILLMW MW[5]=MI.5.2 ;REC
 
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_HBW_DCLS.S"
-;;<<Default Template>><<MATRIX>><<Default>>;;
-; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX MSG='HBW DCLS'
-FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBW_DEST_CHOICE.RPT"
-FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBW.MAT",
-  MO = 112, 100 DEC = D, NAME = HBWSizeTerm, HBWUtil
-FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
-FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
-
-
-; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
-; where I is the origin zones.  All user statements in the module are processed once for each origin.
-; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
-; the values for all destination zones J are automatically computed.  The user can control the computations
-; at each J by using a JLOOP.
-
-ZONES = {TOTAL_ZONES}
-		ARRAY personTrips = ZONES
-
-		; READ IN MODEL PARAMETERS
-		LOOKUP, NAME=COEFF, LOOKUP[1]=NVAR, RESULT=HBW, INTERPOLATE=N, LIST=Y, LOOKUPI=1
-    
-		Coeff_HH = COEFF(1,1)              ; SizeTerm = household coefficient
-		Coeff_OTH_OFF_EMP = COEFF(1,2)     ; SizeTerm = Other + Office Emp coefficient
-		Coeff_OFF_EMP = COEFF(1,3)         ; SizeTerm = Office Emp coefficient
-		Coeff_OTH_EMP = COEFF(1,4)         ; SizeTerm = Other Emp coefficient
-		Coeff_RET_EMP = COEFF(1,5)         ; SizeTerm = Retail Emp coefficient
-		DISTCAP       = COEFF(1,6)         ; Capped distance (this is a value, not coefficient) ?
-		CLSUM         = COEFF(1,7)         ; Logsum coefficient
-		CDIST         = COEFF(1,8)         ; distance coefficient 
-		CDISTSQ       = COEFF(1,9)         ; distance square coeffficient
-		CDISTCUB      = COEFF(1,10)        ; distance cube coefficient
-		CDISTLN       = COEFF(1,11)        ; distance log coefficient		
-		KINTRAZ       = COEFF(1,12)        ; Intrazonal constant
-		KDIST01       = COEFF(1,13)        ; distance calibration constant (0-1 Mile)
-		KDIST12       = COEFF(1,14)        ; distance calibration constant (1-2 Mile)
-		KDIST23       = COEFF(1,15)        ; distance calibration constant (2-3 Mile)
-		KDIST34       = COEFF(1,16)        ; distance calibration cOnstant (3-4 Mile)
-		KDIST45       = COEFF(1,17)        ; distance calibration constant (4-5 Mile)
-		KDIST56       = COEFF(1,18)        ; distance calibration constant (5-6 Mile)
-		KDIST67       = COEFF(1,19)        ; distance calibration constant (6-7 Mile)
-
-		; Mode choice logsums
-		MW[101] = MI.1.1 ;HBW logsum
-
-		; Hwy distance skim
-		MW[2] = DISTCAP
-    
-    ; Distance calibration
-    MW[113] = 0
-    
-    
-;;;;;BEGIN HBW DCLS;;;;;
-
-		JLOOP
-		  ; Compute size term
-        ;MW[112] = Coeff_HH + Coeff_OFF_EMP + Coeff_OTH_EMP + Coeff_OTH_OFF_EMP
-		  MW[112] = Coeff_HH * ZI.1.TOTHH[J] + Coeff_OFF_EMP * ZI.1.OTHEMP[J] + Coeff_RET_EMP * (ZI.1.RETEMP[J]) + Coeff_OTH_EMP * (ZI.1.TOTEMP[J] - ZI.1.OTHEMP[J]  - ZI.1.RETEMP[J]) + Coeff_OTH_OFF_EMP * (ZI.1.TOTEMP[J] - ZI.1.RETEMP[J])
-      
-		  ; Log (sizeTerm)
-		  IF(MW[112] > 0)   MW[113] = Ln(MW[112])  
-		
-		  ; Intrazonal boolean
-		  IF(J == I) MW[111] = 1
-		
-		  ; Hwy distance
-		  IF (MI.2.Distance < DISTCAP)  MW[2] = MI.2.Distance  
-		  IF (MI.2.Distance > 0)  MW[114] = Ln(MI.2.Distance) 
-		  		
-		  ; Distance calibration constants          
-		  IF(MW[2] > 0 && MW[2] <=1) MW[115] = KDIST01    ; Calibration constant for distance 0-1 bin
-		  IF(MW[2] > 1 && MW[2] <=2) MW[115] = KDIST12    ; Calibration constant for distance 1-2 bin
-		  IF(MW[2] > 2 && MW[2] <=3) MW[115] = KDIST23    ; Calibration constant for distance 2-5 bin
-		  IF(MW[2] > 3 && MW[2] <=4) MW[115] = KDIST34    ; Calibration constant for distance 2-5 bin
-		  IF(MW[2] > 4 && MW[2] <=5) MW[115] = KDIST45    ; Calibration constant for distance 2-5 bin
-		  IF(MW[2] > 5 && MW[2] <=6) MW[115] = KDIST56    ; Calibration constant for distance 2-5 bin
-		  IF(MW[2] > 6 && MW[2] <=7) MW[115] = KDIST67    ; Calibration constant for distance 2-5 bin
-		  
-
-      
-		  ; Utility expression--has the MCLS in the expression already
-		  MW[100] =  CLSUM * MW[101] +                ; modechoice logsum
-		             CDIST * MW[2] +                ; distance
-		             CDISTSQ * (POW(MW[2],2)) +     ; distance sq
-		             CDISTCUB * (POW(MW[2],3)) +    ; distance cube
-		             CDISTLN * MW[114] + 						; log(distance)  
-		             MW[113] + 											; log(sizeterm)  
-		             KINTRAZ * MW[111] +            ; intrazonal        
-		             MW[115] +                      ; calibration distance  
-		             MW[116]                        ; Shadow Price 
-		ENDJLOOP
-
-  	; Destination choice model 
-  	XCHOICE,  
-  	ALTERNATIVES = All, 
-    DEMAND = personTrips[I],
-  	UTILITIESMW = 100,
-  	ODEMANDMW = 118,
-  	DESTSPLIT= TOTAL All, INCLUDE=1-{TOTAL_ZONES},
-  	STARTMW = 119 
-    
-; Report coefficient values to summary file and debug file;
-    JLOOP
-		 ;Debug destination choice
-	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest}) 
-      PRINT PRINTO=1 CSV=F LIST ='DESTINTION CHOICE TRACE @PURP@','\n\n'
-	  	PRINT PRINTO=1 CSV=F LIST =' Destination Choice Model Trace \n\nSelected Interchange for Tracing:    ',{SelOrigin}(4.0),'-',{SelDest}(4.0),'\n'
-	  	PRINT PRINTO=1 CSV=F LIST ='\n PURPOSE -                   @PURP@  '
-	  	PRINT PRINTO=1 CSV=F LIST ='\n Size Term is computed on the Destination '	  	      
-	  	PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = household coefficient                    ', Coeff_HH          , ' * ' , ZI.2.HH[J]  
-		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Other + Office Emp coefficient           ', Coeff_OTH_OFF_EMP , ' * ' , ZI.2.EMP[J], ZI.2.RET[J] ,ZI.2.HTRET[J]   
-		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Office Emp coefficient                   ', Coeff_OFF_EMP     , ' * ' , ZI.2.OFF[J] 
-		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Other Emp coefficient                    ', Coeff_OTH_EMP     , ' * ' , ZI.2.EMP[J],  ZI.2.OFF[J], ZI.2.RET[J], ZI.2.HTRET[J] 
-		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Retail Emp coefficient                   ', Coeff_RET_EMP     , ' * ' , ZI.2.RET[J] , ZI.2.HTRET[J]
-		  PRINT PRINTO=1 CSV=F LIST ='\n Capped distance (this is a value)  								 ', DISTCAP             
-		  PRINT PRINTO=1 CSV=F LIST ='\n Logsum coefficient                                  ', CLSUM             , ' * ' , MW[101]   
-		  PRINT PRINTO=1 CSV=F LIST ='\n distance coefficient                                ', CDIST             , ' * ' , MW[2]  
-		  PRINT PRINTO=1 CSV=F LIST ='\n distance square coeffficient                        ', CDISTSQ           , ' * ' , POW(MW[2],2)    
-		  PRINT PRINTO=1 CSV=F LIST ='\n distance cube coefficient                           ', CDISTCUB          , ' * ' , POW(MW[2],3)   
-		  PRINT PRINTO=1 CSV=F LIST ='\n distance log coefficient                            ', CDISTLN           , ' * ' , MW[114] 		  
-		  PRINT PRINTO=1 CSV=F LIST ='\n Intrazonal constant                                 ', KINTRAZ           , ' * ' , MW[111]  
-		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (0-1 Mile)            ', KDIST01           
-		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (1-2 Mile)            ', KDIST12            
-		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (2-3 Mile)            ', KDIST23            
-		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (3-4 Mile)            ', KDIST34            
-		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (4-5 Mile)            ', KDIST45            
-		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (5-6 Mile)            ', KDIST56            
-		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (6-7 Mile)            ', KDIST67            
-		  PRINT PRINTO=1 CSV=F LIST ='\n Applied  calibration constant                       ', MW[113]
-      PRINT PRINTO=1 CSV=F LIST ='\n Size Term                                           ', MW[112] 
-      PRINT PRINTO=1 CSV=F LIST ='\n Ln(Size Term)                                       ', MW[113]     
-		  PRINT PRINTO=1 CSV=F LIST ='\n Computed Utility                                    ', MW[100]            	  
-		  PRINT PRINTO=1 CSV=F LIST ='\n Total Productions in Origin                         ', personTrips[I]     			  
-		  PRINT PRINTO=1 CSV=F LIST ='\n Trip Attractions                                    ', MW[119]            		  
-   ENDIF
-    
-   ; Report total intrazonals 
-    IF(I = J)  INTRAZONAL_sum = INTRAZONAL_sum + MW[119]
-    IF (I = ZONES && J = ZONES) PRINT PRINTO=1 CSV=F LIST ='\n Intrazonal Sum            ', INTRAZONAL_sum 
- ENDJLOOP
-
-ENDRUN
-
-
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\projects\ustm_resiliency\CUBE\01_DCLS_ROWSUM.S"
+; Script for program MATRIX in file "C:\projects\ustm_resiliency\CUBE\01_DCLS_ROWSUM.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\intermediate_outputs\01_DCLS_ROWSUM.PRN"
@@ -1685,37 +1741,46 @@ WRITE RECO = 1
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_BUILD_PEAK_TRANSIT.S"
-;;<<GENERATED SCRIPT>><<MATRIX>><<Matrix>><<Conversion>>;;
-;>>>
-;>>>
-;Input Matrix File 1:{CATALOG_DIR}\Inputs\USTM_transit_skim1.csv
-;Output Matrix File:{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT
-;Maximum Zone number:8775
-;**********************************************************************
-;THIS SCRIPT READS A CSV MATRIX FILE, CREATE A MATRIX WITH THE RESULT *  
-;**********************************************************************
-; BY CITILABS
-;
-;;<<End Parameters>>;;
+; Script for program MATRIX in file "C:\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00R.S"
+;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX MSG='Build Pk Transit Matrix'
+RUN PGM=MATRIX MSG='Get whole Productions file'
+FILEO RECO[1] = "{CATALOG_DIR}\Inputs\HH_PROD_1.DBF",
+  FIELDS = TAZ, HBWP, HBOP, NHBP, RECP
+FILEI MATI[1] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
 
-FILEI MATI[1] = "{CATALOG_DIR}\Inputs\USTM_transit_skim1.csv",
-    PATTERN=IJM:V FIELDS=#1,2,3,4
+; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
+; where I is the origin zones.  All user statements in the module are processed once for each origin.
+; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
+; the values for all destination zones J are automatically computed.  The user can control the computations
+; at each J by using a JLOOP.
 
-FILEO MATO[1] = "{CATALOG_DIR}\Base\Output\01_USTM_TRANSIT_SKIM.MAT",
- MO=1 NAME=TRANSIT_TIME
+	FILLMW MW[1] = MI.1.13 ;Freight Trips
 
-ZONES={TOTAL_ZONES}
+  FREIGHTAUTO = 0
+  
+  JLOOP
+    TAZ = ZI.1.TAZ
+    HBWP = ZI.1.HBW_P
+    HBOP = ZI.1.HBO_P + ZI.1.HBSC_PR_P + ZI.1.HBSC_SC_P + ZI.1.HBSHP_P
+    NHBP =  ZI.1.NHBW_P + ZI.1.NHBNW_P
+    RECP = ZI.1.REC_P
+  ENDJLOOP
+    Ro.TAZ = TAZ
+    Ro.HBWP = HBWP
+    Ro.HBOP = HBOP
+    Ro.NHBP = NHBP
+    Ro.RECP = RECP
+    
+  
+WRITE RECO = 1
 
-MW[1]=MI.1.1
-
-
+  
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_TRIPS_IJ.S"
+; Script for program MATRIX in file "C:\Projects\ustm_resiliency\CUBE\01_TRIPS_IJ.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Build Trips_IJ'
@@ -1742,7 +1807,7 @@ ZONES = {TOTAL_ZONES}
 		MW[1] = MI.1.1 ;HBW
 		MW[2] = MI.1.2 ;HBO
     MW[3] = MI.1.3 ;NHB
-    MW[4] = MI.1.4 ;HBC
+    ;MW[4] = MI.1.4 ;HBC
 	  MW[5] = MI.1.5 ;REC
 
     
@@ -1763,27 +1828,27 @@ ZONES = {TOTAL_ZONES}
 		MW[100] = MW[10] * ZI.1.HBWP[J] 
     MW[200] = MW[20] * ZI.1.HBOP[J] 
     MW[300] = MW[30] * ZI.1.NHBP[J] 
-    MW[400] = MW[40] * ZI.1.HBSCP[J] 
+    ;MW[400] = MW[40] * ZI.1.HBSCP[J] 
     MW[500] = MW[50] * ZI.1.RECP[J] 
        
     ENDJLOOP
-    ;Print Probability Values * 1000 to check accuracy
-    MW[10] = ((exp(MW[1]))/(exp(ZI.2.LNHBW[J])))*1000 ;HBW
-    MW[20] = ((exp(MW[2]))/(exp(ZI.2.LNHBO[J])))*1000 ;HBO
-    MW[30] = ((exp(MW[3]))/(exp(ZI.2.LNNHB[J])))*1000 ;NHB
-    MW[40] = ((exp(MW[4]))/(exp(ZI.2.LNHBC[J])))*1000 ;HBC
-    MW[50] = ((exp(MW[5]))/(exp(ZI.2.LNREC[J])))*1000 ;REC
+    ;Print Probability Values
+    MW[10] = ((exp(MW[1]))/(exp(ZI.2.LNHBW[J]))) ;HBW
+    MW[20] = ((exp(MW[2]))/(exp(ZI.2.LNHBO[J]))) ;HBO
+    MW[30] = ((exp(MW[3]))/(exp(ZI.2.LNNHB[J]))) ;NHB
+    ;MW[40] = ((exp(MW[4]))/(exp(ZI.2.LNHBC[J]))) ;HBC
+    MW[50] = ((exp(MW[5]))/(exp(ZI.2.LNREC[J]))) ;REC
     
-    MW[100] = MW[10] * ZI.1.HBWP[J] /1000
-    MW[200] = MW[20] * ZI.1.HBOP[J] /1000
-    MW[300] = MW[30] * ZI.1.NHBP[J] /1000
-    MW[400] = MW[40] * ZI.1.HBSCP[J] /1000
-    MW[500] = MW[50] * ZI.1.RECP[J] /1000
+    MW[100] = MW[10] * ZI.1.HBWP[J]
+    MW[200] = MW[20] * ZI.1.HBOP[J]
+    MW[300] = MW[30] * ZI.1.NHBP[J]
+    ;MW[400] = MW[40] * ZI.1.HBSCP[J]
+    MW[500] = MW[50] * ZI.1.RECP[J]
 
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_TRIPS_IJK.S"
+; Script for program MATRIX in file "C:\Projects\ustm_resiliency\CUBE\01_TRIPS_IJK.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Build Trips_IJK'
@@ -1867,7 +1932,7 @@ FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJ.MAT"
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\CUBE\01_MODESPLIT.S"
+; Script for program MATRIX in file "C:\Projects\ustm_resiliency\CUBE\01_MODESPLIT.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Create Mode Split Columns'
@@ -1960,45 +2025,6 @@ WRITE RECO = 1
 
 
 
-ENDRUN
-
-
-; Script for program MATRIX in file "C:\USERS\MBARNES7\DOCUMENTS\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00R.S"
-;;<<Default Template>><<MATRIX>><<Default>>;;
-; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX MSG='Get whole Productions file'
-FILEO RECO[1] = "{CATALOG_DIR}\Inputs\HH_PROD_1.DBF",
-  FIELDS = HBWP, HBOP, NHBP, RECP
-FILEI MATI[1] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
-
-; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
-; where I is the origin zones.  All user statements in the module are processed once for each origin.
-; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
-; the values for all destination zones J are automatically computed.  The user can control the computations
-; at each J by using a JLOOP.
-
-	FILLMW MW[1] = MI.1.13 ;Freight Trips
-
-  FREIGHTAUTO = 0
-  
-  JLOOP
-    TAZ = ZI.1.TAZ
-    HBWP = ZI.1.HBW_P
-    HBOP = ZI.1.HBO_P + ZI.1.HBSC_PR_P + ZI.1.HBSC_SC_P + ZI.1.HBSHP_P
-    NHBP =  ZI.1.NHBW_P + ZI.1.NHBNW_P
-    RECP = ZI.1.REC_P
-  ENDJLOOP
-  
-    Ro.HBWP = HBWP
-    Ro.HBOP = HBOP
-    Ro.NHBP = NHBP
-    Ro.RECP = RECP
-    
-  
-WRITE RECO = 1
-
-  
 ENDRUN
 
 

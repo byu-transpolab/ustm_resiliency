@@ -1,7 +1,7 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBW DCLS'
-FILEI MATI[1] = "{SCENARIO_DIR}\Outputs\01_MCLS_COMBINED.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_MCLS_COMBINED.MAT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBW_DEST_CHOICE.RPT"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBW.MAT",
   MO = 112, 100 DEC = D, NAME = HBWSizeTerm, HBWUtil

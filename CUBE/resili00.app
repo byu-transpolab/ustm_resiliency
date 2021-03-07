@@ -7,7 +7,7 @@ resiliency
 00
 
 
-Sun Mar 07 12:33:07 2021
+Sun Mar 07 13:27:51 2021
 
 
 C:\projects\ustm_resiliency\CUBE\resili00.app
@@ -2929,7 +2929,7 @@ MCLS Combined
 0
 0
 *
-{SCENARIO_DIR}\Outputs\01_MCLS_COMBINED.MAT
+{SCENARIO_DIR}\Output\01_MCLS_COMBINED.MAT
 1
 0501
       
@@ -2966,7 +2966,7 @@ Combined MCLS
 0
 0
 *
-{SCENARIO_DIR}\Outputs\01_MCLS_COMBINED.MAT
+{SCENARIO_DIR}\Output\01_MCLS_COMBINED.MAT
 1
 0501
       
