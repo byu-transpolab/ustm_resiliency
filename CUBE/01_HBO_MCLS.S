@@ -20,14 +20,10 @@ FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT",
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-
-
-
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
   MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
   FILLMW MW[3]=MI.2.1     ;Walk bus time
-
 
   ; Progress Bar update for evey 100 zones
   zonemsg=100
@@ -37,10 +33,10 @@ FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT",
   ARRAY TYPE=C30 MARKET_NAME=1
 
   ; Read alternative specific Constants
-  LOOKUP, NAME=CONSTANTS, LOOKUP[1]=1, RESULT=5, INTERPOLATE=N, , LIST=Y, LOOKUPI=2
+  LOOKUP, NAME=CONSTANTS, LOOKUP[1]=1, RESULT=4, INTERPOLATE=N, , LIST=Y, LOOKUPI=2
 
   ; Read mode choice coefficients
-  LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=5, INTERPOLATE=N, LIST=Y, LOOKUPI=1
+  LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=4, INTERPOLATE=N, LIST=Y, LOOKUPI=1
 
   IF (i=FirstZone)
 
@@ -95,17 +91,13 @@ ENDIF
     ENDIF
   ENDJLOOP
 
-
   ; calculate travel time of non-motorized modes
   MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
 
-  ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
-  MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])          ;Drive alone auto utility
-  MW[111] = MW[11] * 100                                                    ;Printed auto utility
-  MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
-  MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
+      ; Calculate Utilities
+  MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])           ;Drive alone auto utility
+  MW[12] = (K_NMOT + 20 * (COEFF_WALK1 * MW[18] + COEFF_WALK2 * MW[19]))    ;non-motorized utility, multiplied by 20 for time
   MW[13] = K_TRN + (COEFF_IVTT * MW[3]) + (COEFF_SWAIT * MW[3] * 0.1)       ;transit utility, assume 10% is waiting
-  MW[113] = MW[13] * 100                                                    ;Printed transity utility
 
   ; Exponentiate Utilities and adjust for zones which do not exist
   MW[21] = exp(MW[11]) ;Exponentiated auto utility
@@ -123,7 +115,6 @@ ENDIF
       ELSE
         MW[23] = exp(MW[13]) ;exponentiated transit utilty
       ENDIF
-
   ENDJLOOP
 
       ; Sum demonominator
@@ -156,16 +147,16 @@ ENDIF
           PRINT PRINTO=1 CSV=F LIST ="\n Auto IVTT                                           ", MW[1]
           PRINT PRINTO=1 CSV=F LIST ="\n Auto Distance                                       ", MW[2]
           PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Equation                               ", COEFF_IVTT, ' * ', MW[1], ' + ', COEFF_COST, ' * ', AUTOCOST, ' * ', MW[2]
-          PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Value                                  ", MW[11],
-          PRINT PRINTO=1 CSV=F LIST ="\n Auto Exponentiated Utility Value                    ", MW[21],
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Value                                  ", MW[11]
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Exponentiated Utility Value                    ", MW[21]
           PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
           PRINT PRINTO=1 CSV=F LIST ="\n Walk Distance                                       ", MW[2]
-          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Equation                               ", K_NMOT, ' + ', COEFF_WALK1, ' * 20 * ', MW[18], ' + ', COEFF_WALK2, ' * 20 * ', MW[19])
-          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Value                                  ", MW[12],
-          PRINT PRINTO=1 CSV=F LIST ="\n WAlk Exponentiated Utility Value (0 if impossible)  ", MW[22],
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Equation                               ", K_NMOT, ' +  20 * (', COEFF_WALK1, ' + ', MW[18], ' + ', COEFF_WALK2, ' * ', MW[19],')
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Value                                  ", MW[12]
+          PRINT PRINTO=1 CSV=F LIST ="\n WAlk Exponentiated Utility Value (0 if impossible)  ", MW[22]
           PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
-          PRINT PRINTO=1 CSV=F LIST ="\n Transit Travel Time Value                           ", MW[3],
-          PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Equation                            ", K_TRN, ' + ', COEFF_IVTT, ' * ', MW[3],  ' + ', COEFF_SWAIT, ' * ', 0.1 * MW[3]
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Travel Time Value                           ", MW[3]
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Equation                            ", K_TRN, ' + ', COEFF_IVTT, ' * ', MW[3]
           PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Values                              ", MW[13]
           PRINT PRINTO=1 CSV=F LIST ="\n Transit Exonentiated Utility Value (0 if impossible)", MW[23]
 
@@ -177,5 +168,5 @@ ENDIF
           PRINT PRINTO=1 CSV=F LIST ='\n Ln(sum)                                             ', MW[40]
 
         ENDIF
-        ENDJLOOP
+       ENDJLOOP
 ENDRUN

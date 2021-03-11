@@ -59,7 +59,6 @@ FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\hbw_modechoice_trace.txt"
 
 
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
-  MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
   FILLMW MW[3]=MI.2.1     ;Walk bus time
 
@@ -72,10 +71,10 @@ FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\hbw_modechoice_trace.txt"
   ARRAY TYPE=C30 MARKET_NAME=1
 
   ; Read alternative specific Constants
-  LOOKUP, NAME=CONSTANTS, LOOKUP[1]=1, RESULT=5, INTERPOLATE=N, , LIST=Y, LOOKUPI=2
+  LOOKUP, NAME=CONSTANTS, LOOKUP[1]=1, RESULT=3, INTERPOLATE=N, , LIST=Y, LOOKUPI=2
 
   ; Read mode choice coefficients
-  LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=5, INTERPOLATE=N, LIST=Y, LOOKUPI=1
+  LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=3, INTERPOLATE=N, LIST=Y, LOOKUPI=1
 
   IF (i=FirstZone)
 
@@ -113,7 +112,7 @@ FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\hbw_modechoice_trace.txt"
    COEFF_COST  = COEFF(1,5)                 ; Cost
 
    ; Calibration specific
-   COEFF_NXFER   = COEFF(1,18)                ; number of xfers
+   COEFF_NXFER   = COEFF(1,18)              ; number of xfers
 
 ENDIF
 
@@ -134,13 +133,10 @@ ENDIF
   ; calculate travel time of non-motorized modes
   MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
 
-  ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
-  MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])          ;Drive alone auto utility
-  MW[111] = MW[11] * 100                                                    ;Printed auto utility
-  MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
-  MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
+  ; Calculate Utilities
+  MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])           ;Drive alone auto utility
+  MW[12] = (K_NMOT + 20 * (COEFF_WALK1 * MW[18] + COEFF_WALK2 * MW[19])     ;non-motorized utility
   MW[13] = K_TRN + (COEFF_IVTT * MW[3]) + (COEFF_SWAIT * MW[3] * 0.1)       ;transit utility, assume 10% is waiting
-  MW[113] = MW[13] * 100                                                    ;Printed transity utility
 
   ; Exponentiate Utilities and adjust for zones which do not exist
   MW[21] = exp(MW[11]) ;Exponentiated auto utility
@@ -158,7 +154,6 @@ ENDIF
       ELSE
         MW[23] = exp(MW[13]) ;exponentiated transit utilty
       ENDIF
-
   ENDJLOOP
 
       ; Sum demonominator
@@ -212,7 +207,7 @@ ENDIF
           PRINT PRINTO=1 CSV=F LIST ='\n Ln(sum)                                             ', MW[40]
                 		  
         ENDIF
-        ENDJLOOP
+       ENDJLOOP
 ENDRUN
 
 
@@ -239,14 +234,10 @@ FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT",
 ; the values for all destination zones J are automatically computed.  The user can control the computations
 ; at each J by using a JLOOP.
 
-
-
-
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
   MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
   FILLMW MW[3]=MI.2.1     ;Walk bus time
-
 
   ; Progress Bar update for evey 100 zones
   zonemsg=100
@@ -256,10 +247,10 @@ FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT",
   ARRAY TYPE=C30 MARKET_NAME=1
 
   ; Read alternative specific Constants
-  LOOKUP, NAME=CONSTANTS, LOOKUP[1]=1, RESULT=5, INTERPOLATE=N, , LIST=Y, LOOKUPI=2
+  LOOKUP, NAME=CONSTANTS, LOOKUP[1]=1, RESULT=4, INTERPOLATE=N, , LIST=Y, LOOKUPI=2
 
   ; Read mode choice coefficients
-  LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=5, INTERPOLATE=N, LIST=Y, LOOKUPI=1
+  LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=4, INTERPOLATE=N, LIST=Y, LOOKUPI=1
 
   IF (i=FirstZone)
 
@@ -314,17 +305,13 @@ ENDIF
     ENDIF
   ENDJLOOP
 
-
   ; calculate travel time of non-motorized modes
   MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
 
-  ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
+      ; Calculate Utilities
   MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])          ;Drive alone auto utility
-  MW[111] = MW[11] * 100                                                    ;Printed auto utility
   MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
-  MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
   MW[13] = K_TRN + (COEFF_IVTT * MW[3]) + (COEFF_SWAIT * MW[3] * 0.1)       ;transit utility, assume 10% is waiting
-  MW[113] = MW[13] * 100                                                    ;Printed transity utility
 
   ; Exponentiate Utilities and adjust for zones which do not exist
   MW[21] = exp(MW[11]) ;Exponentiated auto utility
@@ -494,23 +481,17 @@ MW[18] = MIN(MW[2],1)
       ELSE
           MW[19] = 0
       ENDIF
-
   ENDJLOOP
-  
-  ;TODO: get minimum transit time, but include out-of-vehicle time as separate matrix
 
 ;;;;;;Begin NHB MCLS Calculation;;;;;
       
             ; calculate travel time of non-motorized modes
       MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
  
-      ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
-      MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])          ;Drive alone auto utility
-      MW[111] = MW[11] * 100                                                    ;Printed auto utility
-      MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
-      MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
-      MW[13] = (K_TRN * MW[3])                                                  ;transit utility
-      MW[113] = MW[13] * 100                                                    ;Printed transity utility
+      ; Calculate Utilities
+  MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])           ;Drive alone auto utility
+  MW[12] = (K_NMOT + 20 * (COEFF_WALK1 * MW[18] + COEFF_WALK2 * MW[19])     ;non-motorized utility
+  MW[13] = K_TRN + (COEFF_IVTT * MW[3]) + (COEFF_SWAIT * MW[3] * 0.1)       ;transit utility, assume 10% is waiting
       
      ; Exponentiate Utilities and adjust for zones which do not exist
      MW[21] = exp(MW[11]) ;Exponentiated auto utility
@@ -541,7 +522,6 @@ MW[18] = MIN(MW[2],1)
       ENDJLOOP
       
       ; Probabilities
-
       MW[31] =  MW[21] / MW[30]       ;auto probability
       MW[32] =  MW[22] / MW[30]       ;non-motorized probability
       MW[33] =  MW[23] / MW[30]       ;transit probability
@@ -657,21 +637,16 @@ MW[18] = MIN(MW[2],1)
       ENDIF
 
   ENDJLOOP
-  
-  ;TODO: get minimum transit time, but include out-of-vehicle time as separate matrix
 
 ;;;;;;Begin Fregiht MCLS Calculation;;;;;
       
       ; calculate travel time of non-motorized modes
       MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
  
-      ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
-      MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])          ;Drive alone auto utility
-      MW[111] = MW[11] * 100                                                    ;Printed auto utility
-      MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
-      MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
-      MW[13] = (K_TRN * MW[3])                                                  ;transit utility
-      MW[113] = MW[13] * 100                                                    ;Printed transity utility
+      ; Calculate Utilities
+  MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])          ;Drive alone auto utility
+  MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
+  MW[13] = K_TRN + (COEFF_IVTT * MW[3]) + (COEFF_SWAIT * MW[3] * 0.1)       ;transit utility, assume 10% is waiting
           
         ; Exponentiate Utilities and adjust for zones which do not exist
         ; Need to account for these zones that don't exist in DCLS so they don't get chosen
@@ -808,21 +783,16 @@ MW[18] = MIN(MW[2],1)
       ENDIF
 
   ENDJLOOP
-  
-  ;TODO: get minimum transit time, but include out-of-vehicle time as separate matrix
 
 ;;;;;;Begin REC MCLS Calculation;;;;;
       
             ; calculate travel time of non-motorized modes
       MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
  
-      ; Calculate Utilities, multiplied by 100 to display correct numbers at the wrong magnitude
-      MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])          ;Drive alone auto utility
-      MW[111] = MW[11] * 100                                                    ;Printed auto utility
-      MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
-      MW[112] = MW[12] * 100                                                    ;Printed non-motorized utility
-      MW[13] = (K_TRN * MW[3])                                                  ;transit utility
-      MW[113] = MW[13] * 100                                                    ;Printed transity utility
+      ; Calculate Utilities
+  MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])          ;Drive alone auto utility
+  MW[12] = (K_NMOT + COEFF_WALK1 * 20 * MW[18] + COEFF_WALK2 * 20 * MW[19]) ;non-motorized utility
+  MW[13] = K_TRN + (COEFF_IVTT * MW[3]) + (COEFF_SWAIT * MW[3] * 0.1)       ;transit utility, assume 10% is waiting
       
      ; Exponentiate Utilities and adjust for zones which do not exist
      MW[21] = exp(MW[11]) ;Exponentiated auto utility
@@ -885,7 +855,7 @@ FILEI MATI[9] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_PROBABILITY.MAT"
 FILEI MATI[8] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_PROBABILITY.MAT"
 FILEI MATI[7] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT"
 FILEI MATI[6] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_PROBABILITY.MAT"
-FILEO MATO[1] = "{SCENARIO_DIR}\Outputs\01_MCLS_COMBINED.MAT",
+FILEO MATO[1] = "{SCENARIO_DIR}\Output\01_MCLS_COMBINED.MAT",
   MO = 1-5  DEC = D, NAME = HBWlogsum, HBOlogsum, NHBlogsum, HBClogsum, REClogsum
 FILEI MATI[5] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_REC_LOGSUM.MAT"
 FILEI MATI[4] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_LOGSUM.MAT"
@@ -934,14 +904,13 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='HBW DCLS'
-FILEI MATI[1] = "{SCENARIO_DIR}\Outputs\01_MCLS_COMBINED.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_MCLS_COMBINED.MAT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBW_DEST_CHOICE.RPT"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBW.MAT",
   MO = 112, 100 DEC = D, NAME = HBWSizeTerm, HBWUtil
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
 FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
 FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
-
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -984,12 +953,10 @@ ZONES = {TOTAL_ZONES}
     ; Distance calibration
     MW[113] = 0
     
-    
 ;;;;;BEGIN HBW DCLS;;;;;
 
 		JLOOP
 		  ; Compute size term
-        ;MW[112] = Coeff_HH + Coeff_OFF_EMP + Coeff_OTH_EMP + Coeff_OTH_OFF_EMP
 		  MW[112] = Coeff_HH * ZI.1.TOTHH[J] + Coeff_OFF_EMP * ZI.1.OTHEMP[J] + Coeff_RET_EMP * (ZI.1.RETEMP[J]) + Coeff_OTH_EMP * (ZI.1.TOTEMP[J] - ZI.1.OTHEMP[J]  - ZI.1.RETEMP[J]) + Coeff_OTH_OFF_EMP * (ZI.1.TOTEMP[J] - ZI.1.RETEMP[J])
       
 		  ; Log (sizeTerm)
@@ -1033,6 +1000,7 @@ ZONES = {TOTAL_ZONES}
   	ODEMANDMW = 118,
   	DESTSPLIT= TOTAL All, INCLUDE=1-{TOTAL_ZONES},
   	STARTMW = 119 
+    
     
 ; Report coefficient values to summary file and debug file;
     JLOOP
@@ -1087,7 +1055,7 @@ FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBO.MAT",
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
 FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
 FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_MCLS_COMBINED.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -1233,7 +1201,7 @@ FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_NHB.MAT",
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
 FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
 FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_MCLS_COMBINED.MAT"
 
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -1381,7 +1349,7 @@ MO = 112, 100 DEC = D, NAME = HBCSizeTerm, HBCUtil
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
 FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
 FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
+FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_MCLS_COMBINED.MAT"
 
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -1528,9 +1496,7 @@ FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_REC.MAT",
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
 FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
 FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED.MAT"
-FILEO RECO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBW_DC_SIZETERM.DBF",
-  FIELDS = TAZ, SIZETERM
+FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_MCLS_COMBINED.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -1622,19 +1588,6 @@ ZONES = {TOTAL_ZONES}
   	ODEMANDMW = 118,
   	DESTSPLIT= TOTAL All, INCLUDE=1-{TOTAL_ZONES},
   	STARTMW = 119 
-    
-    
-    MW[89] = Coeff_HH * ZI.1.TOTHH[I] + Coeff_OFF_EMP * ZI.1.OTHEMP[I] + Coeff_RET_EMP * (ZI.1.RETEMP[I]) + Coeff_OTH_EMP * (ZI.1.TOTEMP[I] - ZI.1.OTHEMP[I]  - ZI.1.RETEMP[I]) +                Coeff_OTH_OFF_EMP * (ZI.1.TOTEMP[I] - ZI.1.RETEMP[I])
-    SIZETERM = 0
-    JLOOP
-    TAZ = ZI.1.Z
-    SIZETERM = SIZETERM + MW[89]
-    ENDJLOOP
-    Ro.TAZ = TAZ
-    Ro.SIZETERM = SIZETERM
-
-WRITE RECO = 1
-    
     
 ; Report coefficient values to summary file and debug file;
     JLOOP
@@ -1847,18 +1800,6 @@ ZONES = {TOTAL_ZONES}
     MW[500] = MW[50] * ZI.1.RECP[J] 
        
     ENDJLOOP
-    ;Print Probability Values
-    MW[10] = ((exp(MW[1]))/(exp(ZI.2.LNHBW[J]))) ;HBW
-    MW[20] = ((exp(MW[2]))/(exp(ZI.2.LNHBO[J]))) ;HBO
-    MW[30] = ((exp(MW[3]))/(exp(ZI.2.LNNHB[J]))) ;NHB
-    ;MW[40] = ((exp(MW[4]))/(exp(ZI.2.LNHBC[J]))) ;HBC
-    MW[50] = ((exp(MW[5]))/(exp(ZI.2.LNREC[J]))) ;REC
-    
-    MW[100] = MW[10] * ZI.1.HBWP[J]
-    MW[200] = MW[20] * ZI.1.HBOP[J]
-    MW[300] = MW[30] * ZI.1.NHBP[J]
-    ;MW[400] = MW[40] * ZI.1.HBSCP[J]
-    MW[500] = MW[50] * ZI.1.RECP[J]
 
 ENDRUN
 

@@ -54,7 +54,7 @@ ZONES = {TOTAL_ZONES}
 
 		JLOOP
 		  ; Compute size term
-		  MW[112] = Coeff_HH * ZI.1.TOTHH[J] + Coeff_OFF_EMP * ZI.1.OTHEMP[J] + Coeff_RET_EMP * (ZI.1.RETEMP[J]) + Coeff_OTH_EMP * (ZI.1.TOTEMP[J] - ZI.1.OTHEMP[J]  - ZI.1.RETEMP[J]) + Coeff_OTH_OFF_EMP * (ZI.1.TOTEMP[J] - ZI.1.RETEMP[J])
+		  MW[112] = Coeff_HH * ZI.1.TOTHH[J] + Coeff_OFF_EMP * ZI.1.OFFI[J] + Coeff_RET_EMP * ZI.1.RETEMP[J] + Coeff_OTH_EMP * ZI.1.OTHEMP[J] + Coeff_OTH_OFF_EMP * (ZI.1.OFFI[J] - ZI.1.RETEMP[J])
       
 		  ; Log (sizeTerm)
 		  IF(MW[112] > 0)   MW[113] = Ln(MW[112])  
@@ -78,7 +78,7 @@ ZONES = {TOTAL_ZONES}
 
       
 		  ; Utility expression--has the MCLS in the expression already
-		  MW[100] =  CLSUM * MW[101] +                ; modechoice logsum
+		  MW[100] =  CLSUM * MW[101] +              ; modechoice logsum
 		             CDIST * MW[2] +                ; distance
 		             CDISTSQ * (POW(MW[2],2)) +     ; distance sq
 		             CDISTCUB * (POW(MW[2],3)) +    ; distance cube
@@ -99,31 +99,19 @@ ZONES = {TOTAL_ZONES}
   	STARTMW = 119 
     
     
-    MW[89] = Coeff_HH * ZI.1.TOTHH[I] + Coeff_OFF_EMP * ZI.1.OTHEMP[I] + Coeff_RET_EMP * (ZI.1.RETEMP[I]) + Coeff_OTH_EMP * (ZI.1.TOTEMP[I] - ZI.1.OTHEMP[I]  - ZI.1.RETEMP[I]) +                Coeff_OTH_OFF_EMP * (ZI.1.TOTEMP[I] - ZI.1.RETEMP[I])
-    SIZETERM = 0
-    JLOOP
-    TAZ = ZI.1.Z
-    SIZETERM = SIZETERM + MW[89]
-    ENDJLOOP
-    Ro.TAZ = TAZ
-    Ro.SIZETERM = SIZETERM
-
-WRITE RECO = 1
-    
-    
 ; Report coefficient values to summary file and debug file;
     JLOOP
 		 ;Debug destination choice
 	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest}) 
-      PRINT PRINTO=1 CSV=F LIST ='DESTINTION CHOICE TRACE @PURP@','\n\n'
+      PRINT PRINTO=1 CSV=F LIST ='DESTINTION CHOICE TRACE HBW','\n\n'
 	  	PRINT PRINTO=1 CSV=F LIST =' Destination Choice Model Trace \n\nSelected Interchange for Tracing:    ',{SelOrigin}(4.0),'-',{SelDest}(4.0),'\n'
 	  	PRINT PRINTO=1 CSV=F LIST ='\n PURPOSE -                   @PURP@  '
 	  	PRINT PRINTO=1 CSV=F LIST ='\n Size Term is computed on the Destination '	  	      
-	  	PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = household coefficient                    ', Coeff_HH          , ' * ' , ZI.2.HH[J]  
-		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Other + Office Emp coefficient           ', Coeff_OTH_OFF_EMP , ' * ' , ZI.2.EMP[J], ZI.2.RET[J] ,ZI.2.HTRET[J]   
-		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Office Emp coefficient                   ', Coeff_OFF_EMP     , ' * ' , ZI.2.OFF[J] 
-		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Other Emp coefficient                    ', Coeff_OTH_EMP     , ' * ' , ZI.2.EMP[J],  ZI.2.OFF[J], ZI.2.RET[J], ZI.2.HTRET[J] 
-		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Retail Emp coefficient                   ', Coeff_RET_EMP     , ' * ' , ZI.2.RET[J] , ZI.2.HTRET[J]
+	  	PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = household coefficient                    ', Coeff_HH          , ' * ' , ZI.1.TOTHH[J]  
+		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Other + Office Emp coefficient           ', Coeff_OTH_OFF_EMP , ' * ' , ZI.1.OFFI[J], ZI.1.RETEMP[J]   
+		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Office Emp coefficient                   ', Coeff_OFF_EMP     , ' * ' , ZI.1.OFFI[J] 
+		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Other Emp coefficient                    ', Coeff_OTH_EMP     , ' * ' , ZI.1.OTHEMP
+		  PRINT PRINTO=1 CSV=F LIST ='\n SizeTerm = Retail Emp coefficient                   ', Coeff_RET_EMP     , ' * ' , ZI.1.RETEMP[J]
 		  PRINT PRINTO=1 CSV=F LIST ='\n Capped distance (this is a value)  								 ', DISTCAP             
 		  PRINT PRINTO=1 CSV=F LIST ='\n Logsum coefficient                                  ', CLSUM             , ' * ' , MW[101]   
 		  PRINT PRINTO=1 CSV=F LIST ='\n distance coefficient                                ', CDIST             , ' * ' , MW[2]  
@@ -138,17 +126,20 @@ WRITE RECO = 1
 		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (4-5 Mile)            ', KDIST45            
 		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (5-6 Mile)            ', KDIST56            
 		  PRINT PRINTO=1 CSV=F LIST ='\n distance calibration constant (6-7 Mile)            ', KDIST67            
-		  PRINT PRINTO=1 CSV=F LIST ='\n Applied  calibration constant                       ', MW[113]
+		  PRINT PRINTO=1 CSV=F LIST ='\n Applied  calibration constant                       ', MW[113] ;I'm not sure what this refers to...
       PRINT PRINTO=1 CSV=F LIST ='\n Size Term                                           ', MW[112] 
       PRINT PRINTO=1 CSV=F LIST ='\n Ln(Size Term)                                       ', MW[113]     
 		  PRINT PRINTO=1 CSV=F LIST ='\n Computed Utility                                    ', MW[100]            	  
 		  PRINT PRINTO=1 CSV=F LIST ='\n Total Productions in Origin                         ', personTrips[I]     			  
-		  PRINT PRINTO=1 CSV=F LIST ='\n Trip Attractions                                    ', MW[119]            		  
+		  PRINT PRINTO=1 CSV=F LIST ='\n Trip Attractions                                    ', MW[119]
+      PRINT PRINTO=1 CSV=F LIST ='\n Utility Equation                                    ', MW[100],' = ' ,CLSUM,'*',MW[101],'+',CDIST,'*',MW[2],'+',CDISTQ,'*'
+      PRINT PRINTO=1 CSV=F LIST ='\n Utility Equation Part 2                             ',(POW(MW[2],2)),'+',CDISTCUB,'*',(POW(MW[2,3)),'+',CDISTLN,'*',MW[114]
+      PRINT PRINTO=1 CSV=F LIST ='\n Utility Equation Part 3                             ','+',MW[113],'+',KINTRAZ,'*',MW[111],'+',MW[115],'+',MW[116]
    ENDIF
     
    ; Report total intrazonals 
     IF(I = J)  INTRAZONAL_sum = INTRAZONAL_sum + MW[119]
     IF (I = ZONES && J = ZONES) PRINT PRINTO=1 CSV=F LIST ='\n Intrazonal Sum            ', INTRAZONAL_sum 
  ENDJLOOP
-
+ 
 ENDRUN

@@ -12,7 +12,7 @@ C:\projects\ustm_resiliency\CUBE\resiliency.PRN
 2:DC Logsums,00,C:\PROJECTS\USTM_RESILIENCY\CUBE\DCLOGS00.APP
 #END
 1
-C:\Users\gmac\AppData\Local\Temp\CitBD2B.tmp
+C:\Users\mbarnes7\AppData\Local\Temp\Cit27F8.tmp
 1
 Base
 #GROUP=MC Logsums, 00:6:C:\PROJECTS\USTM_RESILIENCY\CUBE\MCLOGS00.APP
@@ -32,10 +32,10 @@ Base
 {SCENARIO_DIR}\logs\hbw_modechoice_trace.txt
 #END
 #PROGRAM
-#PROGNAME=MATRIX<0:13;4
+#PROGNAME=MATRIX<0:13;5
 #EXEC=2
 #INCLUSTER=0
-#PROGARGS=C:\projects\ustm_resiliency\Base\01_HBO_MCLS.S
+#PROGARGS=C:\projects\ustm_resiliency\CUBE\01_HBO_MCLS.S
 
 1
 #END
@@ -44,9 +44,10 @@ Base
 {SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_LOGSUM.MAT
 {SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_UTILITY.MAT
 {SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT
+{SCENARIO_DIR}\logs\hbo_modechoice_trace.txt
 #END
 #PROGRAM
-#PROGNAME=MATRIX<0:13;4
+#PROGNAME=MATRIX<0:13;5
 #EXEC=3
 #INCLUSTER=0
 #PROGARGS=C:\projects\ustm_resiliency\CUBE\01_NHB_MCLS.S
@@ -58,9 +59,10 @@ Base
 {SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_LOGSUM.MAT
 {SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_UTILITY.MAT
 {SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_PROBABILITY.MAT
+{SCENARIO_DIR}\Base\logs\nhb_modechoice_trace.txt
 #END
 #PROGRAM
-#PROGNAME=MATRIX<0:13;4
+#PROGNAME=MATRIX<0:13;5
 #EXEC=4
 #INCLUSTER=0
 #PROGARGS=C:\projects\ustm_resiliency\CUBE\01_HBC_MCLS.S
@@ -72,9 +74,10 @@ Base
 {SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_LOGSUM.MAT
 {SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_UTILTIY.MAT
 {SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_PROBABILITY.MAT
+{SCENARIO_DIR}\Base\logs\hbc_modechoice_trace.txt
 #END
 #PROGRAM
-#PROGNAME=MATRIX<0:13;4
+#PROGNAME=MATRIX<0:13;5
 #EXEC=5
 #INCLUSTER=0
 #PROGARGS=C:\projects\ustm_resiliency\CUBE\01_REC_MCLS.S
@@ -86,6 +89,7 @@ Base
 {SCENARIO_DIR}\intermediate_outputs\01_MC_REC_LOGSUM.MAT
 {SCENARIO_DIR}\intermediate_outputs\01_MC_REC_UTILITY.MAT
 {SCENARIO_DIR}\intermediate_outputs\01_MC_REC_PROBABILITY.MAT
+{SCENARIO_DIR}\Base\logs\rec_modechoice_trace.txt
 #END
 #PROGRAM
 #PROGNAME=MATRIX<0:13;2
@@ -96,7 +100,7 @@ Base
 0
 #END
 #OUTPUT
-{SCENARIO_DIR}\Outputs\01_MCLS_COMBINED.MAT
+{SCENARIO_DIR}\Output\01_MCLS_COMBINED.MAT
 {SCENARIO_DIR}\intermediate_outputs\01_MCLS_COMBINED_PROBABILITY.MAT
 #END
 #ENDOFPROGS
