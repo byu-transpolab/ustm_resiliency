@@ -1,10 +1,10 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Build Trips_IJ'
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJ.MAT",
 MO = 10,20,30,40,50,100,200,300,400,500,98,99 DEC = D, NAME = HBWDCProbability, HBODCProbability, NHBDCProbability, HBCDCProbability, RECDCProbability, HBWTrips,HBOTrips,NHBTrips,HBCTrips,RECTrips,CheckRowsum, CheckProd
 FILEI ZDATI[2] = "{SCENARIO_DIR}\Output\01_ROWSUMS.DBF"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD_1.DBF"
 FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DCLS_COMBINED.MAT"
 
 

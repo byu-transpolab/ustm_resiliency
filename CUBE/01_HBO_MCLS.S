@@ -7,9 +7,9 @@ FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_LOGSUM.MAT",
-  MO = 41,DEC=D, NAME=HBOlogsum
+  MO = 40,DEC=D, NAME=HBOlogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_UTILITY.MAT",
- MO=31-33, DEC=D,NAME=HBOauto_util,HBOnonmot_util, HBOtransit_util
+ MO=11-13, DEC=D,NAME=HBOauto_util,HBOnonmot_util, HBOtransit_util
 
 FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT",
  MO=31-33, DEC=D,NAME=HBOauto_prob,HBOnonmot_prob, HBOtransit_prob

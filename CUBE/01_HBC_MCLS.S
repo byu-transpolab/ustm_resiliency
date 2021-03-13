@@ -7,9 +7,9 @@ FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_LOGSUM.MAT",
-  MO = 41,DEC=D, NAME=HBClogsum
+  MO = 40,DEC=D, NAME=HBClogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_UTILTIY.MAT",
-  MO=111-113, DEC=D,NAME=HBCauto_util,HBCnonmot_util,HBCtransit_util
+  MO=11-13, DEC=D,NAME=HBCauto_util,HBCnonmot_util,HBCtransit_util
 FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_PROBABILITY.MAT",
  MO=31-33, DEC=D,NAME=HBCauto_prob,HBCnonmot_prob,HBCtransit_prob
 

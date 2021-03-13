@@ -7,9 +7,9 @@ FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_LOGSUM.MAT",
-  MO = 41,DEC=D, NAME=HBWlogsum
+  MO = 40,DEC=D, NAME=HBWlogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_UTILITY.MAT",
-  MO=111-113, DEC=D,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util
+  MO=11-13, DEC=D,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util
 FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_PROBABILITY.MAT",
  MO=31-33, DEC=D,NAME=HBWauto_prob,HBWnonmot_prob, HBWtransit_prob
 FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\hbw_modechoice_trace.txt"
@@ -131,7 +131,6 @@ ENDIF
       ENDJLOOP
 
       ; Probabilities
-
       MW[31] =  MW[21] / MW[30]       ;auto probability
       MW[32] =  MW[22] / MW[30]       ;non-motorized probability
       MW[33] =  MW[23] / MW[30]       ;transit probability
@@ -144,22 +143,22 @@ ENDIF
      		 ;Debug Mode choice
 
      	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest})
-          PRINT PRINTO=1 CSV=F LIST ='MODE CHOICE TRACE HBW','\n\n'
+          PRINT PRINTO=1 CSV=F LIST ='MODE CHOICE TRACE HBO','\n\n'
      	  	PRINT PRINTO=1 CSV=F LIST =' Mode choice Model Trace \n\nSelected Interchange for Tracing:    ',{SelOrigin}(4.0),'-',{SelDest}(4.0),'\n'
      	  	PRINT PRINTO=1 CSV=F LIST ='\n PURPOSE -  @PURP@  '
           PRINT PRINTO=1 CSV=F LIST ="\n Auto IVTT                                           ", MW[1]
           PRINT PRINTO=1 CSV=F LIST ="\n Auto Distance                                       ", MW[2]
           PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Equation                               ", COEFF_IVTT, ' * ', MW[1], ' + ', COEFF_COST, ' * ', AUTOCOST, ' * ', MW[2]
-          PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Value                                  ", MW[11],
-          PRINT PRINTO=1 CSV=F LIST ="\n Auto Exponentiated Utility Value                    ", MW[21],
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Value                                  ", MW[11]
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Exponentiated Utility Value                    ", MW[21]
           PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
           PRINT PRINTO=1 CSV=F LIST ="\n Walk Distance                                       ", MW[2]
-          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Equation                               ", K_NMOT, ' + ', COEFF_WALK1, ' * 20 * ', MW[18], ' + ', COEFF_WALK2, ' * 20 * ', MW[19])
-          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Value                                  ", MW[12],
-          PRINT PRINTO=1 CSV=F LIST ="\n WAlk Exponentiated Utility Value (0 if impossible)  ", MW[22],
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Equation                               ", K_NMOT, ' +  20 * (', COEFF_WALK1, ' + ', MW[18], ' + ', COEFF_WALK2, ' * ', MW[19],')
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Value                                  ", MW[12]
+          PRINT PRINTO=1 CSV=F LIST ="\n WAlk Exponentiated Utility Value (0 if impossible)  ", MW[22]
           PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
-          PRINT PRINTO=1 CSV=F LIST ="\n Transit Travel Time Value                           ", MW[3],
-          PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Equation                            ", K_TRN, ' + ', COEFF_IVTT, ' * ', MW[3],  ' + ', COEFF_SWAIT, ' * ', 0.1 * MW[3]
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Travel Time Value                           ", MW[3]
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Equation                            ", K_TRN, ' + ', COEFF_IVTT, ' * ', MW[3]
           PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Values                              ", MW[13]
           PRINT PRINTO=1 CSV=F LIST ="\n Transit Exonentiated Utility Value (0 if impossible)", MW[23]
 
@@ -169,7 +168,7 @@ ENDIF
           PRINT PRINTO=1 CSV=F LIST ='\n P(walk)                                             ', MW[32]
           PRINT PRINTO=1 CSV=F LIST ='\n P(transit)                                          ', MW[33]
           PRINT PRINTO=1 CSV=F LIST ='\n Ln(sum)                                             ', MW[40]
-                		  
+
         ENDIF
        ENDJLOOP
 ENDRUN
@@ -185,9 +184,9 @@ FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_LOGSUM.MAT",
-  MO = 41,DEC=D, NAME=HBOlogsum
+  MO = 40,DEC=D, NAME=HBOlogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_UTILITY.MAT",
- MO=31-33, DEC=D,NAME=HBOauto_util,HBOnonmot_util, HBOtransit_util
+ MO=11-13, DEC=D,NAME=HBOauto_util,HBOnonmot_util, HBOtransit_util
 
 FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT",
  MO=31-33, DEC=D,NAME=HBOauto_prob,HBOnonmot_prob, HBOtransit_prob
@@ -325,16 +324,16 @@ ENDIF
           PRINT PRINTO=1 CSV=F LIST ="\n Auto IVTT                                           ", MW[1]
           PRINT PRINTO=1 CSV=F LIST ="\n Auto Distance                                       ", MW[2]
           PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Equation                               ", COEFF_IVTT, ' * ', MW[1], ' + ', COEFF_COST, ' * ', AUTOCOST, ' * ', MW[2]
-          PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Value                                  ", MW[11],
-          PRINT PRINTO=1 CSV=F LIST ="\n Auto Exponentiated Utility Value                    ", MW[21],
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Value                                  ", MW[11]
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Exponentiated Utility Value                    ", MW[21]
           PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
           PRINT PRINTO=1 CSV=F LIST ="\n Walk Distance                                       ", MW[2]
-          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Equation                               ", K_NMOT, ' + ', COEFF_WALK1, ' * 20 * ', MW[18], ' + ', COEFF_WALK2, ' * 20 * ', MW[19])
-          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Value                                  ", MW[12],
-          PRINT PRINTO=1 CSV=F LIST ="\n WAlk Exponentiated Utility Value (0 if impossible)  ", MW[22],
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Equation                               ", K_NMOT, ' +  20 * (', COEFF_WALK1, ' + ', MW[18], ' + ', COEFF_WALK2, ' * ', MW[19],')
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Value                                  ", MW[12]
+          PRINT PRINTO=1 CSV=F LIST ="\n WAlk Exponentiated Utility Value (0 if impossible)  ", MW[22]
           PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
-          PRINT PRINTO=1 CSV=F LIST ="\n Transit Travel Time Value                           ", MW[3],
-          PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Equation                            ", K_TRN, ' + ', COEFF_IVTT, ' * ', MW[3],  ' + ', COEFF_SWAIT, ' * ', 0.1 * MW[3]
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Travel Time Value                           ", MW[3]
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Equation                            ", K_TRN, ' + ', COEFF_IVTT, ' * ', MW[3]
           PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Values                              ", MW[13]
           PRINT PRINTO=1 CSV=F LIST ="\n Transit Exonentiated Utility Value (0 if impossible)", MW[23]
 
@@ -354,15 +353,15 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_NHB_MCLS.PRN" MSG='NHB MCLS'
-FILEO PRINTO[1] = "{SCENARIO_DIR}\Base\logs\nhb_modechoice_trace.txt"
+FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\nhb_modechoice_trace.txt"
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_LOGSUM.MAT",
-  MO = 41,DEC=D, NAME=NHBlogsum
+  MO = 40,DEC=D, NAME=NHBlogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_UTILITY.MAT",
-  MO=111-113, DEC=D,NAME=NHBauto_util,NHBnonmot_util,NHBtransit_util
+  MO=11-13, DEC=D,NAME=NHBauto_util,NHBnonmot_util,NHBtransit_util
 FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_PROBABILITY.MAT",
  MO=31-33, DEC=D,NAME=NHBauto_prob,NHBnonmot_prob,NHBtransit_prob
 
@@ -374,10 +373,8 @@ FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_PROBABILITY.MAT",
 
   
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
-  MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
   FILLMW MW[3]=MI.2.1     ;Walk bus time
-
 
 ; Progress Bar update for evey 100 zones
 zonemsg=50
@@ -498,22 +495,22 @@ MW[18] = MIN(MW[2],1)
      		 ;Debug Mode choice
 
      	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest})
-          PRINT PRINTO=1 CSV=F LIST ='MODE CHOICE TRACE HBW','\n\n'
+          PRINT PRINTO=1 CSV=F LIST ='MODE CHOICE TRACE HBO','\n\n'
      	  	PRINT PRINTO=1 CSV=F LIST =' Mode choice Model Trace \n\nSelected Interchange for Tracing:    ',{SelOrigin}(4.0),'-',{SelDest}(4.0),'\n'
      	  	PRINT PRINTO=1 CSV=F LIST ='\n PURPOSE -  @PURP@  '
           PRINT PRINTO=1 CSV=F LIST ="\n Auto IVTT                                           ", MW[1]
           PRINT PRINTO=1 CSV=F LIST ="\n Auto Distance                                       ", MW[2]
           PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Equation                               ", COEFF_IVTT, ' * ', MW[1], ' + ', COEFF_COST, ' * ', AUTOCOST, ' * ', MW[2]
-          PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Value                                  ", MW[11],
-          PRINT PRINTO=1 CSV=F LIST ="\n Auto Exponentiated Utility Value                    ", MW[21],
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Value                                  ", MW[11]
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Exponentiated Utility Value                    ", MW[21]
           PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
           PRINT PRINTO=1 CSV=F LIST ="\n Walk Distance                                       ", MW[2]
-          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Equation                               ", K_NMOT, ' + ', COEFF_WALK1, ' * 20 * ', MW[18], ' + ', COEFF_WALK2, ' * 20 * ', MW[19])
-          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Value                                  ", MW[12],
-          PRINT PRINTO=1 CSV=F LIST ="\n WAlk Exponentiated Utility Value (0 if impossible)  ", MW[22],
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Equation                               ", K_NMOT, ' +  20 * (', COEFF_WALK1, ' + ', MW[18], ' + ', COEFF_WALK2, ' * ', MW[19],')
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Value                                  ", MW[12]
+          PRINT PRINTO=1 CSV=F LIST ="\n WAlk Exponentiated Utility Value (0 if impossible)  ", MW[22]
           PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
-          PRINT PRINTO=1 CSV=F LIST ="\n Transit Travel Time Value                           ", MW[3],
-          PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Equation                            ", K_TRN, ' + ', COEFF_IVTT, ' * ', MW[3],  ' + ', COEFF_SWAIT, ' * ', 0.1 * MW[3]
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Travel Time Value                           ", MW[3]
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Equation                            ", K_TRN, ' + ', COEFF_IVTT, ' * ', MW[3]
           PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Values                              ", MW[13]
           PRINT PRINTO=1 CSV=F LIST ="\n Transit Exonentiated Utility Value (0 if impossible)", MW[23]
 
@@ -523,7 +520,7 @@ MW[18] = MIN(MW[2],1)
           PRINT PRINTO=1 CSV=F LIST ='\n P(walk)                                             ', MW[32]
           PRINT PRINTO=1 CSV=F LIST ='\n P(transit)                                          ', MW[33]
           PRINT PRINTO=1 CSV=F LIST ='\n Ln(sum)                                             ', MW[40]
-                		  
+
         ENDIF
        ENDJLOOP
 ENDRUN
@@ -533,15 +530,15 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBC_MCLS.PRN" MSG='Freight MCLS'
-FILEO PRINTO[1] = "{SCENARIO_DIR}\Base\logs\hbc_modechoice_trace.txt"
+FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\hbc_modechoice_trace.txt"
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_LOGSUM.MAT",
-  MO = 41,DEC=D, NAME=HBClogsum
+  MO = 40,DEC=D, NAME=HBClogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_UTILTIY.MAT",
-  MO=111-113, DEC=D,NAME=HBCauto_util,HBCnonmot_util,HBCtransit_util
+  MO=11-13, DEC=D,NAME=HBCauto_util,HBCnonmot_util,HBCtransit_util
 FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_PROBABILITY.MAT",
  MO=31-33, DEC=D,NAME=HBCauto_prob,HBCnonmot_prob,HBCtransit_prob
 
@@ -553,10 +550,8 @@ FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_PROBABILITY.MAT",
 
   
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
-  MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
   FILLMW MW[3]=MI.2.1     ;Walk bus time
-
 
 ; Progress Bar update for evey 100 zones
 zonemsg=50
@@ -666,22 +661,22 @@ MW[18] = MIN(MW[2],1)
      		 ;Debug Mode choice
 
      	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest})
-          PRINT PRINTO=1 CSV=F LIST ='MODE CHOICE TRACE HBW','\n\n'
+          PRINT PRINTO=1 CSV=F LIST ='MODE CHOICE TRACE HBO','\n\n'
      	  	PRINT PRINTO=1 CSV=F LIST =' Mode choice Model Trace \n\nSelected Interchange for Tracing:    ',{SelOrigin}(4.0),'-',{SelDest}(4.0),'\n'
      	  	PRINT PRINTO=1 CSV=F LIST ='\n PURPOSE -  @PURP@  '
           PRINT PRINTO=1 CSV=F LIST ="\n Auto IVTT                                           ", MW[1]
           PRINT PRINTO=1 CSV=F LIST ="\n Auto Distance                                       ", MW[2]
           PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Equation                               ", COEFF_IVTT, ' * ', MW[1], ' + ', COEFF_COST, ' * ', AUTOCOST, ' * ', MW[2]
-          PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Value                                  ", MW[11],
-          PRINT PRINTO=1 CSV=F LIST ="\n Auto Exponentiated Utility Value                    ", MW[21],
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Value                                  ", MW[11]
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Exponentiated Utility Value                    ", MW[21]
           PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
           PRINT PRINTO=1 CSV=F LIST ="\n Walk Distance                                       ", MW[2]
-          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Equation                               ", K_NMOT, ' + ', COEFF_WALK1, ' * 20 * ', MW[18], ' + ', COEFF_WALK2, ' * 20 * ', MW[19])
-          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Value                                  ", MW[12],
-          PRINT PRINTO=1 CSV=F LIST ="\n WAlk Exponentiated Utility Value (0 if impossible)  ", MW[22],
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Equation                               ", K_NMOT, ' +  20 * (', COEFF_WALK1, ' + ', MW[18], ' + ', COEFF_WALK2, ' * ', MW[19],')
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Value                                  ", MW[12]
+          PRINT PRINTO=1 CSV=F LIST ="\n WAlk Exponentiated Utility Value (0 if impossible)  ", MW[22]
           PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
-          PRINT PRINTO=1 CSV=F LIST ="\n Transit Travel Time Value                           ", MW[3],
-          PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Equation                            ", K_TRN, ' + ', COEFF_IVTT, ' * ', MW[3],  ' + ', COEFF_SWAIT, ' * ', 0.1 * MW[3]
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Travel Time Value                           ", MW[3]
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Equation                            ", K_TRN, ' + ', COEFF_IVTT, ' * ', MW[3]
           PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Values                              ", MW[13]
           PRINT PRINTO=1 CSV=F LIST ="\n Transit Exonentiated Utility Value (0 if impossible)", MW[23]
 
@@ -691,7 +686,7 @@ MW[18] = MIN(MW[2],1)
           PRINT PRINTO=1 CSV=F LIST ='\n P(walk)                                             ', MW[32]
           PRINT PRINTO=1 CSV=F LIST ='\n P(transit)                                          ', MW[33]
           PRINT PRINTO=1 CSV=F LIST ='\n Ln(sum)                                             ', MW[40]
-                		  
+
         ENDIF
        ENDJLOOP
 
@@ -702,15 +697,15 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_REC_MCLS.PRN" MSG='REC MCLS'
-FILEO PRINTO[1] = "{SCENARIO_DIR}\Base\logs\rec_modechoice_trace.txt"
+FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\rec_modechoice_trace.txt"
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_REC_LOGSUM.MAT",
-  MO = 41,DEC=D, NAME=REClogsum
+  MO = 40,DEC=D, NAME=REClogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_REC_UTILITY.MAT",
-  MO=111-113, DEC=D,NAME=RECauto_util,RECnonmot_util,RECtransit_util
+  MO=11-13, DEC=D,NAME=RECauto_util,RECnonmot_util,RECtransit_util
 FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_REC_PROBABILITY.MAT",
  MO=31-33, DEC=D,NAME=RECauto_prob,RECnonmot_prob,RECtransit_prob
 
@@ -722,10 +717,8 @@ FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_REC_PROBABILITY.MAT",
 
   
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
-  MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
   FILLMW MW[3]=MI.2.1    ;Walk bus time
-
 
 ; Progress Bar update for evey 100 zones
 zonemsg=50
@@ -847,22 +840,22 @@ MW[18] = MIN(MW[2],1)
      		 ;Debug Mode choice
 
      	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest})
-          PRINT PRINTO=1 CSV=F LIST ='MODE CHOICE TRACE HBW','\n\n'
+          PRINT PRINTO=1 CSV=F LIST ='MODE CHOICE TRACE HBO','\n\n'
      	  	PRINT PRINTO=1 CSV=F LIST =' Mode choice Model Trace \n\nSelected Interchange for Tracing:    ',{SelOrigin}(4.0),'-',{SelDest}(4.0),'\n'
      	  	PRINT PRINTO=1 CSV=F LIST ='\n PURPOSE -  @PURP@  '
           PRINT PRINTO=1 CSV=F LIST ="\n Auto IVTT                                           ", MW[1]
           PRINT PRINTO=1 CSV=F LIST ="\n Auto Distance                                       ", MW[2]
           PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Equation                               ", COEFF_IVTT, ' * ', MW[1], ' + ', COEFF_COST, ' * ', AUTOCOST, ' * ', MW[2]
-          PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Value                                  ", MW[11],
-          PRINT PRINTO=1 CSV=F LIST ="\n Auto Exponentiated Utility Value                    ", MW[21],
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Utility Value                                  ", MW[11]
+          PRINT PRINTO=1 CSV=F LIST ="\n Auto Exponentiated Utility Value                    ", MW[21]
           PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
           PRINT PRINTO=1 CSV=F LIST ="\n Walk Distance                                       ", MW[2]
-          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Equation                               ", K_NMOT, ' + ', COEFF_WALK1, ' * 20 * ', MW[18], ' + ', COEFF_WALK2, ' * 20 * ', MW[19])
-          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Value                                  ", MW[12],
-          PRINT PRINTO=1 CSV=F LIST ="\n WAlk Exponentiated Utility Value (0 if impossible)  ", MW[22],
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Equation                               ", K_NMOT, ' +  20 * (', COEFF_WALK1, ' + ', MW[18], ' + ', COEFF_WALK2, ' * ', MW[19],')
+          PRINT PRINTO=1 CSV=F LIST ="\n Walk Utility Value                                  ", MW[12]
+          PRINT PRINTO=1 CSV=F LIST ="\n WAlk Exponentiated Utility Value (0 if impossible)  ", MW[22]
           PRINT PRINTO=1 CSV=F LIST ="\n -------------------------                           "
-          PRINT PRINTO=1 CSV=F LIST ="\n Transit Travel Time Value                           ", MW[3],
-          PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Equation                            ", K_TRN, ' + ', COEFF_IVTT, ' * ', MW[3],  ' + ', COEFF_SWAIT, ' * ', 0.1 * MW[3]
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Travel Time Value                           ", MW[3]
+          PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Equation                            ", K_TRN, ' + ', COEFF_IVTT, ' * ', MW[3]
           PRINT PRINTO=1 CSV=F LIST ="\n Transit Utility Values                              ", MW[13]
           PRINT PRINTO=1 CSV=F LIST ="\n Transit Exonentiated Utility Value (0 if impossible)", MW[23]
 
@@ -872,7 +865,7 @@ MW[18] = MIN(MW[2],1)
           PRINT PRINTO=1 CSV=F LIST ='\n P(walk)                                             ', MW[32]
           PRINT PRINTO=1 CSV=F LIST ='\n P(transit)                                          ', MW[33]
           PRINT PRINTO=1 CSV=F LIST ='\n Ln(sum)                                             ', MW[40]
-                		  
+
         ENDIF
        ENDJLOOP
 

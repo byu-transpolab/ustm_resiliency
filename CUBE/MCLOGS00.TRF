@@ -12,7 +12,7 @@ C:\projects\ustm_resiliency\CUBE\resiliency.PRN
 2:DC Logsums,00,C:\PROJECTS\USTM_RESILIENCY\CUBE\DCLOGS00.APP
 #END
 1
-C:\Users\mbarnes7\AppData\Local\Temp\Cit27F8.tmp
+C:\Users\mbarnes7\AppData\Local\Temp\CitBF28.tmp
 1
 Base
 #GROUP=MC Logsums, 00:6:C:\PROJECTS\USTM_RESILIENCY\CUBE\MCLOGS00.APP
@@ -59,7 +59,7 @@ Base
 {SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_LOGSUM.MAT
 {SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_UTILITY.MAT
 {SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_PROBABILITY.MAT
-{SCENARIO_DIR}\Base\logs\nhb_modechoice_trace.txt
+{SCENARIO_DIR}\logs\nhb_modechoice_trace.txt
 #END
 #PROGRAM
 #PROGNAME=MATRIX<0:13;5
@@ -74,7 +74,7 @@ Base
 {SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_LOGSUM.MAT
 {SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_UTILTIY.MAT
 {SCENARIO_DIR}\intermediate_outputs\01_MC_HBC_PROBABILITY.MAT
-{SCENARIO_DIR}\Base\logs\hbc_modechoice_trace.txt
+{SCENARIO_DIR}\logs\hbc_modechoice_trace.txt
 #END
 #PROGRAM
 #PROGNAME=MATRIX<0:13;5
@@ -89,7 +89,7 @@ Base
 {SCENARIO_DIR}\intermediate_outputs\01_MC_REC_LOGSUM.MAT
 {SCENARIO_DIR}\intermediate_outputs\01_MC_REC_UTILITY.MAT
 {SCENARIO_DIR}\intermediate_outputs\01_MC_REC_PROBABILITY.MAT
-{SCENARIO_DIR}\Base\logs\rec_modechoice_trace.txt
+{SCENARIO_DIR}\logs\rec_modechoice_trace.txt
 #END
 #PROGRAM
 #PROGNAME=MATRIX<0:13;2

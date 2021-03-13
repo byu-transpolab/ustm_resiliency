@@ -1,6 +1,6 @@
 ;;<<Default Template>><<HIGHWAY>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=HIGHWAY MSG='Whole Network'
+RUN PGM=HIGHWAY MSG='Mode and Destination Choice Model'
 FILEO MATO[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT",
   MO = 1-2, DEC = D, NAME = TIME, DISTANCE
 FILEI NETI = "{SCENARIO_DIR}\scenario_network.net"

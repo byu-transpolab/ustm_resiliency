@@ -55,8 +55,7 @@ ZONES = {TOTAL_ZONES}
 
 		JLOOP
 		  ; Compute size term
-        ;MW[112] = Coeff_HH + Coeff_OFF_EMP + Coeff_OTH_EMP + Coeff_OTH_OFF_EMP
-		   MW[112] = Coeff_HH * ZI.1.TOTHH[J] + Coeff_OFF_EMP * ZI.1.OTHEMP[J] + Coeff_RET_EMP * (ZI.1.RETEMP[J]) + Coeff_OTH_EMP * (ZI.1.TOTEMP[J] - ZI.1.OTHEMP[J]  - ZI.1.RETEMP[J]) + Coeff_OTH_OFF_EMP * (ZI.1.TOTEMP[J] - ZI.1.RETEMP[J])
+		  MW[112] = Coeff_HH * ZI.1.TOTHH[J] + Coeff_OFF_EMP * ZI.1.OFFI[J] + Coeff_RET_EMP * ZI.1.RETEMP[J] + Coeff_OTH_EMP * (ZI.1.ALLEMP[J] - ZI.1.OTHEMP[J] - ZI.1.RETEMP[J])
       
 		  ; Log (sizeTerm)
 		  IF(MW[112] > 0)   MW[113] = Ln(MW[112])  

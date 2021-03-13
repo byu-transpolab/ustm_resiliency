@@ -9,11 +9,11 @@
 ;Time interval in Min:5
 ;;<<End Parameters>>;;
 RUN PGM=MATRIX 
-FILEO PRINTO[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\Output\tlfd.log"
-FILEO PRINTO[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\Output\tlfd.csv"
-FILEI MATI[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\intermediate_outputs\01_TRIPS_IJ.MAT"
-FILEI MATI[2] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\Output\01_HIGHWAY_SKIMS.MAT"
-FILEO RECO[1] = "C:\Users\mbarnes7\Documents\Projects\ustm_resiliency\Base\Output\test_tlfd.dbf",
+FILEO PRINTO[1] = "C:\projects\ustm_resiliency\Base\Output\tlfd.log"
+FILEO PRINTO[2] = "C:\projects\ustm_resiliency\Base\Output\tlfd.csv"
+FILEI MATI[1] = "C:\projects\ustm_resiliency\Base\intermediate_outputs\01_TRIPS_IJ.MAT"
+FILEI MATI[2] = "C:\projects\ustm_resiliency\Base\Output\01_HIGHWAY_SKIMS.MAT"
+FILEO RECO[1] = "C:\projects\ustm_resiliency\Base\Output\test_tlfd.dbf",
   FIELDS= time, HBW(16.8), HBO(16.8), NHB(16.8), HBC(16.8), REC(16.8)
 
 MW[1]=MI.1.6 ;HBW
