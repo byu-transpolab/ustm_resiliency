@@ -1,7 +1,6 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\intermediate_outputs\01_DCLS_ROWSUM.PRN"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
 FILEO RECO[1] = "{SCENARIO_DIR}\Output\01_ROWSUMS.DBF",
   FIELDS = TAZ, lnHBW, lnHBO, lnNHB, lnHBC, lnREC
 FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DCLS_COMBINED.MAT"
@@ -26,7 +25,7 @@ SeREC = 0
 
 JLOOP
 ;change to an if statement to exclude rows/columns that don't exist i would need to set those values correctly to exclude them (its the column that matters)
-  TAZ = ZI.1.TAZ
+  TAZ = i
   SeHBW = SeHBW + exp(MW[100])
   SeHBO = SeHBO + exp(MW[200])
   SeNHB = SeNHB + exp(MW[300])
