@@ -7,7 +7,7 @@ FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_LOGSUM.MAT",
-  MO = 40,DEC=D, NAME=HBWlogsum
+  MO = 41,DEC=D, NAME=HBWlogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_UTILITY.MAT",
   MO=11-13, DEC=D,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util
 FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_PROBABILITY.MAT",
@@ -137,6 +137,16 @@ ENDIF
 
       ; LOGSUM
       MW[40] = ln(MW[30])
+      
+      ; Calculate logit average of the mode choice logsums
+   JLOOP
+     MW[41] = MW[41] + EXP(MW[40])
+      IF (MW[41]> 0) 
+        MW[41] = Ln(MW[41])
+      ELSE 
+        MW[41] = 0
+     ENDIF
+   ENDJLOOP
 
       ; Report coefficient values to summary file and debug file;
          JLOOP
