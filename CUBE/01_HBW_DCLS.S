@@ -42,7 +42,7 @@ ZONES = {TOTAL_ZONES}
 		KDIST67       = COEFF(1,19)        ; distance calibration constant (6-7 Mile)
 
 		; Mode choice logsums
-		MW[101] = MI.1.1 ;HBW logsum
+		MW[101] = MI.1.HBWlogsum ;HBW logsum
 
 		; Hwy distance skim
 		MW[2] = DISTCAP
@@ -78,12 +78,13 @@ ZONES = {TOTAL_ZONES}
 
       
 		  ; Utility expression--has the MCLS in the expression already
-		  MW[100] =  CLSUM * MW[101] +              ; modechoice logsum
+		  MW[100] =  CLSUM * MW[101] +              ; modechoice logsum (THIS IS THE PRIMARY IMPEDANCE). 
+                 MW[113] + 											; log(sizeterm) 
 		             CDIST * MW[2] +                ; distance
 		             CDISTSQ * (POW(MW[2],2)) +     ; distance sq
 		             CDISTCUB * (POW(MW[2],3)) +    ; distance cube
 		             CDISTLN * MW[114] + 						; log(distance)  
-		             MW[113] + 											; log(sizeterm)  
+		              
 		             KINTRAZ * MW[111] +            ; intrazonal        
 		             MW[115] +                      ; calibration distance  
 		             MW[116]                        ; Shadow Price 
