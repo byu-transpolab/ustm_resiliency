@@ -1019,7 +1019,7 @@ ZONES = {TOTAL_ZONES}
 		KDIST67       = COEFF(1,19)        ; distance calibration constant (6-7 Mile)
 
 		; Mode choice logsums
-		MW[101] = MI.1.1 ;HBW logsum
+		MW[101] = MI.1.HBWlogsum ;HBW logsum
 
 		; Hwy distance skim
 		MW[2] = DISTCAP
@@ -1055,12 +1055,13 @@ ZONES = {TOTAL_ZONES}
 
       
 		  ; Utility expression--has the MCLS in the expression already
-		  MW[100] =  CLSUM * MW[101] +              ; modechoice logsum
+		  MW[100] =  CLSUM * MW[101] +              ; modechoice logsum (THIS IS THE PRIMARY IMPEDANCE). 
+                 MW[113] + 											; log(sizeterm) 
 		             CDIST * MW[2] +                ; distance
 		             CDISTSQ * (POW(MW[2],2)) +     ; distance sq
 		             CDISTCUB * (POW(MW[2],3)) +    ; distance cube
 		             CDISTLN * MW[114] + 						; log(distance)  
-		             MW[113] + 											; log(sizeterm)  
+		              
 		             KINTRAZ * MW[111] +            ; intrazonal        
 		             MW[115] +                      ; calibration distance  
 		             MW[116]                        ; Shadow Price 
@@ -1782,45 +1783,6 @@ WRITE RECO = 1
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00R.S"
-;;<<Default Template>><<MATRIX>><<Default>>;;
-; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX MSG='Get whole Productions file'
-FILEO RECO[1] = "{CATALOG_DIR}\Inputs\HH_PROD_1.DBF",
-  FIELDS = TAZ, HBWP, HBOP, NHBP, RECP
-FILEI MATI[1] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
-FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
-
-; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
-; where I is the origin zones.  All user statements in the module are processed once for each origin.
-; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
-; the values for all destination zones J are automatically computed.  The user can control the computations
-; at each J by using a JLOOP.
-
-	FILLMW MW[1] = MI.1.13 ;Freight Trips
-
-  FREIGHTAUTO = 0
-  
-  JLOOP
-    TAZ = ZI.1.TAZ
-    HBWP = ZI.1.HBW_P
-    HBOP = ZI.1.HBO_P + ZI.1.HBSC_PR_P + ZI.1.HBSC_SC_P + ZI.1.HBSHP_P
-    NHBP =  ZI.1.NHBW_P + ZI.1.NHBNW_P
-    RECP = ZI.1.REC_P
-  ENDJLOOP
-    Ro.TAZ = TAZ
-    Ro.HBWP = HBWP
-    Ro.HBOP = HBOP
-    Ro.NHBP = NHBP
-    Ro.RECP = RECP
-    
-  
-WRITE RECO = 1
-
-  
-ENDRUN
-
-
 ; Script for program MATRIX in file "C:\Projects\ustm_resiliency\CUBE\01_TRIPS_IJ.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
@@ -2033,7 +1995,7 @@ ENDRUN
 RUN PGM=MATRIX MSG='Create Mode Split Columns'
 FILEI MATI[2] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
 FILEO RECO[1] = "{SCENARIO_DIR}\Output\01_MODESPLIT.DBF",
-  FIELDS = TAZ, HBWAUTO, HBWNMOT, HBWTRANSIT, HBOATUO, HBONMOT, HBOTRANSIT, NHBAUTO, NHBNMOT, NHBTRANSIT, FREIGHTAUTO, FREIGHTNMOT, FREIGHTRANSIT, RECAUTO, RECNMOT, RECTRANSIT
+  FIELDS = TAZ, HBWAUTO, HBWNMOT, HBWTRANSIT, HBOAUTO, HBONMOT, HBOTRANSIT, NHBAUTO, NHBNMOT, NHBTRANSIT, FREIGHTAUTO, FREIGHTNMOT, FREIGHTRANSIT, RECAUTO, RECNMOT, RECTRANSIT
 FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
 FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJK.MAT"
 
@@ -2118,6 +2080,45 @@ ENDJLOOP
 
 WRITE RECO = 1
 
+ENDRUN
+
+
+; Script for program MATRIX in file "C:\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00R.S"
+;;<<Default Template>><<MATRIX>><<Default>>;;
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=MATRIX MSG='Get whole Productions file'
+FILEO RECO[1] = "{CATALOG_DIR}\Inputs\HH_PROD_1.DBF",
+  FIELDS = TAZ, HBWP, HBOP, NHBP, RECP
+FILEI MATI[1] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
+
+; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
+; where I is the origin zones.  All user statements in the module are processed once for each origin.
+; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
+; the values for all destination zones J are automatically computed.  The user can control the computations
+; at each J by using a JLOOP.
+
+	FILLMW MW[1] = MI.1.13 ;Freight Trips
+
+  FREIGHTAUTO = 0
+  
+  JLOOP
+    TAZ = ZI.1.TAZ
+    HBWP = ZI.1.HBW_P
+    HBOP = ZI.1.HBO_P + ZI.1.HBSC_PR_P + ZI.1.HBSC_SC_P + ZI.1.HBSHP_P
+    NHBP =  ZI.1.NHBW_P + ZI.1.NHBNW_P
+    RECP = ZI.1.REC_P
+  ENDJLOOP
+    Ro.TAZ = TAZ
+    Ro.HBWP = HBWP
+    Ro.HBOP = HBOP
+    Ro.NHBP = NHBP
+    Ro.RECP = RECP
+    
+  
+WRITE RECO = 1
+
+  
 ENDRUN
 
 
