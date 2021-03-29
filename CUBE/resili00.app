@@ -7,16 +7,13 @@ resiliency
 00
 
 
-Mon Mar 29 13:59:39 2021
+Mon Mar 29 15:16:42 2021
 
 
 C:\projects\ustm_resiliency\CUBE\resili00.app
 VOYAGER
 
 
-1
-These steps are only necessary for calibration
-58,-1050,0,0,Arial,12,400,0,0,5066061
 &End_TextAnnotation
 English
 #PROGRAM0
