@@ -24,3 +24,21 @@ Base/logs/*
 # mac and OS files
 *.DS_Store
 .Rproj.user
+
+*.txt
+
+sample_calcs/OUTPUTS/
+
+sample_calcs/Disbenefit.png
+
+*.html
+
+Base/road10/Output/
+
+Base/road30/Output/
+
+Base/road38/Output/
+
+Base/road41/Output/
+
+Base/road50/Output/

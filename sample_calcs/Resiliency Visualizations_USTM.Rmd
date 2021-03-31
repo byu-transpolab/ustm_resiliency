@@ -1,0 +1,187 @@
+---
+title: "Resiliency Visualizations"
+author: "Max Barnes"
+date: "11/16/2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+library("arsenal")
+library("tidyr")
+library("tidyverse")
+library("sf")
+library("leaflet")
+library("foreign")
+library("maptools")
+library("modelr")
+library("SimDesign")
+```
+
+In the following DCLS analysis and comparison between an original, fully functioning network and a broken network, one intersection was removed from the network, meaning no vehicles could traverse the area as usual. The intersection of Melrose Ave and Peters Creek Rd. Both links appear to be major routes, with 2 lanes traveling in all directions, and a signalized intersection used for traffic control. The intersections is surrounded by small businesses and a small shopping complex, that appears to be in the style of a strip mall, and there are neighborhoods in the vicinity. 
+
+The input data included in this analysis are both the whole and altered network DCLS outputs, as well as a shapefile map of the Roanoke, VA, area. The model was initially run on this dummy network because it is much smaller (with 267 TAZ's, compared to USTM's 8700 TAZ's) and can run a full analysis from beginning to end in about 20-30 seconds. This allows the model to be created quickly, because bugs can be found more effectively. 
+
+```{r initial loading, results = 'hide'}
+# Loading two data sets and a base map from the data folder
+# The first data set is the whole network named WHOLE_ROWSUMS.DBF
+# The second data set is 01_ROWSUMS.DBF, which should be taken
+# from the CUBE model each time a new iteration is run
+whole_rowsum <- read.dbf("Data/WHOLE_ROWSUMS.DBF")  #original unbroken network
+broken_rowsum <- read.dbf("Data/01_ROWSUMS.DBF")    #altered broken network
+map <- st_read("Data/RoanokeTAZ.shp")               #load shapefile
+```
+
+An initial difference comparison was run on the data to determine the number of changes, if any, that were produced by cutting a link in the model. For this comparison, there are `r n.diffs(comparedf(whole_rowsum, broken_rowsum))` differences between the original data set and the new data with a cut link. Lets compare several different methods to visualize the differences in DCLS created by the model because there were several hundred differences. Visualizing the data will help to better understand some of the impacts that a reduction in network function can have on the immediate and distant vicinity of the network disruption.  
+
+```{r include = FALSE}
+# Create rowsum_map object and plot the HBW map and data
+# for initial visualization
+rowsum_map <- left_join(map, broken_rowsum, by = c("ID" = "TAZ"))
+plot(rowsum_map[, "LNHBW"])
+plot(whole_rowsum[, "LNHBW"])
+```
+
+In the following plots, we see several different sets of code and outputs that compare the original functional network to a network with a cut link. Each plot shows a measure of the differences using a different mathematical comparison. A brief commentary, which will highlight changes between plots, if any, will be provided. An additional summary of total RMSE calculations will also be provided.
+.
+```{r difference}
+# Create plot that compares the before and after 5 trip purposes using
+# a simple difference calculation
+change_broken1 <- list(
+  "Original" = whole_rowsum,
+  "Broken Link" = broken_rowsum
+  ) %>%
+  bind_rows(.id = "Scenario") %>%
+  as_tibble() %>%
+  gather("purpose", "logsum", -Scenario, -TAZ) %>%
+  spread(Scenario, logsum, fill = NA) %>%
+  mutate(
+    difference = (`Broken Link` - Original)
+  ) %>%
+  select(TAZ, purpose, difference) %>%
+  spread(purpose, difference, NA)
+
+# Stitching data together
+broken_map <- left_join(map, change_broken1, by = c("ID" = "TAZ"))
+
+# Create choropleth with 5 trip purposes
+plot(broken_map[, c("LNHBO", "LNHBW", "LNREC", "LNHBC", "LNNHB")])
+```
+
+The differences between the simple difference plot and the absolute error plot are that all values must be positive in the absolute error comparison. This simply changes the color scheme of the output plots. Coincidentally, this makes it easier to interpret the plots visually. Specifically viewing corresponding plots between the two methods, it is easy to see that they are exact copies of each other, with different color themes. 
+
+```{r absolute error comparison}
+# Create plot that compares the before and after 5 trip purposes using
+# an absolute error calculation
+change_broken2 <- list(
+  "Original" = whole_rowsum,
+  "Broken Link" = broken_rowsum
+  ) %>%
+  bind_rows(.id = "Scenario") %>%
+  as_tibble() %>%
+  gather("purpose", "logsum", -Scenario, -TAZ) %>%
+  spread(Scenario, logsum, fill = NA) %>%
+  mutate(
+    difference = (abs(`Broken Link` - Original))
+  ) %>%
+  select(TAZ, purpose, difference) %>%
+  spread(purpose, difference, NA)
+
+# Stitching data together
+broken_map <- left_join(map, change_broken2, by = c("ID" = "TAZ"))
+
+# Create choropleth with 5 trip purposes
+plot(broken_map[, c("LNHBO", "LNHBW", "LNREC", "LNHBC", "LNNHB")])
+```
+
+The next two plots show the results using and RMSE and mean absolute error calculation (MAE). MAE measures the average magnitude of the error in a data set, without considering direction. MAE keeps the all positive color scheme from the absolute difference visualization, which is good. The MAE plot shows us the average over the test sample of the absolute differences between prediction and actual observation where all observations are weighted equally. The RMSE function is valuable because of the quadratic nature with which is measure the average magnitude of error in the data. RMSE shows the square root of the average squared difference between estimated and actual data. RMSE returns all positive data, which again helps in visualization due to the coloring scheme. 
+
+```{r RMSE}
+# Create plot that compares the before and after 5 trip purposes using
+# an RMSE calculation
+change_broken3 <- list(
+  "Original" = whole_rowsum,
+  "Broken Link" = broken_rowsum
+  ) %>%
+  bind_rows(.id = "Scenario") %>%
+  as_tibble() %>%
+  gather("purpose", "logsum", -Scenario, -TAZ) %>%
+  spread(Scenario, logsum, fill = NA) %>%
+  mutate(
+    difference = sqrt(((Original - `Broken Link`)^2)/nrow(whole_rowsum))
+  ) %>%
+  select(TAZ, purpose, difference) %>%
+  spread(purpose, difference, NA)
+
+# Stitching data together
+broken_map <- left_join(map, change_broken3, by = c("ID" = "TAZ"))
+
+# Create choropleth with 5 trip purposes
+plot(broken_map[, c("LNHBO", "LNHBW", "LNREC", "LNHBC", "LNNHB")])
+```
+
+```{r MAE}
+# Create plot that compares the before and after 5 trip purposes using
+# an MAE calculation
+change_broken4 <- list(
+  "Original" = whole_rowsum,
+  "Broken Link" = broken_rowsum
+  ) %>%
+  bind_rows(.id = "Scenario") %>%
+  as_tibble() %>%
+  gather("purpose", "logsum", -Scenario, -TAZ) %>%
+  spread(Scenario, logsum, fill = NA) %>%
+  mutate(
+    difference = (abs(`Broken Link` - Original)/nrow(whole_rowsum))
+  ) %>%
+  select(TAZ, purpose, difference) %>%
+  spread(purpose, difference, NA)
+
+# Stitching data together
+broken_map <- left_join(map, change_broken4, by = c("ID" = "TAZ"))
+
+# Create choropleth with 5 trip purposes
+plot(broken_map[, c("LNHBO", "LNHBW", "LNREC", "LNHBC", "LNNHB")])
+```
+
+
+```{r mean absolute percentage}
+# Create plot that compares the before and after 5 trip purposes using
+# an mean absolute percentage calculation
+change_broken5 <- list(
+  "Original" = whole_rowsum,
+  "Broken Link" = broken_rowsum
+  ) %>%
+  bind_rows(.id = "Scenario") %>%
+  as_tibble() %>%
+  gather("purpose", "logsum", -Scenario, -TAZ) %>%
+  spread(Scenario, logsum, fill = NA) %>%
+  mutate(
+    difference = (abs((Original - `Broken Link`)/`Broken Link`))*(1/nrow(whole_rowsum))
+  ) %>%
+  select(TAZ, purpose, difference) %>%
+  spread(purpose, difference, NA)
+
+# Stitching data together
+broken_map <- left_join(map, change_broken5, by = c("ID" = "TAZ"))
+
+# Create choropleth with 5 trip purposes
+plot(broken_map[, c("LNHBO", "LNHBW", "LNREC", "LNHBC", "LNNHB")])
+```
+
+
+```{r overall comparison}
+## Total RMSE between full model and difference comparison
+RMSE(change_broken1, parameter = whole_rowsum, type = "RMSE")
+## Total RMSE between full model and absolute error comparison
+RMSE(change_broken2, parameter = whole_rowsum, type = "RMSE")
+## Total RMSE between full model and RMSE comparison
+RMSE(change_broken3, parameter = whole_rowsum, type = "RMSE")
+## Total RMSE between full model and mean absolute error comparison
+RMSE(change_broken4, parameter = whole_rowsum, type = "RMSE")
+## Total RMSE between full model and mean absolute percentage comparison
+RMSE(change_broken5, parameter = whole_rowsum, type = "RMSE")
+```
+
+

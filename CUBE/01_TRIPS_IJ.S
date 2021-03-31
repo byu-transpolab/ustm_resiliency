@@ -80,6 +80,7 @@ ZONES = {TOTAL_ZONES}
         MW[500] = MW[50] * ZI.1.RECP[i] 
        
     ENDJLOOP
+    
 
     ; Report coefficient values to summary file and debug file;
     JLOOP
