@@ -1,7 +1,14 @@
 library(tidyverse)
 library(foreign)
+library(omxr)
+library(rhdf5)
+library(rhdf5filters)
+library(Rhdf5lib)
 
-scenarios_folder <- "C:projcts/ustm_resiliency/sample_calcs/OUTPUTS/"
+#link folder for files and add constants
+scenarios_folder <- "C:/projects/ustm_resiliency/sample_calcs/OUTPUTS/"
+mc_cost_coef <- -0.0016
+taz <- foreign::read.dbf("Data/TAZ.dbf") %>% tibble()
 
 # read hh productions by purpose 
 prod <- read.dbf(file.path(scenarios_folder, "HH_PROD.DBF")) %>%
@@ -9,11 +16,11 @@ prod <- read.dbf(file.path(scenarios_folder, "HH_PROD.DBF")) %>%
   gather(purpose, productions, -TAZ) %>%
   mutate(purpose = gsub("P", "", purpose))
 
+# read scenario_outputs for logsum
+outputs <- list.files(scenarios_folder, pattern = "\\.DBF$")
 
-# read scenario_outputs
-outputs <- dir(scenarios_folder)
-
-logsums <- lapply(outputs[outputs != "HH_PROD.DBF"], function(scenario){
+#create function that inputs logsums from different scenarios
+logsums <- lapply(outputs[outputs != ("HH_PROD.DBF")], function(scenario){
     # get scenario name
     scenario_name <- gsub("ROWSUM.DBF", "", scenario)
     logsums <- read.dbf(file.path(scenarios_folder, scenario))  %>%
@@ -22,7 +29,6 @@ logsums <- lapply(outputs[outputs != "HH_PROD.DBF"], function(scenario){
       mutate(
         scenario = scenario_name,
         purpose = gsub("LN", "", purpose))
-  
 }) %>%
   bind_rows()
 
@@ -40,8 +46,67 @@ summary_table <- logsums %>%
   ) 
 
 
-summary_table %>%
+summary_table1 <- summary_table %>%
+  #filter(purpose!= "REC") %>%
   select(purpose, scenario, pct_delta) %>%
   spread(purpose, pct_delta)  %>%
   arrange(-HBW)
 
+tibble(
+  summary_table1 %>%
+    select(-HBC)
+) %>%
+  knitr::kable(caption = "Total Benefit accross Utah", format = "markdown")
+
+total_costs <- summary_table %>%
+  group_by(scenario) %>%
+  summarise(total_delta = sum(delta)) %>%
+  mutate(
+    value = total_delta / mc_cost_coef
+  )
+
+tibble(
+  total_costs)%>%
+  knitr::kable(caption = "Cost associated with closure per day", format = "markdown")
+
+#compute logsum by location
+logsum_scenario50 <- read.dbf('C:/projects/ustm_resiliency/Base/road50/Output/01_ROWSUMS.DBF')
+logsum_internal <- logsum_scenario50[-c(1:30),] %>%
+  rename(TAZID = TAZ)
+
+#logsum origin destination county calculations, need to adjust tables first so that I can join
+#them together and end up with a table that has all the desired information in it
+
+#TAZID, purpose, value
+table3 <- logsum_internal %>% 
+  pivot_longer(
+    cols = starts_with("LN"),
+    names_to = "purpose"
+  ) %>%
+  mutate(
+    purpose = gsub("LN", "", purpose))
+
+# add CO_NAME and productions
+table1 <- left_join(taz, prod, by = c("TAZID" = "TAZ")) %>%
+  select(TAZID, CO_NAME, purpose, productions) %>%
+  left_join(logsums, by = c("TAZID" = "TAZ", "purpose"))
+
+#compute total, delta, pct_delta
+logsum_costs <- table1 %>%
+  group_by(CO_NAME, purpose)%>%
+  pivot_wider(names_from = scenario, values_from = logsum)%>%
+  pivot_longer(cols = matches("ROAD"), names_to = "scenario", names_prefix = "ROAD", values_to = "logsum")%>%
+  mutate(
+    total = productions * logsum,
+    basetotal = productions * BASE,
+    delta = total - basetotal,
+    pct_delta = delta / basetotal * 100)%>%
+  filter(basetotal > 0)
+
+# get total delta and cost associated with closure by county
+logsum_summary <- logsum_costs %>%
+  group_by(CO_NAME, purpose, scenario) %>%
+  summarise(total_delta = sum(delta)) %>%
+  mutate(
+    cost_value = total_delta / mc_cost_coef)
+logsum_summary
