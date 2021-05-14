@@ -1,6 +1,7 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBO_MCLS.PRN" MSG='HBO MCLS'
+FILEI MATI[3] = "{CATALOG_DIR}\Inputs\01_HIGHWAY_SKIMS_INITIAL.MAT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\hbo_modechoice_trace.txt"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
@@ -24,6 +25,7 @@ FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT",
   MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
   FILLMW MW[3]=MI.2.1     ;Walk bus time
+  FILLMW MW[5]=MI.3.2        ;NMOT Distance
 
   ; Progress Bar update for evey 100 zones
   zonemsg=100
@@ -33,10 +35,10 @@ FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT",
   ARRAY TYPE=C30 MARKET_NAME=1
 
   ; Read alternative specific Constants
-  LOOKUP, NAME=CONSTANTS, LOOKUP[1]=1, RESULT=4, INTERPOLATE=N, , LIST=Y, LOOKUPI=2
+  LOOKUP, NAME=CONSTANTS, LOOKUP[1]=1, RESULT=3, INTERPOLATE=N, , LIST=Y, LOOKUPI=2
 
   ; Read mode choice coefficients
-  LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=4, INTERPOLATE=N, LIST=Y, LOOKUPI=1
+  LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=3, INTERPOLATE=N, LIST=Y, LOOKUPI=1
 
   IF (i=FirstZone)
 
@@ -74,27 +76,28 @@ FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT",
    COEFF_COST  = COEFF(1,5)                 ; Cost
 
    ; Calibration specific
-   COEFF_NXFER   = COEFF(1,18)                ; number of xfers
+   COEFF_NXFER   = COEFF(1,18)              ; number of xfers
 
 ENDIF
 
   ; Non motorized
   ; distance portion that is 1 mile or less
-  MW[18] = MIN(MW[2],1)
+  MW[18] = MIN(MW[5],1)
 
   ; Distance portion that is longer than 1 mile
   JLOOP
-    IF (MW[2][J] > 1)
+    IF (MW[5][J] > 1)
         MW[19] = MW[2][J] - 1
     ELSE
         MW[19] = 0
     ENDIF
   ENDJLOOP
 
-  ; calculate travel time of non-motorized modes
-  MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
 
-      ; Calculate Utilities
+  ; calculate travel time of non-motorized modes
+  MW[4] = (MW[5] / 3) * 60 ; miles / 3mph * 60 min/hr
+
+  ; Calculate Utilities
   MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])           ;Drive alone auto utility
   MW[12] = (K_NMOT + 20 * (COEFF_WALK1 * MW[18] + COEFF_WALK2 * MW[19]))    ;non-motorized utility, multiplied by 20 for time
   MW[13] = K_TRN + (COEFF_IVTT * MW[3]) + (COEFF_SWAIT * MW[3] * 0.1)       ;transit utility, assume 10% is waiting
@@ -103,7 +106,7 @@ ENDIF
   MW[21] = exp(MW[11]) ;Exponentiated auto utility
 
   JLOOP
-      IF (MW[2] > 2) ;limit length of nonmot trips
+      IF (MW[5] > 2) ;limit length of nonmot trips
         MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
         MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles

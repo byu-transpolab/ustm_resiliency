@@ -1,6 +1,7 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_NHB_MCLS.PRN" MSG='NHB MCLS'
+FILEI MATI[3] = "{CATALOG_DIR}\Inputs\01_HIGHWAY_SKIMS_INITIAL.MAT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\nhb_modechoice_trace.txt"
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
@@ -23,94 +24,92 @@ FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_PROBABILITY.MAT",
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
   FILLMW MW[3]=MI.2.1     ;Walk bus time
+  FILLMW MW[5]=MI.3.2        ;NMOT Distance
 
-; Progress Bar update for evey 100 zones
-zonemsg=50
-    
-; Declare arrays to hold alternative specific constants
-;        ARRAY PARK=2578
- ARRAY TYPE=F K_AUT=1, K_SR=1, K_TRN=1, K_NMOT=1 
- ARRAY TYPE=C30 MARKET_NAME=1
-    
-; Read alternative specific Constants
-LOOKUP, NAME=CONSTANTS, LOOKUP[1]=1, RESULT=5, INTERPOLATE=N, , LIST=Y, LOOKUPI=2
-    
-; Read mode choice coefficients
-LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=5, INTERPOLATE=N, LIST=Y, LOOKUPI=1 
+  ; Progress Bar update for evey 100 zones
+  zonemsg=100
 
-IF (i=FirstZone)
+  ; Declare arrays to hold alternative specific constants
+  ARRAY TYPE=F K_AUT=1, K_SR=1, K_TRN=1, K_NMOT=1
+  ARRAY TYPE=C30 MARKET_NAME=1
 
-  ; constants
-   K_AUT  = CONSTANTS(1,1)                 ; auto 
+  ; Read alternative specific Constants
+  LOOKUP, NAME=CONSTANTS, LOOKUP[1]=1, RESULT=3, INTERPOLATE=N, , LIST=Y, LOOKUPI=2
+
+  ; Read mode choice coefficients
+  LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=3, INTERPOLATE=N, LIST=Y, LOOKUPI=1
+
+  IF (i=FirstZone)
+
+   ; constants
+   K_AUT  = CONSTANTS(1,1)                 ; auto
    K_SR  = CONSTANTS(1,1)                  ; shared-ride 2 & 3+
    K_TRN  = CONSTANTS(1,2)                 ; transit
    K_NMOT = CONSTANTS(1,3)                 ; non-motorized (walk & bike)
-     
-; Mode-specific constants 
+
+   ; Mode-specific constants
    K_PREM = CONSTANTS(1,4)                 ; premium transit
-                                        
-; Nesting coefficients
+
+   ; Nesting coefficients
    NC_1        = COEFF(1,14)               ; Level 1 - auto, trn, non-mot
    NC_2        = COEFF(1,15)               ; Level 2 - transit sub mode choice
    NC_3        = COEFF(1,16)               ; Level 3 - not used
-   ;NCP = NC_1 * NC_2
 
    ; Level of Service Coefficients
-  COEFF_IVTT   = COEFF(1,1)                ; In-vehicle travel time coefficient
-  COEFF_SWAIT  = COEFF(1,2)                ; Short wait(<5 minutes)
-  COEFF_LWAIT  = COEFF(1,3)                ; Long wait (>5 minutes)
-  COEFF_XWAIT  = COEFF(1,4)                ; Xfer wait
-  COEFF_DRIVE  = COEFF(1,6)                ; Drive access
-  COEFF_TERML  = COEFF(1,7)                ; Terminal time
-  COEFF_WALK   = COEFF(1,8)                ; Walk access
-  COEFF_WALK1  = COEFF(1,9)                ; Walk time < 1
-  COEFF_WALK2  = COEFF(1,10)               ; Walk time > 1
-  COEFF_BIKE1  = COEFF(1,11)               ; Bike time < 1
-  COEFF_BIKE2  = COEFF(1,12)               ; Bike time > 1
-  DWalkBIKE    = COEFF(1,13)               ; Walk and Bike threshold
-  AUTOCOST     = COEFF(1,19)               ; Auto Operating Costs in Cents
-  OCC          = COEFF(1,20)               ; Cost Sharing Factor for Shared Ride
+   COEFF_IVTT   = COEFF(1,1)                ; In-vehicle travel time coefficient
+   COEFF_SWAIT  = COEFF(1,2)                ; Short wait(<5 minutes)
+   COEFF_LWAIT  = COEFF(1,3)                ; Long wait (>5 minutes)
+   COEFF_XWAIT  = COEFF(1,4)                ; Xfer wait
+   COEFF_DRIVE  = COEFF(1,6)                ; Drive access
+   COEFF_TERML  = COEFF(1,7)                ; Terminal time
+   COEFF_WALK   = COEFF(1,8)                ; Walk access
+   COEFF_WALK1  = COEFF(1,9)                ; Walk time < 1
+   COEFF_WALK2  = COEFF(1,10)               ; Walk time > 1
+   COEFF_BIKE1  = COEFF(1,11)               ; Bike time < 1
+   COEFF_BIKE2  = COEFF(1,12)               ; Bike time > 1
+   DWalkBIKE    = COEFF(1,13)               ; Walk and Bike threshold
+   AUTOCOST     = COEFF(1,19)               ; Auto Operating Costs in Cents
+   OCC          = COEFF(1,20)               ; Cost Sharing Factor for Shared Ride
 
-; Cost coefficients
-  COEFF_COST  = COEFF(1,5)                 ; Cost 
-  
-; Calibration specific
-COEFF_NXFER   = COEFF(1,18)                ; number of xfers 
+   ; Cost coefficients
+   COEFF_COST  = COEFF(1,5)                 ; Cost
+
+   ; Calibration specific
+   COEFF_NXFER   = COEFF(1,18)              ; number of xfers
 
 ENDIF
 
-      ; Non motorized
-; distance portion that is 1 mile or less
-MW[18] = MIN(MW[2],1)
-  
-; Distance portion that is longer than 1 mile
+  ; Non motorized
+  ; distance portion that is 1 mile or less
+  MW[18] = MIN(MW[5],1)
+
+  ; Distance portion that is longer than 1 mile
   JLOOP
-      IF (MW[2][J] > 1)
-          MW[19] = MW[2][J] - 1
-      ELSE
-          MW[19] = 0
-      ENDIF
+    IF (MW[5][J] > 1)
+        MW[19] = MW[2][J] - 1
+    ELSE
+        MW[19] = 0
+    ENDIF
   ENDJLOOP
 
-;;;;;;Begin NHB MCLS Calculation;;;;;
-      
-            ; calculate travel time of non-motorized modes
-      MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
- 
-      ; Calculate Utilities
+
+  ; calculate travel time of non-motorized modes
+  MW[4] = (MW[5] / 3) * 60 ; miles / 3mph * 60 min/hr
+
+  ; Calculate Utilities
   MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])           ;Drive alone auto utility
   MW[12] = (K_NMOT + 20 * (COEFF_WALK1 * MW[18] + COEFF_WALK2 * MW[19]))    ;non-motorized utility, multiplied by 20 for time
   MW[13] = K_TRN + (COEFF_IVTT * MW[3]) + (COEFF_SWAIT * MW[3] * 0.1)       ;transit utility, assume 10% is waiting
-      
-     ; Exponentiate Utilities and adjust for zones which do not exist
-     MW[21] = exp(MW[11]) ;Exponentiated auto utility
-        JLOOP
-      IF (MW[2] > 2) ;limit length of nonmot trips
+
+  ; Exponentiate Utilities and adjust for zones which do not exist
+  MW[21] = exp(MW[11]) ;Exponentiated auto utility
+
+  JLOOP
+      IF (MW[5] > 2) ;limit length of nonmot trips
         MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
         MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
       ENDIF
-        ENDJLOOP
         
       JLOOP
       IF (MW[3] = 0) ;transit walk time
