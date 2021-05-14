@@ -82,3 +82,9 @@ Base/road47/Output/01_ROWSUMS.DBF
 Base/road50/Output/01_MODESPLIT.DBF
 
 Base/road50/Output/01_ROWSUMS.DBF
+
+sample_calcs/logtable.rds
+
+sample_calcs/logtable.csv
+
+sample_calcs/logsum_table.rds
