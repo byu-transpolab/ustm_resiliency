@@ -142,7 +142,7 @@ ENDIF
   MW[21] = exp(MW[11]) ;Exponentiated auto utility
 
   JLOOP
-      IF (MW[2] > 50) ;limit length of nonmot trips
+      IF (MW[2] > 10) ;limit length of nonmot trips
         MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
         MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
@@ -326,7 +326,7 @@ ENDIF
   MW[21] = exp(MW[11]) ;Exponentiated auto utility
 
   JLOOP
-      IF (MW[2] > 50) ;limit length of nonmot trips
+      IF (MW[2] > 5) ;limit length of nonmot trips
         MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
         MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
@@ -503,7 +503,7 @@ MW[18] = MIN(MW[2],1)
      ; Exponentiate Utilities and adjust for zones which do not exist
      MW[21] = exp(MW[11]) ;Exponentiated auto utility
         JLOOP
-      IF (MW[2] > 50) ;limit length of nonmot trips
+      IF (MW[2] > 5) ;limit length of nonmot trips
         MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
         MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
