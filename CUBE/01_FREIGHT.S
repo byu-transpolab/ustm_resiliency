@@ -1,12 +1,11 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX PRNFILE="C:\projects\ustm_resiliency\CUBE\resi0021.PRN"
-FILEI MATI[7] = "{CATALOG_DIR}\Inputs\OD_Veh_DY.mtx"
-FILEI MATI[4] = "{CATALOG_DIR}\Inputs\01_BASE_TRIPS_IJK.MAT"
+RUN PGM=MATRIX PRNFILE="C:\projects\ustm_resiliency\CUBE\resi0021.PRN" MSG='Compute Costs'
+FILEI MATI[4] = "{CATALOG_DIR}\Inputs\BASE_TRIPS_IJK.MAT"
 FILEO MATO[2] = "{SCENARIO_DIR}\Output\01_COMBINED_TRIPS.MAT",
   MO = 1, 901, 3,5,6,7,4,8,9 DEC = D, NAME = Freight, Pass, REC, HBW, HBO, NHB, ITime, BTime, TDiff
 FILEO PRINTO[1] = "C:\projects\ustm_resiliency\Base\logs\freight_cost.txt"
-FILEI MATI[1] = "{CATALOG_DIR}\Inputs\01_HIGHWAY_SKIMS_INITIAL.MAT"
+FILEI MATI[1] = "{CATALOG_DIR}\Inputs\BASE_HIGHWAY_SKIM.MAT"
 FILEI MATI[6] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[5] = "{CATALOG_DIR}\Inputs\OD_rec_DY.mat"
 FILEO MATO[1] = "{SCENARIO_DIR}\Output\01_TRAVELTIME_COSTS.MAT",
@@ -31,9 +30,6 @@ FILEI MATI[2] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
   MW[5]=MI.4.7 ;HBW Trips from Base
   MW[6]=MI.4.8 ;HBO Trips from Base
   MW[7]=MI.4.9 ;NHB Trips from Base
-  ;MW[5]=MI.7.5 ;HBW Trips from USTM
-  ;MW[6]=MI.7.6 ;HBO Trips from USTM
-  ;MW[7]=MI.7.7 ;NHB Trips from USTM
   MW[8]=MI.6.1 ;Broken Time Skim
   
 ;Compute travel time diff

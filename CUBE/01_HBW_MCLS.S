@@ -1,7 +1,6 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\logs\01_HBW_MCLS.PRN" MSG='HBW MCLS'
-FILEI MATI[3] = "{CATALOG_DIR}\Inputs\01_HIGHWAY_SKIMS_INITIAL.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
@@ -21,11 +20,9 @@ FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\hbw_modechoice_trace.txt"
 ; at each J by using a JLOOP.
 
 
-
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
   FILLMW MW[3]=MI.2.1        ;Walk bus time
-  FILLMW MW[5]=MI.3.2        ;NMOT Distance
 
   ; Progress Bar update for evey 100 zones
   zonemsg=100
@@ -82,11 +79,11 @@ ENDIF
 
   ; Non motorized
   ; distance portion that is 1 mile or less
-  MW[18] = MIN(MW[5],1)
+  MW[18] = MIN(MW[2],1)
 
   ; Distance portion that is longer than 1 mile
   JLOOP
-    IF (MW[5][J] > 1)
+    IF (MW[2][J] > 1)
         MW[19] = MW[2][J] - 1
     ELSE
         MW[19] = 0
@@ -95,18 +92,18 @@ ENDIF
 
 
   ; calculate travel time of non-motorized modes
-  MW[4] = (MW[5] / 3) * 60 ; miles / 3mph * 60 min/hr
+  MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
 
   ; Calculate Utilities
   MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])           ;Drive alone auto utility
-  MW[12] = (K_NMOT + 20 * (COEFF_WALK1 * MW[18] + COEFF_WALK2 * MW[19]))    ;non-motorized utility, multiplied by 20 for time
+  MW[12] = (K_NMOT +(COEFF_WALK1 * MW[18] + COEFF_WALK2 * MW[19]))    ;non-motorized utility, multiplied by 20 for time
   MW[13] = K_TRN + (COEFF_IVTT * MW[3]) + (COEFF_SWAIT * MW[3] * 0.1)       ;transit utility, assume 10% is waiting
 
   ; Exponentiate Utilities and adjust for zones which do not exist
   MW[21] = exp(MW[11]) ;Exponentiated auto utility
 
   JLOOP
-      IF (MW[5] > 2) ;limit length of nonmot trips
+      IF (MW[2] > 50) ;limit length of nonmot trips
         MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
         MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
@@ -124,11 +121,11 @@ ENDIF
       MW[30] = MW[21] + MW[22] + MW[23] ;create denominator for probability calculation
 
       ; Adjust for areas with a denominator equal to 0
-      JLOOP
-      IF(MW[30] = 0)
+    JLOOP
+     IF(MW[30] = 0)
       MW[30] = 1
-      ENDIF
-      ENDJLOOP
+     ENDIF
+    ENDJLOOP
 
       ; Probabilities
       MW[31] =  MW[21] / MW[30]       ;auto probability
@@ -137,16 +134,6 @@ ENDIF
 
       ; LOGSUM
       MW[40] = ln(MW[30])
-      
-      ; Calculate logit average of the mode choice logsums
-   JLOOP
-     MW[41] = MW[41] + EXP(MW[40])
-      IF (MW[41]> 0) 
-        MW[41] = Ln(MW[41])
-      ELSE 
-        MW[41] = 0
-     ENDIF
-   ENDJLOOP
 
       ; Report coefficient values to summary file and debug file;
          JLOOP

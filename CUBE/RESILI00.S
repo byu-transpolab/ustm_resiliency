@@ -38,7 +38,6 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\logs\01_HBW_MCLS.PRN" MSG='HBW MCLS'
-FILEI MATI[3] = "{CATALOG_DIR}\Inputs\01_HIGHWAY_SKIMS_INITIAL.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
@@ -58,11 +57,9 @@ FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\hbw_modechoice_trace.txt"
 ; at each J by using a JLOOP.
 
 
-
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
   FILLMW MW[3]=MI.2.1        ;Walk bus time
-  FILLMW MW[5]=MI.3.2        ;NMOT Distance
 
   ; Progress Bar update for evey 100 zones
   zonemsg=100
@@ -119,11 +116,11 @@ ENDIF
 
   ; Non motorized
   ; distance portion that is 1 mile or less
-  MW[18] = MIN(MW[5],1)
+  MW[18] = MIN(MW[2],1)
 
   ; Distance portion that is longer than 1 mile
   JLOOP
-    IF (MW[5][J] > 1)
+    IF (MW[2][J] > 1)
         MW[19] = MW[2][J] - 1
     ELSE
         MW[19] = 0
@@ -132,18 +129,18 @@ ENDIF
 
 
   ; calculate travel time of non-motorized modes
-  MW[4] = (MW[5] / 3) * 60 ; miles / 3mph * 60 min/hr
+  MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
 
   ; Calculate Utilities
   MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])           ;Drive alone auto utility
-  MW[12] = (K_NMOT + 20 * (COEFF_WALK1 * MW[18] + COEFF_WALK2 * MW[19]))    ;non-motorized utility, multiplied by 20 for time
+  MW[12] = (K_NMOT +(COEFF_WALK1 * MW[18] + COEFF_WALK2 * MW[19]))    ;non-motorized utility, multiplied by 20 for time
   MW[13] = K_TRN + (COEFF_IVTT * MW[3]) + (COEFF_SWAIT * MW[3] * 0.1)       ;transit utility, assume 10% is waiting
 
   ; Exponentiate Utilities and adjust for zones which do not exist
   MW[21] = exp(MW[11]) ;Exponentiated auto utility
 
   JLOOP
-      IF (MW[5] > 2) ;limit length of nonmot trips
+      IF (MW[2] > 50) ;limit length of nonmot trips
         MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
         MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
@@ -161,11 +158,11 @@ ENDIF
       MW[30] = MW[21] + MW[22] + MW[23] ;create denominator for probability calculation
 
       ; Adjust for areas with a denominator equal to 0
-      JLOOP
-      IF(MW[30] = 0)
+    JLOOP
+     IF(MW[30] = 0)
       MW[30] = 1
-      ENDIF
-      ENDJLOOP
+     ENDIF
+    ENDJLOOP
 
       ; Probabilities
       MW[31] =  MW[21] / MW[30]       ;auto probability
@@ -174,16 +171,6 @@ ENDIF
 
       ; LOGSUM
       MW[40] = ln(MW[30])
-      
-      ; Calculate logit average of the mode choice logsums
-   JLOOP
-     MW[41] = MW[41] + EXP(MW[40])
-      IF (MW[41]> 0) 
-        MW[41] = Ln(MW[41])
-      ELSE 
-        MW[41] = 0
-     ENDIF
-   ENDJLOOP
 
       ; Report coefficient values to summary file and debug file;
          JLOOP
@@ -225,7 +212,6 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBO_MCLS.PRN" MSG='HBO MCLS'
-FILEI MATI[3] = "{CATALOG_DIR}\Inputs\01_HIGHWAY_SKIMS_INITIAL.MAT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\hbo_modechoice_trace.txt"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
@@ -235,7 +221,6 @@ FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_LOGSUM.MAT",
   MO = 40,DEC=D, NAME=HBOlogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_UTILITY.MAT",
  MO=11-13, DEC=D,NAME=HBOauto_util,HBOnonmot_util, HBOtransit_util
-
 FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT",
  MO=31-33, DEC=D,NAME=HBOauto_prob,HBOnonmot_prob, HBOtransit_prob
 
@@ -246,10 +231,8 @@ FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT",
 ; at each J by using a JLOOP.
 
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
-  MW[150] = MW[1] * 100      ;AM highway time * 100
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
   FILLMW MW[3]=MI.2.1     ;Walk bus time
-  FILLMW MW[5]=MI.3.2        ;NMOT Distance
 
   ; Progress Bar update for evey 100 zones
   zonemsg=100
@@ -306,11 +289,11 @@ ENDIF
 
   ; Non motorized
   ; distance portion that is 1 mile or less
-  MW[18] = MIN(MW[5],1)
+  MW[18] = MIN(MW[2],1)
 
   ; Distance portion that is longer than 1 mile
   JLOOP
-    IF (MW[5][J] > 1)
+    IF (MW[2][J] > 1)
         MW[19] = MW[2][J] - 1
     ELSE
         MW[19] = 0
@@ -319,18 +302,18 @@ ENDIF
 
 
   ; calculate travel time of non-motorized modes
-  MW[4] = (MW[5] / 3) * 60 ; miles / 3mph * 60 min/hr
+  MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
 
   ; Calculate Utilities
   MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])           ;Drive alone auto utility
-  MW[12] = (K_NMOT + 20 * (COEFF_WALK1 * MW[18] + COEFF_WALK2 * MW[19]))    ;non-motorized utility, multiplied by 20 for time
+  MW[12] = (K_NMOT + (COEFF_WALK1 * MW[18] + COEFF_WALK2 * MW[19]))    ;non-motorized utility, multiplied by 20 for time
   MW[13] = K_TRN + (COEFF_IVTT * MW[3]) + (COEFF_SWAIT * MW[3] * 0.1)       ;transit utility, assume 10% is waiting
 
   ; Exponentiate Utilities and adjust for zones which do not exist
   MW[21] = exp(MW[11]) ;Exponentiated auto utility
 
   JLOOP
-      IF (MW[5] > 2) ;limit length of nonmot trips
+      IF (MW[2] > 50) ;limit length of nonmot trips
         MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
         MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
@@ -355,7 +338,6 @@ ENDIF
       ENDJLOOP
 
       ; Probabilities
-
       MW[31] =  MW[21] / MW[30]       ;auto probability
       MW[32] =  MW[22] / MW[30]       ;non-motorized probability
       MW[33] =  MW[23] / MW[30]       ;transit probability
@@ -403,7 +385,6 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_NHB_MCLS.PRN" MSG='NHB MCLS'
-FILEI MATI[3] = "{CATALOG_DIR}\Inputs\01_HIGHWAY_SKIMS_INITIAL.MAT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\nhb_modechoice_trace.txt"
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
@@ -426,7 +407,6 @@ FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_NHB_PROBABILITY.MAT",
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
   FILLMW MW[3]=MI.2.1     ;Walk bus time
-  FILLMW MW[5]=MI.3.2        ;NMOT Distance
 
   ; Progress Bar update for evey 100 zones
   zonemsg=100
@@ -483,11 +463,11 @@ ENDIF
 
   ; Non motorized
   ; distance portion that is 1 mile or less
-  MW[18] = MIN(MW[5],1)
+  MW[18] = MIN(MW[2],1)
 
   ; Distance portion that is longer than 1 mile
   JLOOP
-    IF (MW[5][J] > 1)
+    IF (MW[2][J] > 1)
         MW[19] = MW[2][J] - 1
     ELSE
         MW[19] = 0
@@ -496,30 +476,30 @@ ENDIF
 
 
   ; calculate travel time of non-motorized modes
-  MW[4] = (MW[5] / 3) * 60 ; miles / 3mph * 60 min/hr
+  MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
 
   ; Calculate Utilities
   MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])           ;Drive alone auto utility
-  MW[12] = (K_NMOT + 20 * (COEFF_WALK1 * MW[18] + COEFF_WALK2 * MW[19]))    ;non-motorized utility, multiplied by 20 for time
+  MW[12] = (K_NMOT +(COEFF_WALK1 * MW[18] + COEFF_WALK2 * MW[19]))    ;non-motorized utility, multiplied by 20 for time
   MW[13] = K_TRN + (COEFF_IVTT * MW[3]) + (COEFF_SWAIT * MW[3] * 0.1)       ;transit utility, assume 10% is waiting
 
   ; Exponentiate Utilities and adjust for zones which do not exist
   MW[21] = exp(MW[11]) ;Exponentiated auto utility
 
   JLOOP
-      IF (MW[5] > 2) ;limit length of nonmot trips
+      IF (MW[2] > 50) ;limit length of nonmot trips
         MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
       ELSE
         MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
       ENDIF
         
-      JLOOP
+      ;transit path reasonableness
       IF (MW[3] = 0) ;transit walk time
           MW[23] = 0 ;transit walk time equals zero if it equals zero
       ELSE
         MW[23] = exp(MW[13]) ;exponentiated transit utilty
       ENDIF
-      ENDJLOOP
+  ENDJLOOP
       
       ; Sum demonominator
       MW[30] = MW[21] + MW[22] + MW[23] ;create denominator for probability calculation
@@ -1291,12 +1271,11 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="C:\projects\ustm_resiliency\CUBE\resi0021.PRN"
-FILEI MATI[7] = "{CATALOG_DIR}\Inputs\OD_Veh_DY.mtx"
-FILEI MATI[4] = "{CATALOG_DIR}\Inputs\01_BASE_TRIPS_IJK.MAT"
+FILEI MATI[4] = "{CATALOG_DIR}\Inputs\BASE_TRIPS_IJK.MAT"
 FILEO MATO[2] = "{SCENARIO_DIR}\Output\01_COMBINED_TRIPS.MAT",
   MO = 1, 901, 3,5,6,7,4,8,9 DEC = D, NAME = Freight, Pass, REC, HBW, HBO, NHB, ITime, BTime, TDiff
 FILEO PRINTO[1] = "C:\projects\ustm_resiliency\Base\logs\freight_cost.txt"
-FILEI MATI[1] = "{CATALOG_DIR}\Inputs\01_HIGHWAY_SKIMS_INITIAL.MAT"
+FILEI MATI[1] = "{CATALOG_DIR}\Inputs\BASE HIGHWAY_SKIM.MAT"
 FILEI MATI[6] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[5] = "{CATALOG_DIR}\Inputs\OD_rec_DY.mat"
 FILEO MATO[1] = "{SCENARIO_DIR}\Output\01_TRAVELTIME_COSTS.MAT",
@@ -1321,9 +1300,6 @@ FILEI MATI[2] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
   MW[5]=MI.4.7 ;HBW Trips from Base
   MW[6]=MI.4.8 ;HBO Trips from Base
   MW[7]=MI.4.9 ;NHB Trips from Base
-  ;MW[5]=MI.7.5 ;HBW Trips from USTM
-  ;MW[6]=MI.7.6 ;HBO Trips from USTM
-  ;MW[7]=MI.7.7 ;NHB Trips from USTM
   MW[8]=MI.6.1 ;Broken Time Skim
   
 ;Compute travel time diff
