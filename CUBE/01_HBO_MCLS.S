@@ -1,6 +1,7 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\01_HBO_MCLS.PRN" MSG='HBO MCLS'
+FILEI MATI[3] = "{CATALOG_DIR}\Base\Output\01_HIGHWAY_SKIMS.MAT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\hbo_modechoice_trace.txt"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
@@ -22,6 +23,7 @@ FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_PROBABILITY.MAT",
   FILLMW MW[1]=MI.1.TIME     ;AM highway time
   FILLMW MW[2]=MI.1.DISTANCE ;AM highway distance
   FILLMW MW[3]=MI.2.1     ;Walk bus time
+  FILLMW MW[5]=MI.3.2        ;NMOT Distance
 
   ; Progress Bar update for evey 100 zones
   zonemsg=100
@@ -78,12 +80,12 @@ ENDIF
 
   ; Non motorized
   ; distance portion that is 1 mile or less
-  MW[18] = MIN(MW[2],1)
+  MW[18] = MIN(MW[5],1)
 
   ; Distance portion that is longer than 1 mile
   JLOOP
-    IF (MW[2][J] > 1)
-        MW[19] = MW[2][J] - 1
+    IF (MW[5][J] > 1)
+        MW[19] = MW[5][J] - 1
     ELSE
         MW[19] = 0
     ENDIF
@@ -91,7 +93,7 @@ ENDIF
 
 
   ; calculate travel time of non-motorized modes
-  MW[4] = (MW[2] / 3) * 60 ; miles / 3mph * 60 min/hr
+  MW[4] = (MW[5] / 3) * 60 ; miles / 3mph * 60 min/hr
 
   ; Calculate Utilities
   MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])           ;Drive alone auto utility
@@ -102,7 +104,7 @@ ENDIF
   MW[21] = exp(MW[11]) ;Exponentiated auto utility
 
   JLOOP
-      IF (MW[2] > 2.5) ;limit length of nonmot trips
+      IF (MW[5] > 2.5) ;limit length of nonmot trips
         MW[22] = 0 ;change nmot exponentiated utility if longer than 2.5 miles
       ELSE
         MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 2.5 miles
