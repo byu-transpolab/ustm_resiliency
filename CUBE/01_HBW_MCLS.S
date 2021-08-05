@@ -96,17 +96,17 @@ ENDIF
 
   ; Calculate Utilities
   MW[11] = (COEFF_IVTT * MW[1]) + (COEFF_COST * AUTOCOST * MW[2])           ;Drive alone auto utility
-  MW[12] = (K_NMOT +(COEFF_WALK1 * MW[18] + COEFF_WALK2 * MW[19]))    ;non-motorized utility, multiplied by 20 for time
+  MW[12] = (K_NMOT + 20 * (COEFF_WALK1 * MW[18] + COEFF_WALK2 * MW[19]))    ;non-motorized utility, multiplied by 20 for time
   MW[13] = K_TRN + (COEFF_IVTT * MW[3]) + (COEFF_SWAIT * MW[3] * 0.1)       ;transit utility, assume 10% is waiting
 
   ; Exponentiate Utilities and adjust for zones which do not exist
   MW[21] = exp(MW[11]) ;Exponentiated auto utility
 
   JLOOP
-      IF (MW[2] > 50) ;limit length of nonmot trips
-        MW[22] = 0 ;change nmot exponentiated utility if longer than 50 miles
+      IF (MW[2] > 2.5) ;limit length of nonmot trips
+        MW[22] = 0 ;change nmot exponentiated utility if longer than 2.5 miles
       ELSE
-        MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 50 miles
+        MW[22] = exp(MW[12]) ;nonmotorized exponentiated utiltiy shorter than 2.5 miles
       ENDIF
 
       ; Transit path reasonableness
