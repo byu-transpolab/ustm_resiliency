@@ -21,8 +21,7 @@ MW[1]=MI.1.6 ;HBW
 MW[2]=MI.2.2 ;Distance
 MW[3]=MI.1.7 ;HBO
 MW[4]=MI.1.8 ;NHB
-MW[5]=MI.1.9 ;HBC
-MW[6]=MI.1.10 ;REC
+
 
 ;set value equal to maximum number of groups, MVG, ustm uses 25
 gps={MVG}-1
@@ -31,8 +30,7 @@ gps={MVG}-1
 array tl1={MVG}
 array tl2={MVG}
 array tl3={MVG}
-array tl4={MVG}
-array tl5={MVG}
+
 
 ;create header for csv file
 IF (i = 1)
@@ -46,14 +44,13 @@ jloop
   ;group1 = min(INT(mw[2]/5),gps) + 1
   ;group2 = min(INT(mw[2]/5),gps) + 1
   ;group3 = min(INT(mw[2]/5),gps) + 1
-  ;group4 = min(INT(mw[2]/5),gps) + 1
+
 
  ;fill group arrays with group + trip purpose matrix values
   tl1[group]=tl1[group]+mw[1]
   tl2[group]=tl2[group]+mw[3]
   tl3[group]=tl3[group]+mw[4]
-  tl4[group]=tl4[group]+mw[5]
-  tl5[group]=tl5[group]+mw[6]
+
 endjloop
 
 if (i=zones)
@@ -62,11 +59,9 @@ if (i=zones)
    ro.HBW=tl1[group]
    ro.HBO=tl2[group]
    ro.NHB=tl3[group]
-   ro.HBC=tl4[group]
-   ro.REC=tl5[group]
    WRITE RECO = 1
-   print printo=1 list=ro.DISTANCE(6.0), ro.HBW(16.8),ro.HBO(16.8),ro.NHB(16.8),ro.HBC(16.8),ro.REC(16.8)
-   print printo=2 CSV = TRUE list = ro.DISTANCE(6.0), ro.HBW(16.8),ro.HBO(16.8),ro.NHB(16.8),ro.HBC(16.8),ro.REC(16.8)
+   print printo=1 list=ro.DISTANCE(6.0), ro.HBW(16.8),ro.HBO(16.8),ro.NHB(16.8)
+   print printo=2 CSV = TRUE list = ro.DISTANCE(6.0), ro.HBW(16.8),ro.HBO(16.8),ro.NHB(16.8)
   endloop
 endif
 
