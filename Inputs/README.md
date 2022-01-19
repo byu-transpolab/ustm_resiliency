@@ -12,14 +12,5 @@ model that do  not change with each scenario. They are as follows:
     into a USTM zone system. Travel times that are infeasible are coded as zero.
     This file is committed to the repository and is available on checkout.
   - `IIIXXIXX_LH_Ton_Truck_Utah.mat` Freight vehicle origin-destination matrix.
-    Extracted from USTM.
-  - `BASE_HIGHWAY_SKIM.MAT` Base highway skim taken from the base scenario. This is
-    created by duplicating the base scenario skim to the inputs folder, and is used
-    to compute the difference in travel times for cost measuring.
-  - `BASE_TRIPS_IJK.MAT` Base trips by mode and purpose from base scenario. This is
-    is created by duplicating the base scneario output into the inputs folder, and is
-    used to compute travel costs in the model based on time differences.
-  - `OD_rec_DY.MAT` Recreation vehicle OD matrix. Extracted from USTM.
-  - `SE_USTM_BASE2015.dbf` Socioeconomic data. Extracted from USTM.
-  - `USTM_Passenger_XX.MAT` External-external passenger trips. Extracted from USTM. 
-
+    Extracted from USTM. Cannot be stored in the repository due to size; download
+    from [https://byu.box.com/shared/static/96ekw7aa2dou4dcmajzw5iikkx6w28ld.mat][https://byu.box.com/shared/static/96ekw7aa2dou4dcmajzw5iikkx6w28ld.mat]
