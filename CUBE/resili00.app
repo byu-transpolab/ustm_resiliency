@@ -7,7 +7,7 @@ resiliency
 00
 
 
-Wed Jan 19 11:50:11 2022
+Wed Jan 19 13:25:21 2022
 
 
 C:\projects\ustm_resiliency\CUBE\resili00.app
@@ -2872,7 +2872,7 @@ PK Transit (Fixed)
 0
 0
 *
-{CATALOG_DIR}\Inputs\transit_skim.mat
+{CATALOG_DIR}\Inputs\transit_skim.MAT
 1
 0002
       
@@ -2882,7 +2882,7 @@ PK Transit (Fixed)
 1839
 -334
 -1
--1
+-9
 0
 #INFIL2
 Lookup File 1
@@ -12298,7 +12298,7 @@ Network File
 0
 0
 NET
-C:\projects\ustm_resiliency\Base\loaded_network.NET
+{SCENARIO_DIR}\Output\loaded_network.NET
 0
 HWY
 NETO  

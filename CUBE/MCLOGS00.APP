@@ -1,6 +1,6 @@
 &PROJFIL
 EXP0 1 1Matrix File 1  {SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT                  
-EXP0 2 1Matrix File 2  {CATALOG_DIR}\Inputs\transit_skim.mat                       
+EXP0 2 1Matrix File 2  {CATALOG_DIR}\Inputs\transit_skim.MAT                       
 EXP0 421Lookup File 1  {CATALOG_DIR}\params\MC_Coefficients.csv                    
 EXP0 431Lookup File 2  {CATALOG_DIR}\params\MC_Constants.csv                       
 EXP3 1 0Matrix File 1  {SCENARIO_DIR}\Output\01_MCLS_COMBINED.MAT                  
@@ -13,7 +13,7 @@ MC Logsums
 00
 
 
-Wed Aug 04 21:40:51 2021
+Wed Jan 19 11:53:48 2022
 
 C:\projects\ustm_resiliency\CUBE\resili00.app
 C:\PROJECTS\USTM_RESILIENCY\CUBE\MCLOGS00.APP
@@ -85,7 +85,7 @@ PK Transit (Fixed)
 0
 0
 MAT
-{CATALOG_DIR}\Inputs\transit_skim.mat
+{CATALOG_DIR}\Inputs\transit_skim.MAT
 0
 MAT
 MATI2 

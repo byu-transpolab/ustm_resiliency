@@ -40,7 +40,7 @@ ENDRUN
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\logs\01_HBW_MCLS.PRN" MSG='HBW MCLS'
 FILEI MATI[3] = "{CATALOG_DIR}\Base\Output\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
+FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.MAT"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_LOGSUM.MAT",
@@ -1335,9 +1335,9 @@ FILEI MATI[2] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
    ;HBW
    MW[403] = MW[5] * MW[90] ;vehicles * cents = total cents per day
    ;HBO
-   MW[503] = MW[7] * MW[90] ;vehicles * cents = total cents per day
+   MW[503] = MW[6] * MW[90] ;vehicles * cents = total cents per day
    ;NHB
-   MW[603] = MW[6] * MW[90] ;vehicles * cents = total cents per day
+   MW[603] = MW[7] * MW[90] ;vehicles * cents = total cents per day
    ;REC
    MW[803] = MW[3] * MW[90] ;vehicles * cents = total cents per day
 
@@ -1378,7 +1378,7 @@ RUN PGM=MATRIX MSG='Create Mode Split Columns'
 FILEI MATI[2] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
 FILEO RECO[1] = "{SCENARIO_DIR}\Output\01_MODESPLIT.DBF",
   FIELDS = TAZ, HBWAUTO, HBWNMOT, HBWTRANSIT, HBOAUTO, HBONMOT, HBOTRANSIT, NHBAUTO, NHBNMOT, NHBTRANSIT 
-  FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
+FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
 FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJK.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
@@ -1436,6 +1436,63 @@ ENDJLOOP
   Ro.NHBTRANSIT = NHBTRANSIT
 
 WRITE RECO = 1
+
+ENDRUN
+
+
+; Script for program HIGHWAY in file "C:\PROJECTS\USTM_RESILIENCY\CUBE\01HWY00A.S"
+;;<<Default Template>><<HIGHWAY>><<Default>>;;
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=HIGHWAY MSG='Congested Network'
+FILEI MATI[3] = "{CATALOG_DIR}\Inputs\USTM_Passenger_XX.mtx"
+FILEI MATI[2] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
+FILEO NETO = "C:\projects\ustm_resiliency\Base\loaded_network.NET"
+FILEI NETI = "{SCENARIO_DIR}\scenario_network.NET"
+FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJK.MAT"
+
+;Set run PARAMETERS and Controls
+PARAMETERS MAXITERS=100, COMBINE=EQUI, GAP= 0.0, RELATIVEGAP = 0.00001
+
+PHASE=LINKREAD
+
+   T0 = 60* (LI.DISTANCE/LI.FF_SPD)
+   C  = LI.AM_CAP
+   LW.COSTa = T0 + 0.25*LI.DISTANCE
+ 
+ENDPHASE
+
+PHASE=ILOOP
+  ; HBW PA to OD
+  HBW_ToD = 0.2746
+  HBW_Dir = 0.9301
+  MW[1] = MI.1.7 * HBW_ToD * HBW_Dir
+  
+  ; HBO
+  HBO_ToD = 0.0755
+  HBO_Dir = 0.7847
+  MW[2] = MI.1.8 * HBO_ToD * HBO_Dir
+  
+  ; NHB
+  NHB_ToD = 0.0641
+  NHB_Dir = 0.5000
+  MW[3] = MI.1.9 * NHB_ToD * NHB_Dir
+  
+  ; Freight, vehicles/day * PCE_HV
+  MW[4] = MI.2.13 / 365 * 2.0
+  
+  ; External Passenger PA to OD
+  XXP_ToD = 0.1236
+  XXP_Dir = 0.7262
+  MW[5] = MI.3.2 * XXP_ToD * XXP_Dir
+  
+  ; Count Daily OD Trips
+  MW[6] = MW[1] + MW[2] + MW[3] + MW[5]
+ 
+  ; Assign trips 
+  PATHLOAD PATH=LW.COSTa, VOL[1] = MW[6]
+                                                                         
+ENDPHASE
+
 
 ENDRUN
 
