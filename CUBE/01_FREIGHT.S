@@ -59,9 +59,9 @@ FILEI MATI[2] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
    ;HBW
    MW[403] = MW[5] * MW[90] ;vehicles * cents = total cents per day
    ;HBO
-   MW[503] = MW[7] * MW[90] ;vehicles * cents = total cents per day
+   MW[503] = MW[6] * MW[90] ;vehicles * cents = total cents per day
    ;NHB
-   MW[603] = MW[6] * MW[90] ;vehicles * cents = total cents per day
+   MW[603] = MW[7] * MW[90] ;vehicles * cents = total cents per day
    ;REC
    MW[803] = MW[3] * MW[90] ;vehicles * cents = total cents per day
 
