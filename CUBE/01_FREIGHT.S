@@ -1,12 +1,12 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="C:\projects\ustm_resiliency\CUBE\resi0021.PRN" MSG='Compute Costs'
+FILEI MATI[1] = "{CATALOG_DIR}\Inputs\BASE_HIGHWAY_SKIM.MAT"
 FILEI MATI[4] = "{CATALOG_DIR}\Inputs\BASE_TRIPS_IJK.MAT"
 FILEO MATO[2] = "{SCENARIO_DIR}\Output\01_COMBINED_TRIPS.MAT",
   MO = 1, 901, 3,5,6,7,4,8,9 DEC = D, NAME = Freight, Pass, REC, HBW, HBO, NHB, ITime, BTime, TDiff
 FILEO PRINTO[1] = "C:\projects\ustm_resiliency\Base\logs\freight_cost.txt"
-FILEI MATI[1] = "{CATALOG_DIR}\Inputs\BASE_HIGHWAY_SKIM.MAT"
-FILEI MATI[6] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
+FILEI MATI[6] = "{SCENARIO_DIR}\Output\01_LOADED_HIGHWAY_SKIMS.MAT"
 FILEI MATI[5] = "{CATALOG_DIR}\Inputs\OD_rec_DY.mat"
 FILEO MATO[1] = "{SCENARIO_DIR}\Output\01_TRAVELTIME_COSTS.MAT",
   MO = 103,203,303,403,503,603,803,903,9, DEC = D, NAME = IIF, XXF, IXF, HBW, HBO, NHB, REC, XXP, Timediff
