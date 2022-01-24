@@ -1,11 +1,11 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX PRNFILE="C:\projects\ustm_resiliency\CUBE\resi0021.PRN" MSG='Compute Costs'
+RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\{SCENARIO_DIR}\intermediate_outputs\resi0021.PRN" MSG='Compute Costs'
 FILEI MATI[1] = "{CATALOG_DIR}\Inputs\BASE_HIGHWAY_SKIM.MAT"
 FILEI MATI[4] = "{CATALOG_DIR}\Inputs\BASE_TRIPS_IJK.MAT"
 FILEO MATO[2] = "{SCENARIO_DIR}\Output\01_COMBINED_TRIPS.MAT",
   MO = 1, 901, 3,5,6,7,4,8,9 DEC = D, NAME = Freight, Pass, REC, HBW, HBO, NHB, ITime, BTime, TDiff
-FILEO PRINTO[1] = "C:\projects\ustm_resiliency\Base\logs\freight_cost.txt"
+FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\freight_cost.txt"
 FILEI MATI[6] = "{SCENARIO_DIR}\Output\01_LOADED_HIGHWAY_SKIMS.MAT"
 FILEI MATI[5] = "{CATALOG_DIR}\Inputs\OD_rec_DY.mat"
 FILEO MATO[1] = "{SCENARIO_DIR}\Output\01_TRAVELTIME_COSTS.MAT",
@@ -77,15 +77,14 @@ FILEI MATI[2] = "{CATALOG_DIR}\Inputs\LH_Truck.mtx"
 	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest}) 
       PRINT PRINTO=1 CSV=F LIST ='FREIGHTCOST TRACE','\n\n'
 	  	PRINT PRINTO=1 CSV=F LIST =' FREIGHTCOST \n\nSelected Interchange for Tracing:    ',{SelOrigin}(4.0),'-',{SelDest}(4.0),'\n'  	      
-	  	PRINT PRINTO=1 CSV=F LIST ='\n IIFreight                                 ', MW[10] 
-      PRINT PRINTO=1 CSV=F LIST ='\n IXFreight                                 ', MW[11] 
-      PRINT PRINTO=1 CSV=F LIST ='\n XXFreight                                 ', MW[12]
-      PRINT PRINTO=1 CSV=F LIST ='\n XIFreight                                 ', MW[13]
-      PRINT PRINTO=1 CSV=F LIST ='\n XXPassenger                               ', MW[14]
-      PRINT PRINTO=1 CSV=F LIST ='\n HBW Values                                ', MW[15]
-      PRINT PRINTO=1 CSV=F LIST ='\n HBO Values                                ', MW[16]
-      PRINT PRINTO=1 CSV=F LIST ='\n NHB Values                                ',MW[17]
-		  PRINT PRINTO=1 CSV=F LIST ='\n REC Values                                ', MW[18]  
+	  	PRINT PRINTO=1 CSV=F LIST ='\n IIFreight                                 ', MW[100] 
+      PRINT PRINTO=1 CSV=F LIST ='\n IXXIFreight                               ', MW[200] 
+      PRINT PRINTO=1 CSV=F LIST ='\n XXFreight                                 ', MW[300]
+      PRINT PRINTO=1 CSV=F LIST ='\n XXPassenger                               ', MW[903]
+      PRINT PRINTO=1 CSV=F LIST ='\n HBW Values                                ', MW[403]
+      PRINT PRINTO=1 CSV=F LIST ='\n HBO Values                                ', MW[503]
+      PRINT PRINTO=1 CSV=F LIST ='\n NHB Values                                ', MW[603]
+		  PRINT PRINTO=1 CSV=F LIST ='\n REC Values                                ', MW[803]  
 
    ENDIF
      
