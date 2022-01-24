@@ -1273,109 +1273,11 @@ FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJ.MAT"
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\projects\ustm_resiliency\CUBE\01_FREIGHT.S"
-;;<<Default Template>><<MATRIX>><<Default>>;;
-; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX PRNFILE="C:\projects\ustm_resiliency\CUBE\resi0021.PRN" MSG='Compute Costs'
-FILEI MATI[4] = "{CATALOG_DIR}\Inputs\BASE_TRIPS_IJK.MAT"
-FILEO MATO[2] = "{SCENARIO_DIR}\Output\01_COMBINED_TRIPS.MAT",
-  MO = 1, 901, 3,5,6,7,4,8,9 DEC = D, NAME = Freight, Pass, REC, HBW, HBO, NHB, ITime, BTime, TDiff
-FILEO PRINTO[1] = "C:\projects\ustm_resiliency\Base\logs\freight_cost.txt"
-FILEI MATI[1] = "{CATALOG_DIR}\Inputs\BASE_HIGHWAY_SKIM.MAT"
-FILEI MATI[6] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[5] = "{CATALOG_DIR}\Inputs\OD_rec_DY.mat"
-FILEO MATO[1] = "{SCENARIO_DIR}\Output\01_TRAVELTIME_COSTS.MAT",
-  MO = 103,203,303,403,503,603,803,903,9, DEC = D, NAME = IIF, XXF, IXF, HBW, HBO, NHB, REC, XXP, Timediff
-FILEI MATI[3] = "{CATALOG_DIR}\Inputs\USTM_Passenger_XX.mtx"
-FILEI MATI[2] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
-
-; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
-; where I is the origin zones.  All user statements in the module are processed once for each origin.
-; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
-; the values for all destination zones J are automatically computed.  The user can control the computations
-; at each J by using a JLOOP.
-
-;Fill matrices
-  MW[1]=MI.2.13 ;Total Freight
-  MW[20]=MI.3.2 ;XXPassenger
-  MW[21]=MI.3.3 ;XXBus
-  MW[22]=MI.3.4 ;XXREC
-  MW[23]=MI.3.5 ;XXOther
-  MW[3]=MI.5.1 ;REC Trips
-  MW[4]=MI.1.1 ;Initial Time Skim
-  MW[5]=MI.4.7 ;HBW Trips from Base
-  MW[6]=MI.4.8 ;HBO Trips from Base
-  MW[7]=MI.4.9 ;NHB Trips from Base
-  MW[8]=MI.6.1 ;Broken Time Skim
-  
-;Compute travel time diff
-  MW[9] = MW[8] - MW[4]
-  
- ;Compute all freight
-   MW[80] = ((MW[1])/365 * (MW[9])) * 156.73 ; vehicles/day * minutes * cents = cents/day
-   MW[90] = MW[9] * 29.45 ; Minutes * cents/min = cents
-    
-   MW[300] = 0 ;XXF
-   MW[100] = 0 ;IIF
-   MW[200] = 0 ;XIF & IXF
-  JLOOP
-   IF (I<28 && J<28) ;referencing only external zones
-    MW[200] = 1
-   ELSEIF (I<28 | J<28) ;referencing external zones in I or J
-    MW[300] = 1
-   ELSE ;referencing all zones
-    MW[100] = 1
-   ENDIF
-  ENDJLOOP
-     
-   MW[103] = MW[80] * MW[100] ;IIF
-   MW[203] = MW[80] * MW[200] ;XXF
-   MW[303] = MW[80] * MW[300] ;IXF
-   
-   ;HBW
-   MW[403] = MW[5] * MW[90] ;vehicles * cents = total cents per day
-   ;HBO
-   MW[503] = MW[6] * MW[90] ;vehicles * cents = total cents per day
-   ;NHB
-   MW[603] = MW[7] * MW[90] ;vehicles * cents = total cents per day
-   ;REC
-   MW[803] = MW[3] * MW[90] ;vehicles * cents = total cents per day
-
-   ;XXPassenger
-   MW[901] = MW[20] + MW[21] + MW[22] + MW[23]
-   MW[903] = MW[901] * MW[90] 
-   
-
-
-; Report coefficient values to summary file and debug file;
-    JLOOP
-		 ;Debug destination choice
-	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest}) 
-      PRINT PRINTO=1 CSV=F LIST ='FREIGHTCOST TRACE','\n\n'
-	  	PRINT PRINTO=1 CSV=F LIST =' FREIGHTCOST \n\nSelected Interchange for Tracing:    ',{SelOrigin}(4.0),'-',{SelDest}(4.0),'\n'  	      
-	  	PRINT PRINTO=1 CSV=F LIST ='\n IIFreight                                 ', MW[10] 
-      PRINT PRINTO=1 CSV=F LIST ='\n IXFreight                                 ', MW[11] 
-      PRINT PRINTO=1 CSV=F LIST ='\n XXFreight                                 ', MW[12]
-      PRINT PRINTO=1 CSV=F LIST ='\n XIFreight                                 ', MW[13]
-      PRINT PRINTO=1 CSV=F LIST ='\n XXPassenger                               ', MW[14]
-      PRINT PRINTO=1 CSV=F LIST ='\n HBW Values                                ', MW[15]
-      PRINT PRINTO=1 CSV=F LIST ='\n HBO Values                                ', MW[16]
-      PRINT PRINTO=1 CSV=F LIST ='\n NHB Values                                ',MW[17]
-		  PRINT PRINTO=1 CSV=F LIST ='\n REC Values                                ', MW[18]  
-
-   ENDIF
-     
- ENDJLOOP
-
-
-ENDRUN
-
-
 ; Script for program MATRIX in file "C:\Projects\ustm_resiliency\CUBE\01_MODESPLIT.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Create Mode Split Columns'
-FILEI MATI[2] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
+FILEI MATI[2] = "{CATALOG_DIR}\Inputs\LH_Truck.mtx"
 FILEO RECO[1] = "{SCENARIO_DIR}\Output\01_MODESPLIT.DBF",
   FIELDS = TAZ, HBWAUTO, HBWNMOT, HBWTRANSIT, HBOAUTO, HBONMOT, HBOTRANSIT, NHBAUTO, NHBNMOT, NHBTRANSIT 
 FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
@@ -1443,9 +1345,9 @@ ENDRUN
 ; Script for program HIGHWAY in file "C:\PROJECTS\USTM_RESILIENCY\CUBE\01HWY00A.S"
 ;;<<Default Template>><<HIGHWAY>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=HIGHWAY MSG='Congested Network'
+RUN PGM=HIGHWAY PRNFILE="C:\projects\ustm_resiliency\Base\intermediate_outputs\01_LOADED_NETWORK.PRN" MSG='Congested Network'
 FILEI MATI[3] = "{CATALOG_DIR}\Inputs\USTM_Passenger_XX.mtx"
-FILEI MATI[2] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
+FILEI MATI[2] = "{CATALOG_DIR}\Inputs\LH_Truck.mtx"
 FILEO NETO = "{SCENARIO_DIR}\Output\loaded_network.NET"
 FILEI NETI = "{SCENARIO_DIR}\scenario_network.NET"
 FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJK.MAT"
@@ -1477,12 +1379,11 @@ PHASE=ILOOP
   NHB_Dir = 0.5000
   MW[3] = MI.1.9 * NHB_ToD * NHB_Dir
   
-  ; Freight, vehicles/day * PCE_HV PA to OD
+  ; Freight, PCE_HV PA to OD
   FREIGHT_ToD = 0.1590
   FREIGHT_Dir = 0.5000
-  PCE_MD = 1.5
   PCE_HV = 2.0
-  MW[4] = MI.2.13 / 365 * PCE_HV * FREIGHT_ToD * FREIGHT_Dir
+  MW[4] = MI.2.1 * PCE_HV * FREIGHT_ToD * FREIGHT_Dir
   
   ; External Passenger PA to OD
   XXP_ToD = 0.1236
@@ -1496,6 +1397,150 @@ PHASE=ILOOP
   PATHLOAD PATH=LW.COSTa, VOL[1] = MW[6]
                                                                          
 ENDPHASE
+
+
+; Report to summary file and debug file;
+    JLOOP
+		 ;Debug destination choice
+	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest}) 
+      PRINT PRINTO=1 CSV=F LIST ='OD Trips TRACE','\n\n'
+	  	PRINT PRINTO=1 CSV=F LIST ='\n HBW OD                                 ', MW[1] 
+      PRINT PRINTO=1 CSV=F LIST ='\n HBO OD                                 ', MW[2]
+	  	PRINT PRINTO=1 CSV=F LIST ='\n NHB OD                                 ', MW[3] 
+      PRINT PRINTO=1 CSV=F LIST ='\n Freight OD                             ', MW[4] 
+      PRINT PRINTO=1 CSV=F LIST ='\n XX Passenger OD                        ', MW[5]
+      PRINT PRINTO=1 CSV=F LIST ='\n Daily OD Trips                         ', MW[6] 
+ 
+   ENDIF
+     
+ ENDJLOOP
+
+ENDRUN
+
+
+; Script for program HIGHWAY in file "C:\PROJECTS\USTM_RESILIENCY\CUBE\01HWY00B.S"
+;;<<Default Template>><<HIGHWAY>><<Default>>;;
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=HIGHWAY
+FILEO MATO[1] = "{SCENARIO_DIR}\Output\01_LOADED_HIGHWAY_SKIMS.MAT",
+  MO = 1-2, DEC = D, NAME = TIME, DISTANCE
+FILEI NETI = "{SCENARIO_DIR}\Output\loaded_network.NET"
+
+PROCESS PHASE=LINKREAD
+
+ TIME_1 = 1
+ T0=LI.TIME_1
+
+ENDPROCESS
+
+PROCESS PHASE=ILOOP
+
+
+; skim network for time and distance
+  PATHLOAD PATH=TIME,MW[1]=PATHTRACE(TIME),MW[2]=PATHTRACE(LI.DISTANCE)
+  MW[1][I] = rowmin(1) * 0.5 ; Intrazonal time is half of the time to the nearest zone.
+  MW[2][I] = 0                ; Set Intrazonal Dist = 0
+
+  ; Total Impedance including terminal times
+  MW[3] = MW[1]+MW[2]
+   
+ENDPROCESS
+
+ENDRUN
+
+
+; Script for program MATRIX in file "C:\projects\ustm_resiliency\CUBE\01_FREIGHT.S"
+;;<<Default Template>><<MATRIX>><<Default>>;;
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\{SCENARIO_DIR}\intermediate_outputs\resi0021.PRN" MSG='Compute Costs'
+FILEI MATI[1] = "{CATALOG_DIR}\Inputs\BASE_HIGHWAY_SKIM.MAT"
+FILEI MATI[4] = "{CATALOG_DIR}\Inputs\BASE_TRIPS_IJK.MAT"
+FILEO MATO[2] = "{SCENARIO_DIR}\Output\01_COMBINED_TRIPS.MAT",
+  MO = 1, 901, 3,5,6,7,4,8,9 DEC = D, NAME = Freight, Pass, REC, HBW, HBO, NHB, ITime, BTime, TDiff
+FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\freight_cost.txt"
+FILEI MATI[6] = "{SCENARIO_DIR}\Output\01_LOADED_HIGHWAY_SKIMS.MAT"
+FILEI MATI[5] = "{CATALOG_DIR}\Inputs\OD_rec_DY.mat"
+FILEO MATO[1] = "{SCENARIO_DIR}\Output\01_TRAVELTIME_COSTS.MAT",
+  MO = 103,203,303,403,503,603,803,903,9, DEC = D, NAME = IIF, XXF, IXF, HBW, HBO, NHB, REC, XXP, Timediff
+FILEI MATI[3] = "{CATALOG_DIR}\Inputs\USTM_Passenger_XX.mtx"
+FILEI MATI[2] = "{CATALOG_DIR}\Inputs\LH_Truck.mtx"
+
+; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
+; where I is the origin zones.  All user statements in the module are processed once for each origin.
+; Matrix computation (MW[#]=) are solved for all values of J for each I.  Thus for a given origin zone I
+; the values for all destination zones J are automatically computed.  The user can control the computations
+; at each J by using a JLOOP.
+
+;Fill matrices
+  MW[1]=MI.2.1 ;Total Freight
+  MW[20]=MI.3.2 ;XXPassenger
+  MW[21]=MI.3.3 ;XXBus
+  MW[22]=MI.3.4 ;XXREC
+  MW[23]=MI.3.5 ;XXOther
+  MW[3]=MI.5.1 ;REC Trips
+  MW[4]=MI.1.1 ;Initial Time Skim
+  MW[5]=MI.4.7 ;HBW Trips from Base
+  MW[6]=MI.4.8 ;HBO Trips from Base
+  MW[7]=MI.4.9 ;NHB Trips from Base
+  MW[8]=MI.6.1 ;Broken Time Skim
+  
+;Compute travel time diff
+  MW[9] = MW[8] - MW[4]
+  
+ ;Compute all freight
+   MW[80] = ((MW[1]) * (MW[9])) * 156.73 ; vehicles/day * minutes * cents = cents/day
+   MW[90] = MW[9] * 29.45 ; Minutes * cents/min = cents
+    
+   MW[300] = 0 ;XXF
+   MW[100] = 0 ;IIF
+   MW[200] = 0 ;XIF & IXF
+  JLOOP
+   IF (I<28 && J<28) ;referencing only external zones
+    MW[200] = 1
+   ELSEIF (I<28 | J<28) ;referencing external zones in I or J
+    MW[300] = 1
+   ELSE ;referencing all zones
+    MW[100] = 1
+   ENDIF
+  ENDJLOOP
+     
+   MW[103] = MW[80] * MW[100] ;IIF
+   MW[203] = MW[80] * MW[200] ;XXF
+   MW[303] = MW[80] * MW[300] ;IXF
+   
+   ;HBW
+   MW[403] = MW[5] * MW[90] ;vehicles * cents = total cents per day
+   ;HBO
+   MW[503] = MW[6] * MW[90] ;vehicles * cents = total cents per day
+   ;NHB
+   MW[603] = MW[7] * MW[90] ;vehicles * cents = total cents per day
+   ;REC
+   MW[803] = MW[3] * MW[90] ;vehicles * cents = total cents per day
+
+   ;XXPassenger
+   MW[901] = MW[20] + MW[21] + MW[22] + MW[23]
+   MW[903] = MW[901] * MW[90] 
+   
+
+
+; Report coefficient values to summary file and debug file;
+    JLOOP
+		 ;Debug destination choice
+	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest}) 
+      PRINT PRINTO=1 CSV=F LIST ='FREIGHTCOST TRACE','\n\n'
+	  	PRINT PRINTO=1 CSV=F LIST =' FREIGHTCOST \n\nSelected Interchange for Tracing:    ',{SelOrigin}(4.0),'-',{SelDest}(4.0),'\n'  	      
+	  	PRINT PRINTO=1 CSV=F LIST ='\n IIFreight                                 ', MW[100] 
+      PRINT PRINTO=1 CSV=F LIST ='\n IXXIFreight                               ', MW[200] 
+      PRINT PRINTO=1 CSV=F LIST ='\n XXFreight                                 ', MW[300]
+      PRINT PRINTO=1 CSV=F LIST ='\n XXPassenger                               ', MW[903]
+      PRINT PRINTO=1 CSV=F LIST ='\n HBW Values                                ', MW[403]
+      PRINT PRINTO=1 CSV=F LIST ='\n HBO Values                                ', MW[503]
+      PRINT PRINTO=1 CSV=F LIST ='\n NHB Values                                ', MW[603]
+		  PRINT PRINTO=1 CSV=F LIST ='\n REC Values                                ', MW[803]  
+
+   ENDIF
+     
+ ENDJLOOP
 
 
 ENDRUN

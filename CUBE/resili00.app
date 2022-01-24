@@ -7,7 +7,7 @@ resiliency
 00
 
 
-Mon Jan 24 10:36:15 2022
+Mon Jan 24 11:26:41 2022
 
 
 C:\projects\ustm_resiliency\CUBE\resili00.app
@@ -11946,7 +11946,7 @@ Print File
 0
 0
 PRN
-C:\projects\ustm_resiliency\Base\intermediate_outputs\01_LOADED_NETWORK.PRN
+{SCENARIO_DIR}\intermediate_outputs\01_LOADED_NETWORK.PRN
 0
 HWY
 OPRN  
@@ -13402,7 +13402,7 @@ HIGHWAY
 0
 0
 #INFIL0
-Script File   
+Script File
 
 0
 0
@@ -13420,7 +13420,7 @@ ISCR1
 -1
 0
 #INFIL1
-Matrix File 1 
+Matrix File 1
 
 0
 0
@@ -13438,7 +13438,7 @@ MATI1
 -1
 0
 #INFIL2
-Matrix File 2 
+Matrix File 2
 
 0
 0
@@ -13456,7 +13456,7 @@ MATI2
 -1
 0
 #INFIL3
-Matrix File 3 
+Matrix File 3
 
 0
 0
@@ -13474,7 +13474,7 @@ MATI3
 -1
 0
 #INFIL4
-Matrix File 4 
+Matrix File 4
 
 0
 0
@@ -13492,7 +13492,7 @@ MATI4
 -1
 0
 #INFIL5
-Matrix File 5 
+Matrix File 5
 
 0
 0
@@ -13510,7 +13510,7 @@ MATI5
 -1
 0
 #INFIL6
-Matrix File 6 
+Matrix File 6
 
 0
 0
@@ -13528,7 +13528,7 @@ MATI6
 -1
 0
 #INFIL7
-Matrix File 7 
+Matrix File 7
 
 0
 0
@@ -13546,7 +13546,7 @@ MATI7
 -1
 0
 #INFIL8
-Matrix File 8 
+Matrix File 8
 
 0
 0
@@ -13564,7 +13564,7 @@ MATI8
 -1
 0
 #INFIL9
-Matrix File 9 
+Matrix File 9
 
 0
 0
@@ -13780,7 +13780,7 @@ MATI20
 -1
 0
 #INFIL21
-Network File  
+Network File
 Loaded Network
 0
 0
@@ -13798,7 +13798,7 @@ NETI
 22
 0
 #INFIL22
-Sub Area Net  
+Sub Area Net
 
 0
 0
@@ -13852,7 +13852,7 @@ TURNPENI
 -1
 0
 #INFIL25
-Zonal Data 1  
+Zonal Data 1
 
 0
 0
@@ -13870,7 +13870,7 @@ ZDATI1
 -1
 0
 #INFIL26
-Zonal Data 2  
+Zonal Data 2
 
 0
 0
@@ -13888,7 +13888,7 @@ ZDATI2
 -1
 0
 #INFIL27
-Zonal Data 3  
+Zonal Data 3
 
 0
 0
@@ -13906,7 +13906,7 @@ ZDATI3
 -1
 0
 #INFIL28
-Zonal Data 4  
+Zonal Data 4
 
 0
 0
@@ -13924,7 +13924,7 @@ ZDATI4
 -1
 0
 #INFIL29
-Zonal Data 5  
+Zonal Data 5
 
 0
 0
@@ -13942,7 +13942,7 @@ ZDATI5
 -1
 0
 #INFIL30
-Zonal Data 6  
+Zonal Data 6
 
 0
 0
@@ -13960,7 +13960,7 @@ ZDATI6
 -1
 0
 #INFIL31
-Zonal Data 7  
+Zonal Data 7
 
 0
 0
@@ -13978,7 +13978,7 @@ ZDATI7
 -1
 0
 #INFIL32
-Zonal Data 8  
+Zonal Data 8
 
 0
 0
@@ -13996,7 +13996,7 @@ ZDATI8
 -1
 0
 #INFIL33
-Zonal Data 9  
+Zonal Data 9
 
 0
 0
@@ -14014,7 +14014,7 @@ ZDATI9
 -1
 0
 #INFIL34
-Zonal Data 10 
+Zonal Data 10
 
 0
 0
@@ -14032,7 +14032,7 @@ ZDATI10
 -1
 0
 #INFIL35
-Toll Matrix 1 
+Toll Matrix 1
 
 0
 0
@@ -14050,7 +14050,7 @@ TOLLMATI1
 -1
 0
 #INFIL36
-Toll Matrix 2 
+Toll Matrix 2
 
 0
 0
@@ -14068,7 +14068,7 @@ TOLLMATI2
 -1
 0
 #INFIL37
-Toll Matrix 3 
+Toll Matrix 3
 
 0
 0
@@ -14086,7 +14086,7 @@ TOLLMATI3
 -1
 0
 #INFIL38
-Toll Matrix 4 
+Toll Matrix 4
 
 0
 0
@@ -14104,7 +14104,7 @@ TOLLMATI4
 -1
 0
 #INFIL39
-Toll Matrix 5 
+Toll Matrix 5
 
 0
 0
@@ -14122,7 +14122,7 @@ TOLLMATI5
 -1
 0
 #INFIL40
-Toll Matrix 6 
+Toll Matrix 6
 
 0
 0
@@ -14140,7 +14140,7 @@ TOLLMATI6
 -1
 0
 #INFIL41
-Toll Matrix 7 
+Toll Matrix 7
 
 0
 0
@@ -14158,7 +14158,7 @@ TOLLMATI7
 -1
 0
 #INFIL42
-Toll Matrix 8 
+Toll Matrix 8
 
 0
 0
@@ -14176,7 +14176,7 @@ TOLLMATI8
 -1
 0
 #INFIL43
-Toll Matrix 9 
+Toll Matrix 9
 
 0
 0
@@ -14212,7 +14212,7 @@ TOLLMATI10
 -1
 0
 #INFIL45
-Lookup File 1 
+Lookup File 1
 
 0
 0
@@ -14230,7 +14230,7 @@ LOOKUPI1
 -1
 0
 #INFIL46
-Lookup File 2 
+Lookup File 2
 
 0
 0
@@ -14248,7 +14248,7 @@ LOOKUPI2
 -1
 0
 #INFIL47
-Lookup File 3 
+Lookup File 3
 
 0
 0
@@ -14266,7 +14266,7 @@ LOOKUPI3
 -1
 0
 #INFIL48
-Lookup File 4 
+Lookup File 4
 
 0
 0
@@ -14284,7 +14284,7 @@ LOOKUPI4
 -1
 0
 #INFIL49
-Lookup File 5 
+Lookup File 5
 
 0
 0
@@ -14302,7 +14302,7 @@ LOOKUPI5
 -1
 0
 #INFIL50
-Lookup File 6 
+Lookup File 6
 
 0
 0
@@ -14320,7 +14320,7 @@ LOOKUPI6
 -1
 0
 #INFIL51
-Lookup File 7 
+Lookup File 7
 
 0
 0
@@ -14338,7 +14338,7 @@ LOOKUPI7
 -1
 0
 #INFIL52
-Lookup File 8 
+Lookup File 8
 
 0
 0
@@ -14356,7 +14356,7 @@ LOOKUPI8
 -1
 0
 #INFIL53
-Lookup File 9 
+Lookup File 9
 
 0
 0
@@ -14752,7 +14752,7 @@ LOOKUPI30
 -1
 0
 #OUTFIL0
-Print File    
+Print File
 
 0
 0
@@ -14768,7 +14768,7 @@ OPRN
 -1767
 0
 #OUTFIL1
-Matrix File 1 
+Matrix File 1
 Loaded Skim
 0
 0
@@ -14784,7 +14784,7 @@ MATO1
 -2170
 0
 #OUTFIL2
-Matrix File 2 
+Matrix File 2
 
 0
 0
@@ -14800,7 +14800,7 @@ MATO2
 -1891
 0
 #OUTFIL3
-Matrix File 3 
+Matrix File 3
 
 0
 0
@@ -14816,7 +14816,7 @@ MATO3
 404
 0
 #OUTFIL4
-Matrix File 4 
+Matrix File 4
 
 0
 0
@@ -14832,7 +14832,7 @@ MATO4
 342
 0
 #OUTFIL5
-Matrix File 5 
+Matrix File 5
 
 0
 0
@@ -14848,7 +14848,7 @@ MATO5
 280
 0
 #OUTFIL6
-Matrix File 6 
+Matrix File 6
 
 0
 0
@@ -14864,7 +14864,7 @@ MATO6
 218
 0
 #OUTFIL7
-Matrix File 7 
+Matrix File 7
 
 0
 0
@@ -14880,7 +14880,7 @@ MATO7
 156
 0
 #OUTFIL8
-Matrix File 8 
+Matrix File 8
 
 0
 0
@@ -14896,7 +14896,7 @@ MATO8
 94
 0
 #OUTFIL9
-Matrix File 9 
+Matrix File 9
 
 0
 0
@@ -15088,7 +15088,7 @@ MATO20
 -650
 0
 #OUTFIL21
-Sub Area Mat. 
+Sub Area Mat.
 
 0
 0
@@ -15104,7 +15104,7 @@ SUBAREAMATO
 -1953
 0
 #OUTFIL22
-Network File  
+Network File
 
 0
 0
@@ -15120,7 +15120,7 @@ NETO
 -2015
 0
 #OUTFIL23
-Turn Flows    
+Turn Flows
 
 0
 0
@@ -15232,7 +15232,7 @@ TURNPENO
 -2201
 0
 #OUTFIL30
-Screenlines 1 
+Screenlines 1
 
 0
 0
@@ -15248,7 +15248,7 @@ ESTMDATO1
 -2263
 0
 #OUTFIL31
-Screenlines 2 
+Screenlines 2
 
 0
 0
@@ -15264,7 +15264,7 @@ ESTMDATO2
 -1332
 0
 #OUTFIL32
-Screenlines 3 
+Screenlines 3
 
 0
 0
@@ -15280,7 +15280,7 @@ ESTMDATO3
 -1394
 0
 #OUTFIL33
-Screenlines 4 
+Screenlines 4
 
 0
 0
@@ -15296,7 +15296,7 @@ ESTMDATO4
 -1456
 0
 #OUTFIL34
-Screenlines 5 
+Screenlines 5
 
 0
 0
@@ -15312,7 +15312,7 @@ ESTMDATO5
 -1518
 0
 #OUTFIL35
-Screenlines 6 
+Screenlines 6
 
 0
 0
@@ -15328,7 +15328,7 @@ ESTMDATO6
 -1580
 0
 #OUTFIL36
-Screenlines 7 
+Screenlines 7
 
 0
 0
@@ -15344,7 +15344,7 @@ ESTMDATO7
 -1642
 0
 #OUTFIL37
-Screenlines 8 
+Screenlines 8
 
 0
 0
@@ -15360,7 +15360,7 @@ ESTMDATO8
 -1704
 0
 #OUTFIL38
-Screenlines 9 
+Screenlines 9
 
 0
 0
@@ -15440,7 +15440,7 @@ ESTMDATO13
 -2014
 0
 #OUTFIL43
-ICP File 1    
+ICP File 1
 
 0
 0
@@ -15456,7 +15456,7 @@ ESTMICPO1
 -2325
 0
 #OUTFIL44
-ICP File 2    
+ICP File 2
 
 0
 0
@@ -15472,7 +15472,7 @@ ESTMICPO2
 -2138
 0
 #OUTFIL45
-ICP File 3    
+ICP File 3
 
 0
 0
@@ -15488,7 +15488,7 @@ ESTMICPO3
 -2200
 0
 #OUTFIL46
-ICP File 4    
+ICP File 4
 
 0
 0
@@ -15504,7 +15504,7 @@ ESTMICPO4
 -2262
 0
 #OUTFIL47
-ICP File 5    
+ICP File 5
 
 0
 0
@@ -15520,7 +15520,7 @@ ESTMICPO5
 -2324
 0
 #OUTFIL48
-ICP File 6    
+ICP File 6
 
 0
 0
@@ -15536,7 +15536,7 @@ ESTMICPO6
 -2386
 0
 #OUTFIL49
-ICP File 7    
+ICP File 7
 
 0
 0
@@ -15552,7 +15552,7 @@ ESTMICPO7
 -2448
 0
 #OUTFIL50
-ICP File 8    
+ICP File 8
 
 0
 0
@@ -15568,7 +15568,7 @@ ESTMICPO8
 -2510
 0
 #OUTFIL51
-ICP File 9    
+ICP File 9
 
 0
 0
@@ -15584,7 +15584,7 @@ ESTMICPO9
 -2572
 0
 #OUTFIL52
-ICP File 10   
+ICP File 10
 
 0
 0
@@ -15600,7 +15600,7 @@ ESTMICPO10
 -2634
 0
 #OUTFIL53
-ICP File 11   
+ICP File 11
 
 0
 0
@@ -15616,7 +15616,7 @@ ESTMICPO11
 -2696
 0
 #OUTFIL54
-ICP File 12   
+ICP File 12
 
 0
 0
@@ -15632,7 +15632,7 @@ ESTMICPO12
 -2758
 0
 #OUTFIL55
-ICP File 13   
+ICP File 13
 
 0
 0
@@ -15648,7 +15648,7 @@ ESTMICPO13
 -2820
 0
 #OUTFIL56
-Toll Vols 1   
+Toll Vols 1
 
 0
 0
@@ -15664,7 +15664,7 @@ TOLLVOLO1
 -2387
 0
 #OUTFIL57
-Toll Vols 2   
+Toll Vols 2
 
 0
 0
@@ -15680,7 +15680,7 @@ TOLLVOLO2
 -2944
 0
 #OUTFIL58
-Toll Vols 3   
+Toll Vols 3
 
 0
 0
@@ -15696,7 +15696,7 @@ TOLLVOLO3
 -3006
 0
 #OUTFIL59
-Toll Vols 4   
+Toll Vols 4
 
 0
 0
@@ -15712,7 +15712,7 @@ TOLLVOLO4
 -3068
 0
 #OUTFIL60
-Toll Vols 5   
+Toll Vols 5
 
 0
 0
@@ -15728,7 +15728,7 @@ TOLLVOLO5
 -3130
 0
 #OUTFIL61
-Toll Vols 6   
+Toll Vols 6
 
 0
 0
@@ -15744,7 +15744,7 @@ TOLLVOLO6
 -3192
 0
 #OUTFIL62
-Toll Vols 7   
+Toll Vols 7
 
 0
 0
@@ -15760,7 +15760,7 @@ TOLLVOLO7
 -3254
 0
 #OUTFIL63
-Toll Vols 8   
+Toll Vols 8
 
 0
 0
@@ -15776,7 +15776,7 @@ TOLLVOLO8
 -3316
 0
 #OUTFIL64
-Path File 1   
+Path File 1
 
 0
 0
@@ -15792,7 +15792,7 @@ PATHO1
 -2449
 0
 #OUTFIL65
-Path File 2   
+Path File 2
 
 0
 0
@@ -15808,7 +15808,7 @@ PATHO2
 -3440
 0
 #OUTFIL66
-Path File 3   
+Path File 3
 
 0
 0
@@ -15824,7 +15824,7 @@ PATHO3
 -3502
 0
 #OUTFIL67
-Path File 4   
+Path File 4
 
 0
 0
@@ -15840,7 +15840,7 @@ PATHO4
 -3564
 0
 #OUTFIL68
-Path File 5   
+Path File 5
 
 0
 0
@@ -15856,7 +15856,7 @@ PATHO5
 -3626
 0
 #OUTFIL69
-Path File 6   
+Path File 6
 
 0
 0
@@ -15872,7 +15872,7 @@ PATHO6
 -3688
 0
 #OUTFIL70
-Path File 7   
+Path File 7
 
 0
 0
@@ -15888,7 +15888,7 @@ PATHO7
 -3750
 0
 #OUTFIL71
-Path File 8   
+Path File 8
 
 0
 0
@@ -15904,7 +15904,7 @@ PATHO8
 -3812
 0
 #OUTFIL72
-Tree File 1   
+Tree File 1
 
 0
 0
@@ -15920,7 +15920,7 @@ TREEO1
 -2511
 0
 #OUTFIL73
-Tree File 2   
+Tree File 2
 
 0
 0
@@ -15936,7 +15936,7 @@ TREEO2
 -3936
 0
 #OUTFIL74
-Tree File 3   
+Tree File 3
 
 0
 0
@@ -15952,7 +15952,7 @@ TREEO3
 -3998
 0
 #OUTFIL75
-Tree File 4   
+Tree File 4
 
 0
 0
@@ -15968,7 +15968,7 @@ TREEO4
 -4060
 0
 #OUTFIL76
-Tree File 5   
+Tree File 5
 
 0
 0
@@ -15984,7 +15984,7 @@ TREEO5
 -4122
 0
 #OUTFIL77
-Tree File 6   
+Tree File 6
 
 0
 0
@@ -16000,7 +16000,7 @@ TREEO6
 -4184
 0
 #OUTFIL78
-Tree File 7   
+Tree File 7
 
 0
 0
@@ -16016,7 +16016,7 @@ TREEO7
 -4246
 0
 #OUTFIL79
-Tree File 8   
+Tree File 8
 
 0
 0
@@ -16032,7 +16032,7 @@ TREEO8
 -4308
 0
 #OUTFIL80
-Print Data 1  
+Print Data 1
 
 0
 0
@@ -16048,7 +16048,7 @@ PRINTO1
 -2573
 0
 #OUTFIL81
-Print Data 2  
+Print Data 2
 
 0
 0
@@ -16064,7 +16064,7 @@ PRINTO2
 -4432
 0
 #OUTFIL82
-Print Data 3  
+Print Data 3
 
 0
 0
@@ -16080,7 +16080,7 @@ PRINTO3
 -4494
 0
 #OUTFIL83
-Print Data 4  
+Print Data 4
 
 0
 0
@@ -16096,7 +16096,7 @@ PRINTO4
 -4556
 0
 #OUTFIL84
-Print Data 5  
+Print Data 5
 
 0
 0
@@ -16112,7 +16112,7 @@ PRINTO5
 -4618
 0
 #OUTFIL85
-Print Data 6  
+Print Data 6
 
 0
 0
@@ -16128,7 +16128,7 @@ PRINTO6
 -4680
 0
 #OUTFIL86
-Print Data 7  
+Print Data 7
 
 0
 0
@@ -16144,7 +16144,7 @@ PRINTO7
 -4742
 0
 #OUTFIL87
-Print Data 8  
+Print Data 8
 
 0
 0
@@ -16160,7 +16160,7 @@ PRINTO8
 -4804
 0
 #OUTFIL88
-Print Data 9  
+Print Data 9
 
 0
 0
@@ -16176,7 +16176,7 @@ PRINTO9
 -4866
 0
 #OUTFIL89
-Print Data 10 
+Print Data 10
 
 0
 0

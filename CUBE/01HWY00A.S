@@ -1,6 +1,6 @@
 ;;<<Default Template>><<HIGHWAY>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=HIGHWAY PRNFILE="C:\projects\ustm_resiliency\Base\intermediate_outputs\01_LOADED_NETWORK.PRN" MSG='Congested Network'
+RUN PGM=HIGHWAY PRNFILE="{SCENARIO_DIR}\intermediate_outputs\01_LOADED_NETWORK.PRN" MSG='Congested Network'
 FILEI MATI[3] = "{CATALOG_DIR}\Inputs\USTM_Passenger_XX.mtx"
 FILEI MATI[2] = "{CATALOG_DIR}\Inputs\LH_Truck.mtx"
 FILEO NETO = "{SCENARIO_DIR}\Output\loaded_network.NET"
@@ -55,19 +55,20 @@ ENDPHASE
 
 
 ; Report to summary file and debug file;
-    JLOOP
-		 ;Debug destination choice
-	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest}) 
-      PRINT PRINTO=1 CSV=F LIST ='OD Trips TRACE','\n\n'
-	  	PRINT PRINTO=1 CSV=F LIST ='\n HBW OD                                 ', MW[1] 
-      PRINT PRINTO=1 CSV=F LIST ='\n HBO OD                                 ', MW[2]
-	  	PRINT PRINTO=1 CSV=F LIST ='\n NHB OD                                 ', MW[3] 
-      PRINT PRINTO=1 CSV=F LIST ='\n Freight OD                             ', MW[4] 
-      PRINT PRINTO=1 CSV=F LIST ='\n XX Passenger OD                        ', MW[5]
-      PRINT PRINTO=1 CSV=F LIST ='\n Daily OD Trips                         ', MW[6] 
+;    JLOOP
+;		 ;Debug destination choice
+;	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest}) 
+;    	  	PRINT PRINTO=1 CSV=F LIST =' FREIGHTCOST \n\nSelected Interchange for Tracing:    ',{SelOrigin}(4.0),'-',{SelDest}(4.0),'\n'  	      
+;      PRINT PRINTO=1 CSV=F LIST ='OD Trips TRACE','\n\n'
+;	  	 PRINT PRINTO=1 CSV=F LIST ='\n HBW OD                                 ', MW[1] 
+;      PRINT PRINTO=1 CSV=F LIST ='\n HBO OD                                 ', MW[2]
+;	  	 PRINT PRINTO=1 CSV=F LIST ='\n NHB OD                                 ', MW[3] 
+;      PRINT PRINTO=1 CSV=F LIST ='\n Freight OD                             ', MW[4] 
+;      PRINT PRINTO=1 CSV=F LIST ='\n XX Passenger OD                        ', MW[5]
+;      PRINT PRINTO=1 CSV=F LIST ='\n Daily OD Trips                         ', MW[6] 
  
-   ENDIF
+;   ENDIF
      
- ENDJLOOP
+; ENDJLOOP
 
 ENDRUN
