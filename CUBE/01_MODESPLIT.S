@@ -1,7 +1,7 @@
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Create Mode Split Columns'
-FILEI MATI[2] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
+FILEI MATI[2] = "{CATALOG_DIR}\Inputs\LH_Truck.mtx"
 FILEO RECO[1] = "{SCENARIO_DIR}\Output\01_MODESPLIT.DBF",
   FIELDS = TAZ, HBWAUTO, HBWNMOT, HBWTRANSIT, HBOAUTO, HBONMOT, HBOTRANSIT, NHBAUTO, NHBNMOT, NHBTRANSIT 
 FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"

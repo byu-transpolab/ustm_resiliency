@@ -2,7 +2,7 @@
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=HIGHWAY MSG='Congested Network'
 FILEI MATI[3] = "{CATALOG_DIR}\Inputs\USTM_Passenger_XX.mtx"
-FILEI MATI[2] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
+FILEI MATI[2] = "{CATALOG_DIR}\Inputs\LH_Truck.mtx"
 FILEO NETO = "{SCENARIO_DIR}\Output\loaded_network.NET"
 FILEI NETI = "{SCENARIO_DIR}\scenario_network.NET"
 FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJK.MAT"
@@ -34,12 +34,11 @@ PHASE=ILOOP
   NHB_Dir = 0.5000
   MW[3] = MI.1.9 * NHB_ToD * NHB_Dir
   
-  ; Freight, vehicles/day * PCE_HV PA to OD
+  ; Freight, PCE_HV PA to OD
   FREIGHT_ToD = 0.1590
   FREIGHT_Dir = 0.5000
-  PCE_MD = 1.5
   PCE_HV = 2.0
-  MW[4] = MI.2.13 / 365 * PCE_HV * FREIGHT_ToD * FREIGHT_Dir
+  MW[4] = MI.2.1 * PCE_HV * FREIGHT_ToD * FREIGHT_Dir
   
   ; External Passenger PA to OD
   XXP_ToD = 0.1236

@@ -11,7 +11,7 @@ FILEI MATI[5] = "{CATALOG_DIR}\Inputs\OD_rec_DY.mat"
 FILEO MATO[1] = "{SCENARIO_DIR}\Output\01_TRAVELTIME_COSTS.MAT",
   MO = 103,203,303,403,503,603,803,903,9, DEC = D, NAME = IIF, XXF, IXF, HBW, HBO, NHB, REC, XXP, Timediff
 FILEI MATI[3] = "{CATALOG_DIR}\Inputs\USTM_Passenger_XX.mtx"
-FILEI MATI[2] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
+FILEI MATI[2] = "{CATALOG_DIR}\Inputs\LH_Truck.mtx"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.
@@ -20,7 +20,7 @@ FILEI MATI[2] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
 ; at each J by using a JLOOP.
 
 ;Fill matrices
-  MW[1]=MI.2.13 ;Total Freight
+  MW[1]=MI.2.1 ;Total Freight
   MW[20]=MI.3.2 ;XXPassenger
   MW[21]=MI.3.3 ;XXBus
   MW[22]=MI.3.4 ;XXREC
@@ -36,7 +36,7 @@ FILEI MATI[2] = "{CATALOG_DIR}\Inputs\IIIXXIXX_LH_Ton_Truck_Utah.MAT"
   MW[9] = MW[8] - MW[4]
   
  ;Compute all freight
-   MW[80] = ((MW[1])/365 * (MW[9])) * 156.73 ; vehicles/day * minutes * cents = cents/day
+   MW[80] = ((MW[1]) * (MW[9])) * 156.73 ; vehicles/day * minutes * cents = cents/day
    MW[90] = MW[9] * 29.45 ; Minutes * cents/min = cents
     
    MW[300] = 0 ;XXF
