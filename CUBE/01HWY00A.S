@@ -16,6 +16,14 @@ PHASE=LINKREAD
    C  = LI.AM_CAP
    LW.COSTa = T0 + 0.25*LI.DISTANCE
  
+; Group facility types
+  IF(LI.FT=1)    LINKCLASS=1 ; Freeway
+  IF(LI.FT=2)    LINKCLASS=2 ; Ramp
+  IF(LI.FT=3)    LINKCLASS=3 ; Expressway
+  IF(LI.FT=4)    LINKCLASS=4 ; Arterial
+  IF(LI.FT=5)    LINKCLASS=5 ; Local & Connectors
+  IF(LI.FT=6)    LINKCLASS=6 ; Managed Freeway
+   
 ENDPHASE
 
 PHASE=ILOOP
@@ -54,21 +62,23 @@ PHASE=ILOOP
 ENDPHASE
 
 
-; Report to summary file and debug file;
-;    JLOOP
-;		 ;Debug destination choice
-;	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest}) 
-;    	  	PRINT PRINTO=1 CSV=F LIST =' FREIGHTCOST \n\nSelected Interchange for Tracing:    ',{SelOrigin}(4.0),'-',{SelDest}(4.0),'\n'  	      
-;      PRINT PRINTO=1 CSV=F LIST ='OD Trips TRACE','\n\n'
-;	  	 PRINT PRINTO=1 CSV=F LIST ='\n HBW OD                                 ', MW[1] 
-;      PRINT PRINTO=1 CSV=F LIST ='\n HBO OD                                 ', MW[2]
-;	  	 PRINT PRINTO=1 CSV=F LIST ='\n NHB OD                                 ', MW[3] 
-;      PRINT PRINTO=1 CSV=F LIST ='\n Freight OD                             ', MW[4] 
-;      PRINT PRINTO=1 CSV=F LIST ='\n XX Passenger OD                        ', MW[5]
-;      PRINT PRINTO=1 CSV=F LIST ='\n Daily OD Trips                         ', MW[6] 
- 
-;   ENDIF
-     
-; ENDJLOOP
+PHASE=ADJUST
+
+function {
+    V=VOL[1] ; Add preloaded EE Volumes here
+  
+    TC[1] = Min(T0 * (1 + 0.6*(V/C)^8), T0*100)    ; Freeway        
+    TC[2] = Min(T0 * (1 + 0.7*(V/C)^3), T0*100)    ; Ramp         
+    TC[3] = Min(T0 * (1 + 0.6*(V/C)^6), T0*100)    ; Expressway   
+    TC[4] = Min(T0 * (1 + 0.6*(V/C)^4), T0*100)    ; Arterial
+    TC[5] = Min(T0 * (1 + 0.7*(V/C)^3), T0*100)    ; Local & Connectors
+    TC[6] = Min(T0 * (1 + 0.6*(V/C)^8), T0*100)    ; Managed Freeway
+    
+   
+    }
+
+  LW.COSTa=TIME + 0.25*LI.DISTANCE
+  
+ENDPHASE
 
 ENDRUN
