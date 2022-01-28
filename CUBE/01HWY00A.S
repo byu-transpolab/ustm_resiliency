@@ -42,16 +42,14 @@ PHASE=ILOOP
   NHB_Dir = 0.5000
   MW[3] = MI.1.9 * NHB_ToD * NHB_Dir
   
-  ; Freight, PCE_HV PA to OD
+  ; Freight, PCE_HV AM
   FREIGHT_ToD = 0.1590
-  FREIGHT_Dir = 0.5000
   PCE_HV = 2.0
-  MW[4] = MI.2.1 * PCE_HV * FREIGHT_ToD * FREIGHT_Dir
+  MW[4] = MI.2.1 * PCE_HV * FREIGHT_ToD
   
-  ; External Passenger PA to OD
+  ; External Passenger AM
   XXP_ToD = 0.1236
-  XXP_Dir = 0.7262
-  MW[5] = MI.3.2 * XXP_ToD * XXP_Dir
+  MW[5] = (MI.3.1 + (MI.3.3*PCE_HV) + MI.3.4 + MI.3.5) * XXP_ToD   ;XXPass_MD + PassBUS * PCE + PassOTH + PassREC
   
   ; Count Daily OD Trips
   MW[6] = MW[1] + MW[2] + MW[3] + MW[4] + MW[5]
