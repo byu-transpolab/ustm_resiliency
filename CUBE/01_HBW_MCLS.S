@@ -7,7 +7,7 @@ FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.MAT"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_LOGSUM.MAT",
-  MO = 41,DEC=D, NAME=HBWlogsum
+  MO = 40,DEC=D, NAME=HBWlogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_UTILITY.MAT",
   MO=11-13, DEC=D,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util
 FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_PROBABILITY.MAT",
