@@ -1,6 +1,8 @@
 ;;<<Default Template>><<HIGHWAY>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=HIGHWAY PRNFILE="{SCENARIO_DIR}\intermediate_outputs\01_LOADED_NETWORK.PRN" MSG='Congested Network'
+;FILEO MATO[1] = "{SCENARIO_DIR}\Outputs\sl_assignmentvolumes.mat",
+;MO=7-11, NAME=SL_HBW, SL_HBO, SL_NHB, SL_Freight, SL_XXPass
 FILEI MATI[3] = "{CATALOG_DIR}\Inputs\USTM_Passenger_XX.mtx"
 FILEI MATI[2] = "{CATALOG_DIR}\Inputs\LH_Truck.mtx"
 FILEO NETO = "{SCENARIO_DIR}\Output\loaded_network.NET"
@@ -8,7 +10,7 @@ FILEI NETI = "{SCENARIO_DIR}\scenario_network.NET"
 FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJK.MAT"
 
 ;Set run PARAMETERS and Controls
-PARAMETERS MAXITERS=100, COMBINE=EQUI, GAP= 0.0, RELATIVEGAP = 0.00001
+PARAMETERS MAXITERS=100, COMBINE=EQUI, RELATIVEGAP = 0.00001
 
 PHASE=LINKREAD
 
@@ -56,6 +58,7 @@ PHASE=ILOOP
  
   ; Assign trips 
   PATHLOAD PATH=LW.COSTa, VOL[1] = MW[6]
+
                                                                          
 ENDPHASE
 
@@ -63,7 +66,7 @@ ENDPHASE
 PHASE=ADJUST
 
 function {
-    V=VOL[1] ; Add preloaded EE Volumes here
+    V=VOL[1] 
   
     TC[1] = Min(T0 * (1 + 0.6*(V/C)^8), T0*100)    ; Freeway        
     TC[2] = Min(T0 * (1 + 0.7*(V/C)^3), T0*100)    ; Ramp         

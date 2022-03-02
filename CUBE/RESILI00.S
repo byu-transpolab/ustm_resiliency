@@ -34,6 +34,14 @@ ENDPROCESS
 ENDRUN
 
 
+LOOP AMLoop_1 = 1, 1
+
+  IF (AMLoop_1=1)
+    *Copy "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT" "C:\PROJECTS\USTM_RESILIENCY\CUBE\01LOO00B.MAT"
+  ELSE
+    *Copy "{SCENARIO_DIR}\Output\01_LOADED_HIGHWAY_SKIMS.MAT" "C:\PROJECTS\USTM_RESILIENCY\CUBE\01LOO00B.MAT"
+  ENDIF
+
 ; Script for program MATRIX in file "C:\projects\ustm_resiliency\CUBE\01_HBW_MCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
@@ -44,7 +52,7 @@ FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.MAT"
 FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_LOGSUM.MAT",
-  MO = 41,DEC=D, NAME=HBWlogsum
+  MO = 40,DEC=D, NAME=HBWlogsum
 FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_UTILITY.MAT",
   MO=11-13, DEC=D,NAME=HBWauto_util,HBWnonmot_util,HBWtransit_util
 FILEO MATO[3] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBW_PROBABILITY.MAT",
@@ -663,6 +671,7 @@ ZONES = {TOTAL_ZONES}
 		JLOOP
 		  ; Compute size term
 		  MW[112] = Coeff_HH * ZI.1.TOTHH[J] + Coeff_OFF_EMP * ZI.1.OFFI[J] + Coeff_RET_EMP * ZI.1.RETEMP[J] + Coeff_OTH_EMP * (ZI.1.ALLEMP[J] - ZI.1.OTHEMP[J] - ZI.1.RETEMP[J])
+
       
 		  ; Log (sizeTerm)
 		  IF(MW[112] > 0)   MW[113] = Ln(MW[112])  
@@ -677,11 +686,11 @@ ZONES = {TOTAL_ZONES}
 		  ; Distance calibration constants          
 		  IF(MW[2] > 0 && MW[2] <=1) MW[115] = KDIST01    ; Calibration constant for distance 0-1 bin
 		  IF(MW[2] > 1 && MW[2] <=2) MW[115] = KDIST12    ; Calibration constant for distance 1-2 bin
-		  IF(MW[2] > 2 && MW[2] <=3) MW[115] = KDIST23    ; Calibration constant for distance 2-5 bin
-		  IF(MW[2] > 3 && MW[2] <=4) MW[115] = KDIST34    ; Calibration constant for distance 2-5 bin
-		  IF(MW[2] > 4 && MW[2] <=5) MW[115] = KDIST45    ; Calibration constant for distance 2-5 bin
-		  IF(MW[2] > 5 && MW[2] <=6) MW[115] = KDIST56    ; Calibration constant for distance 2-5 bin
-		  IF(MW[2] > 6 && MW[2] <=7) MW[115] = KDIST67    ; Calibration constant for distance 2-5 bin
+		  IF(MW[2] > 2 && MW[2] <=3) MW[115] = KDIST23    ; Calibration constant for distance 2-3 bin
+		  IF(MW[2] > 3 && MW[2] <=4) MW[115] = KDIST34    ; Calibration constant for distance 3-4 bin
+		  IF(MW[2] > 4 && MW[2] <=5) MW[115] = KDIST45    ; Calibration constant for distance 4-5 bin
+		  IF(MW[2] > 5 && MW[2] <=6) MW[115] = KDIST56    ; Calibration constant for distance 5-6 bin
+		  IF(MW[2] > 6 && MW[2] <=7) MW[115] = KDIST67    ; Calibration constant for distance 6-7 bin
 		  
 
       
@@ -1277,7 +1286,6 @@ ENDRUN
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX MSG='Create Mode Split Columns'
-FILEI MATI[2] = "{CATALOG_DIR}\Inputs\LH_Truck.mtx"
 FILEO RECO[1] = "{SCENARIO_DIR}\Output\01_MODESPLIT.DBF",
   FIELDS = TAZ, HBWAUTO, HBWNMOT, HBWTRANSIT, HBOAUTO, HBONMOT, HBOTRANSIT, NHBAUTO, NHBNMOT, NHBTRANSIT 
 FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
@@ -1345,7 +1353,9 @@ ENDRUN
 ; Script for program HIGHWAY in file "C:\PROJECTS\USTM_RESILIENCY\CUBE\01HWY00A.S"
 ;;<<Default Template>><<HIGHWAY>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=HIGHWAY PRNFILE="C:\projects\ustm_resiliency\Base\intermediate_outputs\01_LOADED_NETWORK.PRN" MSG='Congested Network'
+RUN PGM=HIGHWAY PRNFILE="{SCENARIO_DIR}\intermediate_outputs\01_LOADED_NETWORK.PRN" MSG='Congested Network'
+;FILEO MATO[1] = "{SCENARIO_DIR}\Outputs\sl_assignmentvolumes.mat",
+;MO=7-11, NAME=SL_HBW, SL_HBO, SL_NHB, SL_Freight, SL_XXPass
 FILEI MATI[3] = "{CATALOG_DIR}\Inputs\USTM_Passenger_XX.mtx"
 FILEI MATI[2] = "{CATALOG_DIR}\Inputs\LH_Truck.mtx"
 FILEO NETO = "{SCENARIO_DIR}\Output\loaded_network.NET"
@@ -1353,7 +1363,7 @@ FILEI NETI = "{SCENARIO_DIR}\scenario_network.NET"
 FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJK.MAT"
 
 ;Set run PARAMETERS and Controls
-PARAMETERS MAXITERS=100, COMBINE=EQUI, GAP= 0.0, RELATIVEGAP = 0.00001
+PARAMETERS MAXITERS=100, COMBINE=EQUI, RELATIVEGAP = 0.00001
 
 PHASE=LINKREAD
 
@@ -1361,6 +1371,14 @@ PHASE=LINKREAD
    C  = LI.AM_CAP
    LW.COSTa = T0 + 0.25*LI.DISTANCE
  
+; Group facility types
+  IF(LI.FT=1)    LINKCLASS=1 ; Freeway
+  IF(LI.FT=2)    LINKCLASS=2 ; Ramp
+  IF(LI.FT=3)    LINKCLASS=3 ; Expressway
+  IF(LI.FT=4)    LINKCLASS=4 ; Arterial
+  IF(LI.FT=5)    LINKCLASS=5 ; Local & Connectors
+  IF(LI.FT=6)    LINKCLASS=6 ; Managed Freeway
+   
 ENDPHASE
 
 PHASE=ILOOP
@@ -1379,41 +1397,43 @@ PHASE=ILOOP
   NHB_Dir = 0.5000
   MW[3] = MI.1.9 * NHB_ToD * NHB_Dir
   
-  ; Freight, PCE_HV PA to OD
+  ; Freight, PCE_HV AM
   FREIGHT_ToD = 0.1590
-  FREIGHT_Dir = 0.5000
   PCE_HV = 2.0
-  MW[4] = MI.2.1 * PCE_HV * FREIGHT_ToD * FREIGHT_Dir
+  MW[4] = MI.2.1 * PCE_HV * FREIGHT_ToD
   
-  ; External Passenger PA to OD
+  ; External Passenger AM
   XXP_ToD = 0.1236
-  XXP_Dir = 0.7262
-  MW[5] = MI.3.2 * XXP_ToD * XXP_Dir
+  MW[5] = (MI.3.1 + (MI.3.3*PCE_HV) + MI.3.4 + MI.3.5) * XXP_ToD   ;XXPass_MD + PassBUS * PCE + PassOTH + PassREC
   
   ; Count Daily OD Trips
   MW[6] = MW[1] + MW[2] + MW[3] + MW[4] + MW[5]
  
   ; Assign trips 
   PATHLOAD PATH=LW.COSTa, VOL[1] = MW[6]
+
                                                                          
 ENDPHASE
 
 
-; Report to summary file and debug file;
-    JLOOP
-		 ;Debug destination choice
-	  IF({DebugDC} = 1 && I = {SelOrigin} && J = {SelDest}) 
-      PRINT PRINTO=1 CSV=F LIST ='OD Trips TRACE','\n\n'
-	  	PRINT PRINTO=1 CSV=F LIST ='\n HBW OD                                 ', MW[1] 
-      PRINT PRINTO=1 CSV=F LIST ='\n HBO OD                                 ', MW[2]
-	  	PRINT PRINTO=1 CSV=F LIST ='\n NHB OD                                 ', MW[3] 
-      PRINT PRINTO=1 CSV=F LIST ='\n Freight OD                             ', MW[4] 
-      PRINT PRINTO=1 CSV=F LIST ='\n XX Passenger OD                        ', MW[5]
-      PRINT PRINTO=1 CSV=F LIST ='\n Daily OD Trips                         ', MW[6] 
- 
-   ENDIF
-     
- ENDJLOOP
+PHASE=ADJUST
+
+function {
+    V=VOL[1] 
+  
+    TC[1] = Min(T0 * (1 + 0.6*(V/C)^8), T0*100)    ; Freeway        
+    TC[2] = Min(T0 * (1 + 0.7*(V/C)^3), T0*100)    ; Ramp         
+    TC[3] = Min(T0 * (1 + 0.6*(V/C)^6), T0*100)    ; Expressway   
+    TC[4] = Min(T0 * (1 + 0.6*(V/C)^4), T0*100)    ; Arterial
+    TC[5] = Min(T0 * (1 + 0.7*(V/C)^3), T0*100)    ; Local & Connectors
+    TC[6] = Min(T0 * (1 + 0.6*(V/C)^8), T0*100)    ; Managed Freeway
+    
+   
+    }
+
+  LW.COSTa=TIME + 0.25*LI.DISTANCE
+  
+ENDPHASE
 
 ENDRUN
 
@@ -1449,16 +1469,18 @@ ENDPROCESS
 ENDRUN
 
 
+ENDLOOP
+
 ; Script for program MATRIX in file "C:\projects\ustm_resiliency\CUBE\01_FREIGHT.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
 RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\{SCENARIO_DIR}\intermediate_outputs\resi0021.PRN" MSG='Compute Costs'
-FILEI MATI[1] = "{CATALOG_DIR}\Inputs\BASE_HIGHWAY_SKIM.MAT"
-FILEI MATI[4] = "{CATALOG_DIR}\Inputs\BASE_TRIPS_IJK.MAT"
+FILEI MATI[1] = "C:\projects\ustm_resiliency\Base\Output\01_LOADED_HIGHWAY_SKIMS.MAT"
+FILEI MATI[6] = "{SCENARIO_DIR}\Output\01_LOADED_HIGHWAY_SKIMS.MAT"
+FILEI MATI[4] = "C:\projects\ustm_resiliency\Base\intermediate_outputs\01_TRIPS_IJK.MAT"
 FILEO MATO[2] = "{SCENARIO_DIR}\Output\01_COMBINED_TRIPS.MAT",
   MO = 1, 901, 3,5,6,7,4,8,9 DEC = D, NAME = Freight, Pass, REC, HBW, HBO, NHB, ITime, BTime, TDiff
 FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\freight_cost.txt"
-FILEI MATI[6] = "{SCENARIO_DIR}\Output\01_LOADED_HIGHWAY_SKIMS.MAT"
 FILEI MATI[5] = "{CATALOG_DIR}\Inputs\OD_rec_DY.mat"
 FILEO MATO[1] = "{SCENARIO_DIR}\Output\01_TRAVELTIME_COSTS.MAT",
   MO = 103,203,303,403,503,603,803,903,9, DEC = D, NAME = IIF, XXF, IXF, HBW, HBO, NHB, REC, XXP, Timediff
@@ -1542,6 +1564,42 @@ FILEI MATI[2] = "{CATALOG_DIR}\Inputs\LH_Truck.mtx"
      
  ENDJLOOP
 
+
+ENDRUN
+
+
+; Script for program MATRIX in file "C:\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00S.S"
+;;<<GENERATED SCRIPT>><<MATRIX>><<Matrix>><<Conversion>>;;
+;>>>
+;>>>
+;;>>>
+;Input Matrix File 1:{SCENARIO_DIR}\Output\01_TRAVELTIME_COSTS.MAT
+;Output CSV File:C:\projects\ustm_resiliency\Base\road38\Output\01_TRAVELTIME_COSTS.CSV
+;**********************************************************************
+;THIS SCRIPT READS A MAT FILE, CREATE TWO MATRICS IN CSV AND DBF      *  
+;**********************************************************************
+; BY CITILABS
+;
+;;<<End Parameters>>;;
+
+
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+RUN PGM=MATRIX MSG='Travel Times as CSV'
+
+FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_TRAVELTIME_COSTS.MAT"
+
+FILEO MATO[1] = "C:\projects\ustm_resiliency\Base\road38\Output\01_TRAVELTIME_COSTS.CSV",
+MO=1-9, FORMAT = CSV, PATTERN = IJM:V
+
+MW[1]=mi.1.1
+MW[2]=mi.1.2
+MW[3]=mi.1.3
+MW[4]=mi.1.4
+MW[5]=mi.1.5
+MW[6]=mi.1.6
+MW[7]=mi.1.7
+MW[8]=mi.1.8
+MW[9]=mi.1.9
 
 ENDRUN
 
