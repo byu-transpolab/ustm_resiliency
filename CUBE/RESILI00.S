@@ -34,13 +34,18 @@ ENDPROCESS
 ENDRUN
 
 
-LOOP AMLoop_1 = 1, 1
+LOOP FeedBack_ITER = 0, 1, 1
 
-  IF (AMLoop_1=1)
-    *Copy "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT" "C:\PROJECTS\USTM_RESILIENCY\CUBE\01LOO00B.MAT"
-  ELSE
-    *Copy "{SCENARIO_DIR}\Output\01_LOADED_HIGHWAY_SKIMS.MAT" "C:\PROJECTS\USTM_RESILIENCY\CUBE\01LOO00B.MAT"
-  ENDIF
+; PILOT Script
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+
+IF (FeedBack_ITER=1) 
+FB_ITER = 1
+*IF EXIST DEL {SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT
+*COPY  {SCENARIO_DIR}\Output\01_LOADED_HIGHWAY_SKIMS.MAT  {SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT
+
+ENDIF
+; End of PILOT Script
 
 ; Script for program MATRIX in file "C:\projects\ustm_resiliency\CUBE\01_HBW_MCLS.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
@@ -1121,6 +1126,14 @@ WRITE RECO = 1
 ENDRUN
 
 
+; PILOT Script
+; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
+
+IF (FeedBack_ITER=1) 
+EXIT
+ENDIF
+; End of PILOT Script
+
 ; Script for program MATRIX in file "C:\Projects\ustm_resiliency\CUBE\01_TRIPS_IJ.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
@@ -1469,8 +1482,6 @@ ENDPROCESS
 ENDRUN
 
 
-ENDLOOP
-
 ; Script for program MATRIX in file "C:\projects\ustm_resiliency\CUBE\01_FREIGHT.S"
 ;;<<Default Template>><<MATRIX>><<Default>>;;
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
@@ -1568,13 +1579,13 @@ FILEI MATI[2] = "{CATALOG_DIR}\Inputs\LH_Truck.mtx"
 ENDRUN
 
 
-; Script for program MATRIX in file "C:\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00S.S"
+; Script for program MATRIX in file "C:\PROJECTS\USTM_RESILIENCY\CUBE\01MAT00T.S"
 ;;<<GENERATED SCRIPT>><<MATRIX>><<Matrix>><<Conversion>>;;
 ;>>>
 ;>>>
 ;;>>>
 ;Input Matrix File 1:{SCENARIO_DIR}\Output\01_TRAVELTIME_COSTS.MAT
-;Output CSV File:C:\projects\ustm_resiliency\Base\road38\Output\01_TRAVELTIME_COSTS.CSV
+;Output DBF File:{SCENARIO_DIR}\OUTPUT\01_TRAVELTIME_COSTS.DBF
 ;**********************************************************************
 ;THIS SCRIPT READS A MAT FILE, CREATE TWO MATRICS IN CSV AND DBF      *  
 ;**********************************************************************
@@ -1584,12 +1595,13 @@ ENDRUN
 
 
 ; Do not change filenames or add or remove FILEI/FILEO statements using an editor. Use Cube/Application Manager.
-RUN PGM=MATRIX MSG='Travel Times as CSV'
+RUN PGM=MATRIX
 
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_TRAVELTIME_COSTS.MAT"
 
-FILEO MATO[1] = "C:\projects\ustm_resiliency\Base\road38\Output\01_TRAVELTIME_COSTS.CSV",
-MO=1-9, FORMAT = CSV, PATTERN = IJM:V
+FILEO MATO[1] = "{SCENARIO_DIR}\OUTPUT\01_TRAVELTIME_COSTS.DBF",
+MO=1-9, FORMAT=DBF, PATTERN=IJM:V
+
 
 MW[1]=mi.1.1
 MW[2]=mi.1.2
@@ -1603,4 +1615,6 @@ MW[9]=mi.1.9
 
 ENDRUN
 
+
+ENDLOOP
 
