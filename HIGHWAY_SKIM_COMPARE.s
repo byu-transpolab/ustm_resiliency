@@ -19,7 +19,7 @@
 ;;<<End Parameters>>;;
 RUN PGM=MATRIX
 FILEI MATI[1]="C:\projects\ustm_resiliency\Base\Output\01_HIGHWAY_SKIMS.MAT"
-FILEI MATI[2]="C:\projects\ustm_resiliency\Base\Output\01_LOADED_HIGHWAY_SKIMS.MAT" 
+FILEI MATI[2]="C:\projects\ustm_resiliency\Base\road39\Output\01_LOADED_HIGHWAY_SKIMS.MAT" 
 FILEO MATO="C:\projects\ustm_resiliency\Base\Output\01_HIGHWAY_SKIM_COMPARE.mat", MO=2-4, NAME=DIFF, DIFFRATIO, BASE ; OUTPUT DIFFERENCES
  
   MW[1]=MI.1.1                              ; TRIP TABLE FROM FILE 1
