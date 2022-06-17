@@ -5,7 +5,7 @@ FILEI MATI[3] = "{CATALOG_DIR}\Base\Output\01_HIGHWAY_SKIMS.MAT"
 FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\hbo_modechoice_trace.txt"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[2] = "{CATALOG_DIR}\Inputs\transit_skim.mat"
-FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\MC_Coefficients.csv"
+FILEI LOOKUPI[1] = "{SCENARIO_DIR}\params\MC_Coefficients.csv"
 FILEI LOOKUPI[2] = "{CATALOG_DIR}\params\MC_Constants.csv"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_MC_HBO_LOGSUM.MAT",
   MO = 40,DEC=D, NAME=HBOlogsum

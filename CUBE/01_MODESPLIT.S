@@ -4,7 +4,6 @@ RUN PGM=MATRIX MSG='Create Mode Split Columns'
 FILEO RECO[1] = "{SCENARIO_DIR}\Output\01_MODESPLIT.DBF",
   FIELDS = TAZ, HBWAUTO, HBWNMOT, HBWTRANSIT, HBOAUTO, HBONMOT, HBOTRANSIT, NHBAUTO, NHBNMOT, NHBTRANSIT 
 FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\HH_PROD.DBF"
-FILEI MATI[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRIPS_IJK.MAT"
 
 ; The MATRIX module does not have any explicit phases.  The module does run within an implied ILOOP
 ; where I is the origin zones.  All user statements in the module are processed once for each origin.

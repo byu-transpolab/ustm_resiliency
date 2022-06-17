@@ -4,7 +4,7 @@ RUN PGM=MATRIX MSG='HBO DCLS'
 FILEO PRINTO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_HBO_DEST_CHOICE.RPT"
 FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_DEST_HBO.MAT",
   MO = 112, 100 DEC = D, NAME = HBOSizeTerm, HBOUtil
-FILEI LOOKUPI[1] = "{CATALOG_DIR}\params\DESTCHOICE_PARAMETERS.DBF"
+FILEI LOOKUPI[1] = "{SCENARIO_DIR}\params\DC_PARAM.csv"
 FILEI ZDATI[1] = "{CATALOG_DIR}\Inputs\SE_USTM_BASE2015.DBF"
 FILEI MATI[2] = "{SCENARIO_DIR}\Output\01_HIGHWAY_SKIMS.MAT"
 FILEI MATI[1] = "{SCENARIO_DIR}\Output\01_MCLS_COMBINED.MAT"
@@ -19,8 +19,9 @@ ZONES = {TOTAL_ZONES}
 		ARRAY personTrips = ZONES
 
 		; READ IN MODEL PARAMETERS
-		LOOKUP, NAME=COEFF, LOOKUP[1]=NVAR, RESULT=HBO, INTERPOLATE=N, LIST=Y, LOOKUPI=1
+		LOOKUP, NAME=COEFF, LOOKUP[1]=1, RESULT=4, INTERPOLATE=N, LIST=Y, LOOKUPI=1
     
+    IF (i=FirstZone) 
 		Coeff_HH = COEFF(1,1)              ; SizeTerm = household coefficient
 		Coeff_OTH_OFF_EMP = COEFF(1,2)     ; SizeTerm = Other + Office Emp coefficient
 		Coeff_OFF_EMP = COEFF(1,3)         ; SizeTerm = Office Emp coefficient
@@ -41,6 +42,8 @@ ZONES = {TOTAL_ZONES}
 		KDIST56       = COEFF(1,18)        ; distance calibration constant (5-6 Mile)
 		KDIST67       = COEFF(1,19)        ; distance calibration constant (6-7 Mile)
 
+    ENDIF
+    
 		; Mode choice logsums
 		MW[101] = MI.1.2 ;HBO logsum
  
