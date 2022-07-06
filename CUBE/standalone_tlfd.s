@@ -17,10 +17,10 @@ FILEO RECO[1] = "C:\projects\ustm_resiliency\Base\Output\test_tlfd.dbf",
   FIELDS= time, HBW(16.8), HBO(16.8), NHB(16.8), HBC(16.8), REC(16.8)
 
   ;fill initial matrices with trip_ij by purpose, and distance
-MW[1]=MI.1.6 ;HBW
+MW[1]=MI.1.4 ;HBW
 MW[2]=MI.2.2 ;Distance
-MW[3]=MI.1.7 ;HBO
-MW[4]=MI.1.8 ;NHB
+MW[3]=MI.1.5 ;HBO
+MW[4]=MI.1.6 ;NHB
 
 
 ;set value equal to maximum number of groups, MVG, ustm uses 25
