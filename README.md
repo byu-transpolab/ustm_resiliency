@@ -13,8 +13,7 @@ with the model. The other folders are as follows:
 
   - `Base/` Base scenario directory. Child scenarios will be created in this folder.
   - `Inputs/` Global inputs directory; contains transit, freight, and other files that do
-    not change between scenarios. **It is necessary to download files in this folder from Box**. This folder 
-    cannot be stored in the repository due to size; download 10 files from [https://byu.box.com/s/ynyoxg7snzhc7hu881lob40s6jbygfan] 
+    not change between scenarios. 
   - `CUBE/` Model script and application files
   - `params/` Model parameters
   - `Reports/` Calibration and fit report files for Cube.
