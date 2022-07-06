@@ -7,10 +7,16 @@ model that do  not change with each scenario. They are as follows:
   - `HH_PROD.dbf` Household productions file. This is extracted from USTM, and
     contains trip productions by purpose. This file is committed to the repository
     and is available on checkout.
+  - `LH_Truck.mtx` Freight vehicle origin-destination matrix.
+    Extracted from USTM. This file is committed to the repository and is available 
+    on checkout.
+  - `OD_rec_DY.mat` Daily recreation OD. Extracted from USTM. This file is committed
+    to the repository and is available on checkout.
+  - `SE_USTM_BASE2015.DBF` Socioeconomic data for each TAZ. Extracted from USTM. 
+    This file is committed to the repository and is available on checkout.
   - `transit_skim.mat` Transit travel time skim file. This is created by an offline
     process that averaged transit travel time skims in the WFRC model region
     into a USTM zone system. Travel times that are infeasible are coded as zero.
     This file is committed to the repository and is available on checkout.
-  - `IIIXXIXX_LH_Ton_Truck_Utah.mat` Freight vehicle origin-destination matrix.
-    Extracted from USTM. Cannot be stored in the repository due to size; download
-    from [https://byu.box.com/shared/static/96ekw7aa2dou4dcmajzw5iikkx6w28ld.mat][https://byu.box.com/shared/static/96ekw7aa2dou4dcmajzw5iikkx6w28ld.mat]
+  - `USTM_Passenger_XX.mtx` External passenger through trips. Extracted from USTM. 
+    This file is committed to the repository and is available on checkout. 
