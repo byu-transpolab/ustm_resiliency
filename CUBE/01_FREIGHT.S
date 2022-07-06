@@ -4,11 +4,11 @@ RUN PGM=MATRIX PRNFILE="{SCENARIO_DIR}\{SCENARIO_DIR}\intermediate_outputs\resi0
 FILEI MATI[1] = "C:\projects\ustm_resiliency\Base\Output\01_LOADED_HIGHWAY_SKIMS.MAT"
 FILEI MATI[6] = "{SCENARIO_DIR}\Output\01_LOADED_HIGHWAY_SKIMS.MAT"
 FILEI MATI[4] = "C:\projects\ustm_resiliency\Base\intermediate_outputs\01_TRIPS_IJK.MAT"
-FILEO MATO[2] = "{SCENARIO_DIR}\Output\01_COMBINED_TRIPS.MAT",
+FILEO MATO[2] = "{SCENARIO_DIR}\intermediate_outputs\01_COMBINED_TRIPS.MAT",
   MO = 1, 901, 3,5,6,7,4,8,9 DEC = D, NAME = Freight, Pass, REC, HBW, HBO, NHB, ITime, BTime, TDiff
 FILEO PRINTO[1] = "{SCENARIO_DIR}\logs\freight_cost.txt"
 FILEI MATI[5] = "{CATALOG_DIR}\Inputs\OD_rec_DY.mat"
-FILEO MATO[1] = "{SCENARIO_DIR}\Output\01_TRAVELTIME_COSTS.MAT",
+FILEO MATO[1] = "{SCENARIO_DIR}\intermediate_outputs\01_TRAVELTIME_COSTS.MAT",
   MO = 103,203,303,403,503,603,803,903,9, DEC = D, NAME = IIF, XXF, IXF, HBW, HBO, NHB, REC, XXP, Timediff
 FILEI MATI[3] = "{CATALOG_DIR}\Inputs\USTM_Passenger_XX.mtx"
 FILEI MATI[2] = "{CATALOG_DIR}\Inputs\LH_Truck.mtx"

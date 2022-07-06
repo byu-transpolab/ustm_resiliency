@@ -2,7 +2,7 @@
 ;{Title,note,12,"Convert a Binary Matrix File to DBF and CSV Files"}>>>
 ;{Description,note,10,"The script will convert a single Voyager table to CSV and DBF format"}>>>
 ;;{Example,note,8,"Example?"}>>>
-;Input Matrix File 1:{mati1,filename,"Enter Input Matrix File Name",x,"{SCENARIO_DIR}\Output\01_TRAVELTIME_COSTS.MAT","Matrix File (*.mat)|*.mat"}
+;Input Matrix File 1:{mati1,filename,"Enter Input Matrix File Name",x,"{SCENARIO_DIR}\intermediate_outputs\01_TRAVELTIME_COSTS.MAT","Matrix File (*.mat)|*.mat"}
 ;Output DBF File:{mato1,filename,"Enter Output DBF File Name",x,"{SCENARIO_DIR}\OUTPUT\01_TRAVELTIME_COSTS.DBF","DBF File (*.dbf)|*.dbf"}
 ;**********************************************************************
 ;THIS SCRIPT READS A MAT FILE, CREATE TWO MATRICS IN CSV AND DBF      *  
