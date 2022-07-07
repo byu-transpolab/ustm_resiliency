@@ -6,6 +6,8 @@ considering the change in mode and destination choice
 logsums resulting from a break in the highway network.
 
 ## Model Setup
+![](https://byu.box.com/shared/static/2ttslcyj6a7yvoal60bbx6oaqzjarjlx.jpg)
+
 This model runs using the CUBE travel demand modeling software. The
 `ustm_resiliency.cat` Cube catalog will open an application manager in Cube
 with the model. The other folders are as follows:
